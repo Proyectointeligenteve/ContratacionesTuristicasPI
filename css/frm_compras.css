@@ -1,0 +1,27 @@
+﻿
+.bs-docs-header
+    {
+    /*position:relative;
+    padding:30px 15px;*/
+    /*color:#ffffff;*/
+    text-align:center;
+    text-shadow:0 1px 0 rgba(0,0,0,.1);
+    background-color:#093252 !important;
+    /*background-repeat: repeat-x;
+    background-image: linear-gradient(to bottom,#ff180e 0,#ffffff 100%);*/
+    /*background-image: url(../img/fondo2.jpg);*/
+
+}
+
+.bs-docs-header{padding-top:60px;padding-bottom:60px;margin-bottom:40px;font-size:20px}
+.bs-docs-header h1{margin-top:0;color:#fff}
+.bs-docs-header p{margin-bottom:0;font-weight:300;line-height:1.4}
+.bs-docs-header .container{position:relative}
+@media (min-width:768px){.bs-docs-header{font-size:24px;text-align:left}.bs-docs-header h1{font-size:60px;line-height:1}}
+@media (min-width:992px){.bs-docs-header h1,.bs-docs-header p{margin-right:200px}}
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           /*#f91f13*/

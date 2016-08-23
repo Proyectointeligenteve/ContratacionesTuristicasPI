@@ -1,0 +1,519 @@
+﻿Imports System
+Imports System.Data
+Imports System.Data.SqlClient
+Imports ac_Funciones
+
+Public Class cls_ventas
+
+#Region "VARIABLES"
+    Dim var_Nombre_Tabla As String = "tbl_ventas"
+    Dim var_Campo_Id As String = "id"
+    Dim var_Campos As String = "fecha,numero,nombre,apellido,cedula,telefono,email,id_moneda,subtotal,impuesto,total,observaciones,id_usuario_reg,fecha_reg,anulado,id_usuario_anulacion,fecha_anulacion,persona_recibe,telefono_envio,estado_envio,direccion_envio,forma_envio,forma_pago,banco,monto_pago,fecha_pago,numero_transferencia,estatus,ciudad,codigo_postal"
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+
+    Dim var_id As Integer = 0
+    Dim var_fecha As Date = Now.Date
+    Dim var_numero As String = ""
+    Dim var_nombre As String = ""
+    Dim var_apellido As String = ""
+    Dim var_cedula As String = ""
+    Dim var_telefono As String = ""
+    Dim var_email As String = ""
+    Dim var_id_moneda As Integer = 0
+    Dim var_subtotal As Double = 0
+    Dim var_impuesto As Double = 0
+    Dim var_total As Double = 0
+    Dim var_observaciones As String = ""
+    Dim var_id_usuario_reg As Integer = 0
+    Dim var_fecha_reg As Date = Now.Date
+    Dim var_anulado As Boolean = False
+    Dim var_id_usuario_anulacion As Integer = 0
+    Dim var_fecha_anulacion As Date = Now.Date
+    Dim var_persona_recibe As String = ""
+    Dim var_telefono_envio As String = ""
+    Dim var_estado_envio As String = ""
+    Dim var_direccion_envio As String = ""
+    Dim var_forma_envio As String = ""
+    Dim var_forma_pago As String = ""
+    Dim var_banco As String = ""
+    Dim var_monto_pago As Double = 0
+    Dim var_fecha_pago As Date = Now.Date
+    Dim var_estatus As Integer = 0
+    Dim var_numero_transferencia As String = ""
+    Dim var_ciudad As String = ""
+    Dim var_codigo_postal As String = ""
+
+    Dim obj_detalle As New Generic.List(Of cls_ventas_detalles)
+#End Region
+
+#Region "PROPIEDADES"
+    Public Shared ReadOnly Property Nombre_Tabla() As String
+        Get
+            Return "tbl_ventas"
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property Campo_Id() As String
+        Get
+            Return "id"
+        End Get
+    End Property
+
+    Public ReadOnly Property Detalleventas() As Generic.List(Of cls_ventas_detalles)
+        Get
+            Return Me.obj_detalle
+        End Get
+    End Property
+
+    Public Property id() As Integer
+        Get
+            Return Me.var_id
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_id = value
+        End Set
+    End Property
+
+    Public Property fecha() As Date
+        Get
+            Return Me.var_fecha
+        End Get
+        Set(ByVal value As Date)
+            Me.var_fecha = value
+        End Set
+    End Property
+
+    Public Property numero() As String
+        Get
+            Return Me.var_numero
+        End Get
+        Set(ByVal value As String)
+            Me.var_numero = value
+        End Set
+    End Property
+
+    Public Property nombre() As String
+        Get
+            Return Me.var_nombre
+        End Get
+        Set(ByVal value As String)
+            Me.var_nombre = value
+        End Set
+    End Property
+
+    Public Property apellido() As String
+        Get
+            Return Me.var_apellido
+        End Get
+        Set(ByVal value As String)
+            Me.var_apellido = value
+        End Set
+    End Property
+
+    Public Property cedula() As String
+        Get
+            Return Me.var_cedula
+        End Get
+        Set(ByVal value As String)
+            Me.var_cedula = value
+        End Set
+    End Property
+
+    Public Property telefono() As String
+        Get
+            Return Me.var_telefono
+        End Get
+        Set(ByVal value As String)
+            Me.var_telefono = value
+        End Set
+    End Property
+
+    Public Property email() As String
+        Get
+            Return Me.var_email
+        End Get
+        Set(ByVal value As String)
+            Me.var_email = value
+        End Set
+    End Property
+
+    Public Property id_moneda() As Integer
+        Get
+            Return Me.var_id_moneda
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_id_moneda = value
+        End Set
+    End Property
+
+    Public Property subtotal() As Double
+        Get
+            Return Me.var_subtotal
+        End Get
+        Set(ByVal value As Double)
+            Me.var_subtotal = value
+        End Set
+    End Property
+
+    Public Property impuesto() As Double
+        Get
+            Return Me.var_impuesto
+        End Get
+        Set(ByVal value As Double)
+            Me.var_impuesto = value
+        End Set
+    End Property
+
+    Public Property total() As Double
+        Get
+            Return Me.var_total
+        End Get
+        Set(ByVal value As Double)
+            Me.var_total = value
+        End Set
+    End Property
+
+    Public Property observaciones() As String
+        Get
+            Return Me.var_observaciones
+        End Get
+        Set(ByVal value As String)
+            Me.var_observaciones = value
+        End Set
+    End Property
+
+    Public Property id_usuario_reg() As Integer
+        Get
+            Return Me.var_id_usuario_reg
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_id_usuario_reg = value
+        End Set
+    End Property
+
+    Public Property fecha_reg() As Date
+        Get
+            Return Me.var_fecha_reg
+        End Get
+        Set(ByVal value As Date)
+            Me.var_fecha_reg = value
+        End Set
+    End Property
+
+    Public Property anulado() As Boolean
+        Get
+            Return Me.var_anulado
+        End Get
+        Set(ByVal value As Boolean)
+            Me.var_anulado = value
+        End Set
+    End Property
+
+    Public Property id_usuario_anulacion() As Integer
+        Get
+            Return Me.var_id_usuario_anulacion
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_id_usuario_anulacion = value
+        End Set
+    End Property
+
+    Public Property fecha_anulacion() As Date
+        Get
+            Return Me.var_fecha_anulacion
+        End Get
+        Set(ByVal value As Date)
+            Me.var_fecha_anulacion = value
+        End Set
+    End Property
+
+    Public Property persona_recibe() As String
+        Get
+            Return Me.var_persona_recibe
+        End Get
+        Set(ByVal value As String)
+            Me.var_persona_recibe = value
+        End Set
+    End Property
+
+    Public Property telefono_envio() As String
+        Get
+            Return Me.var_telefono_envio
+        End Get
+        Set(ByVal value As String)
+            Me.var_telefono_envio = value
+        End Set
+    End Property
+
+    Public Property estado_envio() As String
+        Get
+            Return Me.var_estado_envio
+        End Get
+        Set(ByVal value As String)
+            Me.var_estado_envio = value
+        End Set
+    End Property
+
+    Public Property direccion_envio() As String
+        Get
+            Return Me.var_direccion_envio
+        End Get
+        Set(ByVal value As String)
+            Me.var_direccion_envio = value
+        End Set
+    End Property
+
+    Public Property forma_envio() As String
+        Get
+            Return Me.var_forma_envio
+        End Get
+        Set(ByVal value As String)
+            Me.var_forma_envio = value
+        End Set
+    End Property
+
+    Public Property forma_pago() As String
+        Get
+            Return Me.var_forma_pago
+        End Get
+        Set(ByVal value As String)
+            Me.var_forma_pago = value
+        End Set
+    End Property
+
+    Public Property banco() As String
+        Get
+            Return Me.var_banco
+        End Get
+        Set(ByVal value As String)
+            Me.var_banco = value
+        End Set
+    End Property
+
+    Public Property monto_pago() As Double
+        Get
+            Return Me.var_monto_pago
+        End Get
+        Set(ByVal value As Double)
+            Me.var_monto_pago = value
+        End Set
+    End Property
+
+    Public Property fecha_pago() As Date
+        Get
+            Return Me.var_fecha_pago
+        End Get
+        Set(ByVal value As Date)
+            Me.var_fecha_pago = value
+        End Set
+    End Property
+
+    Public Property estatus() As Integer
+        Get
+            Return Me.var_estatus
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_estatus = value
+        End Set
+    End Property
+
+    Public Property numero_transferencia() As String
+        Get
+            Return Me.var_numero_transferencia
+        End Get
+        Set(ByVal value As String)
+            Me.var_numero_transferencia = value
+        End Set
+    End Property
+
+    Public Property ciudad() As String
+        Get
+            Return Me.var_ciudad
+        End Get
+        Set(ByVal value As String)
+            Me.var_ciudad = value
+        End Set
+    End Property
+
+    Public Property codigoPostal() As String
+        Get
+            Return Me.var_codigo_postal
+        End Get
+        Set(ByVal value As String)
+            Me.var_codigo_postal = value
+        End Set
+    End Property
+#End Region
+
+#Region "FUNCIONES"
+
+    Sub New(Optional ByVal var_Id_int As Integer = 0)
+
+        If var_Id_int > 0 Then
+            Cargar(var_Id_int)
+        End If
+
+    End Sub
+
+    Public Sub Cargar(ByVal var_id_int As Integer)
+        Dim obj_dt_int As New DataTable
+        obj_dt_int = Abrir_Tabla(Me.obj_Conex_int, "Select * from tbl_ventas WHERE id=" & var_id_int)
+        If obj_dt_int.Rows.Count > 0 Then
+            Me.var_id = obj_dt_int.Rows(0).Item("id").ToString
+            Me.var_fecha = formato_Fecha(obj_dt_int.Rows(0).Item("fecha").ToString)
+            Me.var_numero = formato_Texto(obj_dt_int.Rows(0).Item("numero").ToString)
+            Me.var_nombre = formato_Texto(obj_dt_int.Rows(0).Item("nombre").ToString)
+            Me.var_apellido = formato_Texto(obj_dt_int.Rows(0).Item("apellido").ToString)
+            Me.var_cedula = formato_Texto(obj_dt_int.Rows(0).Item("cedula").ToString)
+            Me.var_telefono = formato_Texto(obj_dt_int.Rows(0).Item("telefono").ToString)
+            Me.var_email = formato_Texto(obj_dt_int.Rows(0).Item("email").ToString)
+            Me.var_id_moneda = formato_Numero(obj_dt_int.Rows(0).Item("id_moneda").ToString)
+            Me.var_subtotal = formato_Numero(obj_dt_int.Rows(0).Item("subtotal").ToString, True)
+            Me.var_impuesto = formato_Numero(obj_dt_int.Rows(0).Item("impuesto").ToString, True)
+            Me.var_total = formato_Numero(obj_dt_int.Rows(0).Item("total").ToString, True)
+            Me.var_observaciones = formato_Texto(obj_dt_int.Rows(0).Item("observaciones").ToString)
+            Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
+            Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
+            Me.var_anulado = formato_boolean(obj_dt_int.Rows(0).Item("anulado").ToString)
+            Me.var_id_usuario_anulacion = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_anulacion").ToString)
+            Me.var_fecha_anulacion = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_anulacion").ToString)
+            Me.var_persona_recibe = formato_Texto(obj_dt_int.Rows(0).Item("persona_recibe").ToString)
+            Me.var_telefono_envio = formato_Texto(obj_dt_int.Rows(0).Item("telefono_envio").ToString)
+            Me.var_estado_envio = formato_Texto(obj_dt_int.Rows(0).Item("estado_envio").ToString)
+            Me.var_direccion_envio = formato_Texto(obj_dt_int.Rows(0).Item("direccion_envio").ToString)
+            Me.var_forma_envio = formato_Texto(obj_dt_int.Rows(0).Item("forma_envio").ToString)
+
+            Me.var_forma_pago = formato_Texto(obj_dt_int.Rows(0).Item("forma_pago").ToString)
+            Me.var_banco = formato_Texto(obj_dt_int.Rows(0).Item("banco").ToString)
+            Me.var_monto_pago = formato_Numero(obj_dt_int.Rows(0).Item("monto_pago").ToString, True)
+            Me.var_fecha_pago = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_pago").ToString)
+            Me.var_estatus = formato_Numero(obj_dt_int.Rows(0).Item("estatus").ToString)
+            Me.var_numero_transferencia = formato_Texto(obj_dt_int.Rows(0).Item("numero_transferencia").ToString)
+            Me.var_ciudad = formato_Texto(obj_dt_int.Rows(0).Item("ciudad").ToString)
+            Me.var_codigo_postal = formato_Texto(obj_dt_int.Rows(0).Item("codigo_postal").ToString)
+
+            Dim obj_dt_detalles As DataTable = ac_Funciones.Abrir_Tabla(Me.obj_Conex_int, "select id from " & cls_ventas_detalles.Nombre_Tabla & " where id_venta=" & Me.var_id)
+            For i As Integer = 0 To obj_dt_detalles.Rows.Count - 1
+                Me.obj_detalle.Add(New cls_ventas_detalles(obj_dt_detalles.Rows(i).Item(0)))
+            Next
+
+        Else
+            Me.var_id = -1
+        End If
+    End Sub
+
+    Public Function Actualizar(ByRef var_msj As String, ByVal var_id_usuario As Integer) As Boolean
+        Dim var_error As String = ""
+        If Me.var_id = 0 Then   'NUEVO
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_fecha, True) & "," & Sql_Texto(Me.var_numero) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_apellido) & "," & Sql_Texto(Me.var_cedula) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_id_moneda) & "," & Sql_Texto(Me.var_subtotal) & "," & Sql_Texto(Me.var_impuesto) & "," & Sql_Texto(Me.var_total) & "," & Sql_Texto(Me.var_observaciones) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg, True) & "," & Sql_Texto(Me.var_anulado) & "," & Sql_Texto(Me.var_id_usuario_anulacion) & "," & Sql_Texto(Me.var_fecha_anulacion) & "," & Sql_Texto(Me.var_persona_recibe) & "," & Sql_Texto(Me.var_telefono_envio) & "," & Sql_Texto(Me.var_estado_envio) & "," & Sql_Texto(Me.var_direccion_envio) & "," & Sql_Texto(Me.var_forma_envio) & "," & Sql_Texto(Me.var_forma_pago) & "," & Sql_Texto(Me.var_banco) & "," & Sql_Texto(Me.var_monto_pago) & "," & Sql_Texto(Me.var_fecha_pago) & "," & Sql_Texto(Me.var_estatus) & "," & Sql_Texto(Me.var_numero_transferencia) & "," & Sql_Texto(Me.var_ciudad) & "," & Sql_Texto(Me.var_codigo_postal), var_msj) Then
+                var_msj = var_error
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error agregando venta - " & var_id_usuario & " - " & Me.var_fecha & ": " & var_error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("venta").Id
+                obj_log.id_Usuario = var_id_usuario
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
+                Return False
+                Exit Function
+            Else
+                Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
+
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append("," & Chr(34) & "Fecha" & Chr(34) & ":" & Chr(34) & Me.fecha & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "idusuario" & Chr(34) & ":" & Chr(34) & var_id_usuario & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "venta agregado: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("ventas").Id
+                obj_log.id_Usuario = var_id_usuario
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
+
+                For i As Integer = 0 To obj_detalle.Count - 1
+                    obj_detalle.Item(i).id_venta = Me.id
+                    Dim var_msj2 As String = ""
+                    If Not obj_detalle.Item(i).Actualizar(var_msj2) Then
+                        var_msj &= " - " & var_msj2
+                    End If
+                Next
+
+                Return True
+
+            End If
+        ElseIf Me.var_id > 0 Then 'EDICION
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "fecha=" & Sql_Texto(Me.var_fecha) & ",numero=" & Sql_Texto(Me.var_numero) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",apellido=" & Sql_Texto(Me.var_apellido) & ",cedula=" & Sql_Texto(Me.var_cedula) & ",telefono=" & Sql_Texto(Me.var_telefono) & ",email=" & Sql_Texto(Me.var_email) & ",id_moneda=" & Sql_Texto(Me.var_id_moneda) & ",subtotal=" & Sql_Texto(Me.var_subtotal) & ",impuesto=" & Sql_Texto(Me.var_impuesto) & ",total=" & Sql_Texto(Me.var_total) & ",observaciones=" & Sql_Texto(Me.var_observaciones) & ",id_usuario_reg=" & Sql_Texto(Me.var_id_usuario_reg) & ",fecha_reg=" & Sql_Texto(Me.var_fecha_reg) & ",anulado=" & Sql_Texto(Me.var_anulado) & ",id_usuario_anulacion=" & Sql_Texto(Me.var_id_usuario_anulacion) & ",fecha_anulacion=" & Sql_Texto(Me.var_fecha_anulacion) & ",persona_recibe=" & Sql_Texto(Me.var_persona_recibe) & ",telefono_envio=" & Sql_Texto(Me.var_telefono_envio) & ",estado_envio=" & Sql_Texto(Me.var_estado_envio) & ",direccion_envio=" & Sql_Texto(Me.var_direccion_envio) & ",forma_envio=" & Sql_Texto(Me.var_forma_envio) & ",forma_pago=" & Sql_Texto(Me.var_forma_pago) & ",banco=" & Sql_Texto(Me.var_banco) & ",monto_pago=" & Sql_Texto(Me.var_monto_pago) & ",fecha_pago=" & Sql_Texto(Me.var_fecha_pago) & ",estatus=" & Sql_Texto(Me.var_estatus) & ",numero_transferencia=" & Sql_Texto(Me.var_numero_transferencia) & ",ciudad=" & Sql_Texto(Me.var_ciudad) & ",codigo_postal=" & Sql_Texto(Me.var_codigo_postal), Me.var_Campo_Id & "=" & Me.var_id) Then
+                var_msj = var_error
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error editando venta '" & Me.var_id & " - " & var_id_usuario & " - " & Me.var_fecha & "': " & var_error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("ventas").Id
+                obj_log.id_Usuario = var_id_usuario
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
+                Return False
+                Exit Function
+
+            Else
+
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append("," & Chr(34) & "Fecha" & Chr(34) & ":" & Chr(34) & Me.fecha & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "idusuario" & Chr(34) & ":" & Chr(34) & var_id_usuario & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "venta editado: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("ventas").Id
+                obj_log.id_Usuario = var_id_usuario
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
+
+                Dim var_ids As String = ""
+                For i As Integer = 0 To Me.obj_detalle.Count - 1
+                    Me.obj_detalle.Item(i).id_venta = Me.id
+                    Dim var_msj2 As String = ""
+                    Me.obj_detalle.Item(i).Actualizar(var_msj2)
+                    If var_msj2.Trim.Length > 0 Then
+                        var_msj &= " - " & var_msj2
+                    End If
+                    var_ids &= "," & Me.obj_detalle.Item(i).Id
+                Next
+                If var_ids.Trim.Length > 1 Then
+                    ac_Funciones.Eliminar(Me.obj_Conex_int, cls_ventas_detalles.Nombre_Tabla, "id_venta=" & Me.var_id & " and id not in(" & var_ids.Substring(1) & ")")
+                Else
+                    ac_Funciones.Eliminar(Me.obj_Conex_int, cls_ventas_detalles.Nombre_Tabla, "id_venta=" & Me.var_id)
+                End If
+
+                Return True
+
+            End If
+        Else
+            var_error = "No se encontro el Registro"
+            Return False
+        End If
+    End Function
+
+    Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        ac_Funciones.Eliminar(obj_Conex_int, cls_ventas.Nombre_Tabla, cls_ventas.Campo_Id & "=" & var_id)
+        ac_Funciones.Eliminar(obj_Conex_int, cls_ventas_detalles.Nombre_Tabla, "id_venta=" & var_id)
+        Return True
+    End Function
+
+    Public Shared Function Siguiente_numero() As Integer
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Return ac_Funciones.Valor_De(obj_Conex_int, "select isnull(max(numero),0)+1 from tbl_ventas")
+
+    End Function
+#End Region
+
+End Class
