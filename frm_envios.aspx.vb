@@ -183,7 +183,7 @@ Partial Class frm_envios
             End If
             obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_envio.codigo & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Id_cliente_emisor" & Chr(34) & ":" & Chr(34) & obj_envio.id_cliente_emisor & Chr(34) & "")
-            obj_sb.Append("," & Chr(34) & "Id_cliente_recepor" & Chr(34) & ":" & Chr(34) & obj_envio.id_cliente_receptor & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Id_cliente_receptor" & Chr(34) & ":" & Chr(34) & obj_envio.id_cliente_receptor & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Id_pais_origen" & Chr(34) & ":" & Chr(34) & obj_envio.id_pais_origen & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Id_estado_origen" & Chr(34) & ":" & Chr(34) & obj_envio.id_estado_origen & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Id_ciudad_origen" & Chr(34) & ":" & Chr(34) & obj_envio.id_ciudad_origen & Chr(34) & "")
