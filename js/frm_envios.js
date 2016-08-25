@@ -179,6 +179,7 @@ function save() {
     /* 
      * paquete CODE
      */
+
     function Cargarpaquetes() {
 
         $.ajax({
@@ -426,13 +427,15 @@ function save() {
         return result;
     };
      
-    var modalcliente;
+    var modalclienteE;
     function BuscarClientesE() {
+        //asigna el string vacio en el campo NombreE
         $("#NombreE").val('');
-        //prueba
-
-        $('#btn_cargar').hide();
-        $('#dvloader').show();
+        //esconde el boton btn_cargarE
+        $('#btn_cargarE').hide();
+        //muestra la imagen loading de dvloaderE
+        $('#dvloaderE').show();
+        //asigna el valor del input IdClienteEmisor a var_identificador
         var var_identificador = $('#IdClienteEmisor').val();
         //anotacion: se borra la lista del modal 
         $('#tbClientesE').dataTable().fnDestroy();
@@ -449,6 +452,7 @@ function save() {
         tableElement.dataTable({
             "bProcessing": true,
             "bServerSide": false,
+            //toma los datos del identificador con el querystring
             "sAjaxSource": "frm_envios.aspx?fn=buscarclientesE&identificador=" + var_identificador,
             "bAutoWidth": false,
             "bFilter": false,
@@ -471,11 +475,12 @@ function save() {
                 $.getJSON(sSource, aoData, function (json) {
                     $('.loading').hide()
                     $('.btn').show();
-                    $('#btn_cargar').show()
-                    $('#dvloader').hide()
+                    $('#btn_cargarE').show()
+                    $('#dvloaderE').hide()
                     try {
                         if (json.error == '-1') {
                             alert(1);
+                            alert("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").html("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").show();
                             $("#IdClienteEmisor").focus();
@@ -491,11 +496,11 @@ function save() {
                             return false;
                         }
 
-                        if (json.idcliente) {
+                        if (json.idclienteEmisor) {
                             var id = ""
 
                             try {
-                                id = json.idcliente;
+                                id = json.idclienteEmisor;
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -503,14 +508,14 @@ function save() {
                                 return false;
                             }
 
-                            $("#Cliente").val(id)
-                            CargarCliente()
+                            $("#ClienteE").val(id)
+                            CargarClienteE()
                             return false;
                         }
                     } catch (e) { }
 
-                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalcliente]').data('remodal')];
-                    modalcliente.open();
+                    modalclienteE = $.remodal.lookup[$('[data-remodal-id=modalclienteE]').data('remodal')];
+                    modalclienteE.open();
                     fnCallback(json);
                 });
             },
@@ -527,9 +532,9 @@ function save() {
             },
             "aoColumns": [
                     { "mDataProp": "Nombre" },
-                    { "mDataProp": "Rif" },
+                    { "mDataProp": "Identificador" },
                     { "mDataProp": "Telefono" },
-                    { "mDataProp": "Direccion" }
+                    { "mDataProp": "Email" }
             ]
         });
 
@@ -539,13 +544,13 @@ function save() {
     }
 
     function CargarClienteE() {
-        var id = $("#Cliente").val();
+        var id = $("#ClienteE").val();
 
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
             type: "POST",
-            url: "frm_envios.aspx?fn=cargarcliente",
+            url: "frm_envios.aspx?fn=cargarclienteE",
             data: '{"id":"' + id + '"}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -566,7 +571,7 @@ function save() {
                     $("#dv_error").html(response.msj);
                     $("#dv_error").show();
                     setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                    $("#rif").focus();
+                    //$("#identificador").focus();
                 }
             },
             error: function () {
@@ -601,14 +606,15 @@ function save() {
         });
     }
 
+    var modalclienteR;
     function BuscarClientesR() {
         $("#NombreR").val('');
 
-        $('#btn_cargar').hide();
-        $('#dvloader').show();
-        var var_rif = $('#IdClienteReceptor').val();
+        $('#btn_cargarR').hide();
+        $('#dvloaderR').show();
+        var var_identificador = $('#IdClienteReceptor').val();
 
-        $('#tbClientes').dataTable().fnDestroy();
+        $('#tbClientesR').dataTable().fnDestroy();
         var giRedraw = false;
         var responsiveHelper;
         var breakpointDefinition = {
@@ -618,11 +624,11 @@ function save() {
 
         $('.loading').show()
         $('.btn').hide();
-        tableElement = $('#tbClientes')
+        tableElement = $('#tbClientesR')
         tableElement.dataTable({
             "bProcessing": true,
             "bServerSide": false,
-            "sAjaxSource": "frm_envios.aspx?fn=buscarclientes&rif=" + var_rif,
+            "sAjaxSource": "frm_envios.aspx?fn=buscarclientesR&identificador=" + var_identificador,
             "bAutoWidth": false,
             "bFilter": false,
             "bSort": false,
@@ -644,30 +650,32 @@ function save() {
                 $.getJSON(sSource, aoData, function (json) {
                     $('.loading').hide()
                     $('.btn').show();
-                    $('#btn_cargar').show()
-                    $('#dvloader').hide()
+                    $('#btn_cargarR').show()
+                    $('#dvloaderR').hide()
                     try {
+
                         if (json.error == '-1') {
+                            alert("no se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").html("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").show();
-                            $("#IdClienteEmisor").focus();
+                            $("#IdClienteReceptor").focus();
                             setTimeout(function () { $('#dv_advertencia').hide(); }, 10000);
                             return false;
                         }
 
                         if (json.error == '-2') {
+                            alert("Se ha producido un error en el sistema. Intente de nuevo. Si el problema persiste comuniquese con el administrador del sistema");
                             $("#dv_error").html("Se ha producido un error en el sistema. Intente de nuevo. Si el problema persiste comuniquese con el administrador del sistema");
                             $("#dv_error").show();
                             setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                            $("#IdClienteEmisor").focus();
+                            $("#IdClienteReceptor").focus();
                             return false;
                         }
 
-                        if (json.idcliente) {
+                        if (json.idclienteReceptor) {
                             var id = ""
-
                             try {
-                                id = json.idcliente;
+                                id = json.idclienteReceptor;
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -675,14 +683,14 @@ function save() {
                                 return false;
                             }
 
-                            $("#Cliente").val(id)
-                            CargarCliente()
+                            $("#ClienteR").val(id)
+                            CargarClienteR()
                             return false;
                         }
                     } catch (e) { }
 
-                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalcliente]').data('remodal')];
-                    modalcliente.open();
+                    modalclienteR = $.remodal.lookup[$('[data-remodal-id=modalclienteR]').data('remodal')];
+                    modalclienteR.open();
                     fnCallback(json);
                 });
             },
@@ -699,9 +707,9 @@ function save() {
             },
             "aoColumns": [
                     { "mDataProp": "Nombre" },
-                    { "mDataProp": "Rif" },
+                    { "mDataProp": "Identificador" },
                     { "mDataProp": "Telefono" },
-                    { "mDataProp": "Direccion" }
+                    { "mDataProp": "Email" }
             ]
         });
 
@@ -710,44 +718,46 @@ function save() {
         search_input.attr('placeholder', "Buscar");
     }
 
-    function CargarClienteE() {
-        var id = $("#Cliente").val();
+    function CargarClienteR() {
+        var id = $("#ClienteR").val();
 
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
             type: "POST",
-            url: "frm_envios.aspx?fn=cargarcliente",
+            url: "frm_envios.aspx?fn=cargarclienteR",
             data: '{"id":"' + id + '"}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 $('.loading').hide()
                 $('.btn').show();
-
+                alert(0);
                 if (response.error == '-1') {
                     window.location.href = 'info.aspx';
                     return false;
                 }
+                alert(1)
                 if (response.rslt == 'exito') {
-                    $('#IdClienteEmisor').val(response.IdClienteEmisor);
-                    $('#NombreE').val(response.NombreE);
+                    alert(2)
+                    $('#IdClienteReceptor').val(response.IdClienteReceptor);
+                    $('#NombreR').val(response.NombreR);
                     $("#IdClienteReceptor").focus();
                 }
                 else {
                     $("#dv_error").html(response.msj);
                     $("#dv_error").show();
                     setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                    $("#rif").focus();
+                    $("#IdClienteReceptor").focus();
                 }
             },
             error: function () {
                 $('.loading').hide()
                 $('.btn').show();
-                $("#dv_error").html('Error de comunicación con el servidor. Función Cargarcliente().');
+                $("#dv_error").html('Error de comunicación con el servidor. Función CargarclienteR().');
                 $("#dv_error").show();
                 setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                $("#IdClienteEmisor").focus();
+                $("#IdClienteReceptor").focus();
             }
         });
 
