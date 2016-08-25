@@ -44,10 +44,6 @@ Partial Class frm_aerolineas
                     '* Parent
                 Case "loadAll"
                     loadAll()
-
-                    'Case "loadProfession"
-                    '    loadProfession()
-
                 Case "saveAll"
                     saveAll()
 
@@ -174,15 +170,20 @@ Partial Class frm_aerolineas
             Else
                 var_User = obj_Session.Usuario.nombre
             End If
+            If obj_aerolinea.Id > 0 Then
+                obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_aerolinea.codigo & Chr(34) & "")
+            Else
+                obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & Right("AE" & Right("0000" & (cls_aerolineas.SiguienteNumero() + 1).ToString, 4).ToString, 6) & Chr(34) & "")
+            End If
             obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_aerolinea.nombre & Chr(34) & "")
-            obj_sb.Append("," & Chr(34) & "Razonsocial" & Chr(34) & ":" & Chr(34) & obj_aerolinea.razon_social & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "RazonSocial" & Chr(34) & ":" & Chr(34) & obj_aerolinea.razon_social & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Identificador" & Chr(34) & ":" & Chr(34) & obj_aerolinea.identificador & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Direccion" & Chr(34) & ":" & Chr(34) & obj_aerolinea.direccion & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "TelefonoFijo" & Chr(34) & ":" & Chr(34) & obj_aerolinea.telefono_fijo & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "TelefonoMovil" & Chr(34) & ":" & Chr(34) & obj_aerolinea.telefono_movil & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Email" & Chr(34) & ":" & Chr(34) & obj_aerolinea.email & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Web" & Chr(34) & ":" & Chr(34) & obj_aerolinea.web & Chr(34) & "")
-            obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_aerolinea.codigo & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Comision" & Chr(34) & ":" & Chr(34) & obj_aerolinea.comision & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "IATA" & Chr(34) & ":" & Chr(34) & obj_aerolinea.IATA & Chr(34) & "")
 
         Catch ex As Exception
@@ -226,18 +227,21 @@ Partial Class frm_aerolineas
         If obj_aerolinea.Id = 0 Then
             obj_aerolinea.id_usuario_reg = DirectCast(Session.Contents("obj_Session"), cls_Sesion).Usuario.Id
             obj_aerolinea.fecha_reg = Now.Date
+            obj_aerolinea.codigo = Right("AE" & Right("0000" & (cls_aerolineas.SiguienteNumero() + 1).ToString, 4).ToString, 6)
+        Else
+            obj_aerolinea.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
         End If
+
         obj_aerolinea.nombre = ac_Funciones.formato_Texto(var_JObject("Nombre").ToString)
-        obj_aerolinea.razon_social = ac_Funciones.formato_Texto(var_JObject("Razonsocial").ToString)
+        obj_aerolinea.razon_social = ac_Funciones.formato_Texto(var_JObject("RazonSocial").ToString)
         obj_aerolinea.identificador = ac_Funciones.formato_Texto(var_JObject("Identificador").ToString)
         obj_aerolinea.direccion = ac_Funciones.formato_Texto(var_JObject("Direccion").ToString)
-        obj_aerolinea.telefono_fijo = ac_Funciones.formato_Texto(var_JObject("TelefonFijo").ToString)
+        obj_aerolinea.telefono_fijo = ac_Funciones.formato_Texto(var_JObject("TelefonoFijo").ToString)
         obj_aerolinea.telefono_movil = ac_Funciones.formato_Texto(var_JObject("TelefonoMovil").ToString)
         obj_aerolinea.email = ac_Funciones.formato_Texto(var_JObject("Email").ToString)
         obj_aerolinea.web = ac_Funciones.formato_Texto(var_JObject("Web").ToString)
-        obj_aerolinea.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
+        obj_aerolinea.comision = ac_Funciones.formato_Texto(var_JObject("Comision").ToString)
         obj_aerolinea.IATA = ac_Funciones.formato_Texto(var_JObject("IATA").ToString)
-        
         Response.ContentType = "application/json"
         Response.Clear()
         Response.ClearHeaders()
@@ -303,7 +307,11 @@ Partial Class frm_aerolineas
             Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
             Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
             Dim var_Position As Integer = ac_Funciones.formato_Numero(var_JObject("hdn_contactoId").ToString) - 1
-            obj_StringBuilder.Append("," & Chr(34) & "contacto" & Chr(34) & ":" & Chr(34) & obj_aerolinea.Contacto(var_Position).id_aerolinea & Chr(34) & "")
+            obj_StringBuilder.Append("," & Chr(34) & "IdAerolinea" & Chr(34) & ":" & Chr(34) & obj_aerolinea.Contacto(var_Position).id_aerolinea & Chr(34) & "")
+            obj_StringBuilder.Append("," & Chr(34) & "NombreC" & Chr(34) & ":" & Chr(34) & obj_aerolinea.Contacto(var_Position).nombre & Chr(34) & "")
+            obj_StringBuilder.Append("," & Chr(34) & "CargoC" & Chr(34) & ":" & Chr(34) & obj_aerolinea.Contacto(var_Position).cargo & Chr(34) & "")
+            obj_StringBuilder.Append("," & Chr(34) & "TelefonoC" & Chr(34) & ":" & Chr(34) & obj_aerolinea.Contacto(var_Position).telefono & Chr(34) & "")
+
         Catch ex As Exception
             var_Error = ex.Message
         Finally
@@ -348,15 +356,20 @@ Partial Class frm_aerolineas
 
             Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
             Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
-            Dim var_contactoId As Integer = CInt(var_JObject("hdn_contactoId").ToString)
+            Dim var_contactoId As Integer = CInt(var_JObject("IdAerolinea").ToString)
 
-            'If var_contactoId > 0 Then
-            '    obj_aerolinea.contactos(var_contactoId - 1).id_contacto = var_JObject("contacto").ToString
-            'Else
-            '    Dim obj_aerolineas_contactos As New cls_aerolineas_contactos
-            '    obj_aerolineas_contactos.id_contacto = var_JObject("contacto").ToString
-            '    obj_aerolinea.contactos.Add(obj_aerolineas_contactos)
-            'End If
+            If var_contactoId > 0 Then
+                obj_aerolinea.Contacto(var_contactoId - 1).id_aerolinea = var_JObject("IdAerolinea").ToString
+                obj_aerolinea.Contacto(var_contactoId - 1).nombre = var_JObject("NombreC").ToString
+                obj_aerolinea.Contacto(var_contactoId - 1).cargo = var_JObject("CargoC").ToString
+                obj_aerolinea.Contacto(var_contactoId - 1).telefono = var_JObject("TelefonoC").ToString
+            Else
+                Dim obj_aerolineas_contacto As New cls_aerolineas_contactos
+                obj_aerolineas_contacto.nombre = var_JObject("NombreC").ToString
+                obj_aerolineas_contacto.cargo = var_JObject("CargoC").ToString
+                obj_aerolineas_contacto.telefono = var_JObject("TelefonoC").ToString
+                obj_aerolinea.Contacto.Add(obj_aerolineas_contacto)
+            End If
             Session.Contents("obj_aerolinea") = obj_aerolinea
         Catch ex As Exception
             var_Error = ex.Message
