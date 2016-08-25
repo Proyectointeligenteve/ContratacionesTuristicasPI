@@ -34,8 +34,11 @@ function load() {
             }
             if (response.rslt == 'exito') {
                 $('#Codigo').val(response.Codigo);
-                $('#Id_cliente_emisor').val(response.Id_cliente_emisor);
-                $('#Id_cliente_receptor').val(response.Id_cliente_emisor);
+                //este codigo es para que devuelva el nombre del emisor basado en el id_cliente_emisor
+                $("#ClienteE").val(response.Id_cliente_emisor);
+                CargarClienteE();
+                $("#ClienteR").val(response.Id_cliente_receptor);
+                CargarClienteR();
                 $('#Id_pais_origen').val(response.Id_pais_origen);
                 $('#Id_estado_origen').val(response.Id_estado_origen);
                 $('#Id_ciudad_origen').val(response.Id_ciudad_origen);
@@ -563,6 +566,7 @@ function save() {
                     return false;
                 }
                 if (response.rslt == 'exito') {
+                    alert("exito");
                     $('#IdClienteEmisor').val(response.IdClienteEmisor);
                     $('#NombreE').val(response.NombreE);
                     $("#IdClienteReceptor").focus();
@@ -720,7 +724,7 @@ function save() {
 
     function CargarClienteR() {
         var id = $("#ClienteR").val();
-
+        alert(id + "" + "ClienteR");
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
@@ -737,7 +741,7 @@ function save() {
                     window.location.href = 'info.aspx';
                     return false;
                 }
-                alert(1)
+                alert(1);
                 if (response.rslt == 'exito') {
                     alert(2)
                     $('#IdClienteReceptor').val(response.IdClienteReceptor);
@@ -748,7 +752,7 @@ function save() {
                     $("#dv_error").html(response.msj);
                     $("#dv_error").show();
                     setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                    $("#IdClienteReceptor").focus();
+                    //$("#IdClienteReceptor").focus();
                 }
             },
             error: function () {
