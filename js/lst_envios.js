@@ -161,6 +161,7 @@ function Ver() {
 
 function Editar() {
     var id = '';
+    //lo que esta dentro de los parentesis tiene separado el tr para denotar que es para cada fila
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {
             id = this.id;
