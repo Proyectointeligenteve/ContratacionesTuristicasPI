@@ -1,6 +1,8 @@
-﻿/*body {
+﻿body {
 
-    background-color: #eee;
+    /*background-color: #eee;*/
+    background-color: #013b63;
+    /*color:white;*/
 }
 
 .remodal {
@@ -13,7 +15,7 @@ text-align:left !important;
 
 .text-normal{
     font-weight:normal !important;
-}*/
+}
 
 table tr.even.row_selected td {
     background-color: #B0BED9;
@@ -22,7 +24,7 @@ table tr.odd.row_selected td {
     background-color: #9FAFD1;
 }
 
-/*.table {
+.table {
     width:100% !important;
 }
 
@@ -90,7 +92,7 @@ label.error,div.error{
 }
 
 .izq {
-width:50%;
+width:40%;
 float:left;
 font-size:10px;
 vertical-align:top;
@@ -98,7 +100,7 @@ text-align:left;
 }
 
 .der {
-width:50%;
+width:60%;
 float:right;
 font-size:14px;
 vertical-align:top;
@@ -148,4 +150,4 @@ div.dataTables_filter {
 
 .DTTT_container {
 float:left!important;
-}*/
+}

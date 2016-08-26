@@ -31,7 +31,7 @@ Partial Class principal
             objDAAux.Fill(objDTMenuItems)
 
             If objDTMenuItems.Rows.Count > 0 Then
-                varHtmlMenu &= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>" & objMenu.Item("Menu").ToString & "</a>"
+                varHtmlMenu &= "<li class='dropdown'><a style='font-size :14px !important' href='#' class='dropdown-toggle' data-toggle='dropdown'>" & objMenu.Item("Menu").ToString & "</a>"
 
                 varHtmlMenu &= "<ul class='dropdown-menu'>"
                 For Each objItems As System.Data.DataRow In objDTMenuItems.Rows

@@ -32,12 +32,6 @@ Partial Class lst_agencias
                     Cargar()
                 Case "eliminar"
                     Eliminar()
-                Case "guardar"
-                    Guardar()
-                Case "editar"
-                    Editar()
-                Case "anular"
-                    Anular()
             End Select
         End If
     End Sub
@@ -106,11 +100,11 @@ Partial Class lst_agencias
 
         Dim obj_dt_int As System.Data.DataTable
         If var_estatus = 1 Then
-            obj_dt_int = cls_agencias.ConsultaActivos(var_error)
+            obj_dt_int = cls_agencias.ConsultaActivos("", var_error)
         ElseIf var_estatus = 2 Then
-            obj_dt_int = cls_agencias.ConsultaAnulados(var_error)
-        Else 'Todos
-            obj_dt_int = cls_agencias.Consulta(var_error)
+            obj_dt_int = cls_agencias.ConsultaAnulados("", var_error)
+        Else
+            obj_dt_int = cls_agencias.Consulta("", var_error)
         End If
         Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
 
@@ -124,54 +118,6 @@ Partial Class lst_agencias
         End If
         Response.End()
     End Sub
-    Sub Guardar()
-        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
-        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
-
-        Dim obj_agencias As New cls_agencias(CInt(var_data("id")))
-        If obj_agencias.Id = 0 Then
-            obj_agencias.id_usuario_reg = DirectCast(Session.Contents("obj_Session"), cls_Sesion).Usuario.Id
-            obj_agencias.fecha_reg = Now.Date
-        End If
-        obj_agencias.nombre = var_data("Nombre")
-        obj_agencias.rif = var_data("Rif")
-        obj_agencias.direccion = var_data("Direccion")
-        'obj_agencias.telefono_fijo = var_data("Telefono_fijo")
-        'obj_agencias.telefono_movil = var_data("Telefono_movil")
-        obj_agencias.email = var_data("Email")
-        Response.ContentType = "application/json"
-        Response.Clear()
-        Response.ClearHeaders()
-        Response.ClearContent()
-        Dim var_error As String = ""
-        If Not obj_agencias.Actualizar(var_error) Then
-            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
-        Else
-            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "}")
-        End If
-        Response.End()
-    End Sub
-
-    Sub Editar()
-        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
-        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
-
-        Dim obj_agencias As New cls_agencias(CInt(var_data("id").ToString))
-        Dim obj_sb As New StringBuilder
-        obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_agencias.nombre & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Rif" & Chr(34) & ":" & Chr(34) & obj_agencias.rif & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Direccion" & Chr(34) & ":" & Chr(34) & obj_agencias.direccion & Chr(34) & "")
-        'obj_sb.Append("," & Chr(34) & "Telefono_fijo" & Chr(34) & ":" & Chr(34) & obj_agencias.telefono_fijo & Chr(34) & "")
-        'obj_sb.Append("," & Chr(34) & "Telefono_movil" & Chr(34) & ":" & Chr(34) & obj_agencias.telefono_movil & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Email" & Chr(34) & ":" & Chr(34) & obj_agencias.email & Chr(34) & "")
-        Response.ContentType = "application/json"
-        Response.Clear()
-        Response.ClearHeaders()
-        Response.ClearContent()
-        Dim var_error As String = ""
-        Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
-        Response.End()
-    End Sub
 
     Sub Eliminar()
         Dim var_sr = New System.IO.StreamReader(Request.InputStream)
@@ -183,22 +129,6 @@ Partial Class lst_agencias
         Response.ClearHeaders()
         Response.ClearContent()
         If Not cls_agencias.Eliminar(CInt(var_data("id").ToString), obj_Session.Usuario, var_error) Then
-            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
-        Else
-            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")
-        End If
-        Response.End()
-    End Sub
-    Sub Anular()
-        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
-        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
-        Dim var_error As String = ""
-
-        Response.ContentType = "application/json"
-        Response.Clear()
-        Response.ClearHeaders()
-        Response.ClearContent()
-        If Not cls_agencias.Anular(CInt(var_data("id").ToString), obj_Session.Usuario.Id, var_error) Then
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")

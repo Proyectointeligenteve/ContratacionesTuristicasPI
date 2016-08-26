@@ -13,7 +13,7 @@ Public Class cls_envios_paquetes
 
     Dim var_id As Integer = 0
     Dim var_id_envio As Integer = 0
-    Dim var_numero As Integer = 0
+    Dim var_numero As String = ""
     Dim var_peso As String = ""
     Dim var_volumen As String = ""
     Dim var_costo As Double = 0

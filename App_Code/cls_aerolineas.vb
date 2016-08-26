@@ -7,8 +7,8 @@ Public Class cls_aerolineas
     Dim var_Nombre_Tabla As String = "tbl_aerolineas"
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "identificador"
-    Dim var_Campos As String = "nombre,razon_social,identificador,direccion,telefono_fijo,telefono_movil,email,web,codigo,IATA,id_usuario_reg,fecha_reg"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim var_Campos As String = "nombre,razon_social,identificador,direccion,telefono_fijo,telefono_movil,email,web,codigo,IATA,id_usuario_reg,fecha_reg,comision"
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_nombre As String = ""
@@ -23,6 +23,7 @@ Public Class cls_aerolineas
     Dim var_IATA As String = ""
     Dim var_id_usuario_reg As Integer
     Dim var_fecha_reg As Date = Now
+    Dim var_comision As Double = 0
 
     Dim obj_contacto As New Generic.List(Of cls_aerolineas_contactos)
 
@@ -180,6 +181,16 @@ Public Class cls_aerolineas
             Me.var_fecha_reg = value
         End Set
     End Property
+
+    Public Property comision() As Double
+        Get
+            Return Me.var_comision
+        End Get
+        Set(ByVal value As Double)
+            Me.var_comision = value
+        End Set
+    End Property
+
     Sub New(Optional ByVal var_Id_int As Integer = 0)
 
         If var_Id_int > 0 Then
@@ -208,7 +219,8 @@ Public Class cls_aerolineas
             Me.var_codigo = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("codigo").ToString)
             Me.var_IATA = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("IATA").ToString)
             Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
-            Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
+            Me.var_fecha_reg = ac_Funciones.formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
+            Me.var_comision = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("comision").ToString, True)
 
             Dim obj_dt_contacto As DataTable = ac_Funciones.Abrir_Tabla(Me.obj_Conex_int, "select id from " & cls_aerolineas_contactos.Nombre_Tabla & " where id_aerolinea=" & Me.var_id)
             For i As Integer = 0 To obj_dt_contacto.Rows.Count - 1
@@ -219,20 +231,8 @@ Public Class cls_aerolineas
         End If
     End Sub
 
-    'Public Sub Cargar(ByVal var_email As String)
-    '    Dim obj_dt_int As New DataTable
-    '    obj_dt_int = Abrir_Tabla(Me.obj_Conex_int, "Select * from " & Me.var_Nombre_Tabla & " WHERE ltrim(rtrim(upper(email)))=" & Sql_Texto(var_email.ToUpper))
-    '    If obj_dt_int.Rows.Count > 0 Then
-    '        Me.var_id = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id").ToString)
-    '        Me.var_nombre = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("nombre").ToString)
-    '        Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
-    '        Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
-    '    Else
-    '        Me.var_id = 0
-    '    End If
-    'End Sub
-
-    Public Function Actualizar(ByRef var_Error As String) As Boolean
+    Public Function Actualizar(ByRef var_msj As String) As Boolean
+        Dim var_error As String = ""
         If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
             If var_Error = "" Then
                 var_Error = "La aerolinea '" & Me.var_nombre & "' ya existe en la base de datos"
@@ -242,16 +242,92 @@ Public Class cls_aerolineas
         End If
 
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_razon_social) & "," & Sql_Texto(Me.var_identificador) & "," & Sql_Texto(Me.var_direccion) & "," & Sql_Texto(Me.var_telefono_fijo) & "," & Sql_Texto(Me.var_telefono_movil) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_web) & "," & Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_IATA) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg), var_Error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_razon_social) & "," & Sql_Texto(Me.var_identificador) & "," & Sql_Texto(Me.var_direccion) & "," & Sql_Texto(Me.var_telefono_fijo) & "," & Sql_Texto(Me.var_telefono_movil) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_web) & "," & Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_IATA) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_comision), var_Error) Then
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error agregando aerolinea '" & Me.var_codigo & " - " & Me.var_nombre & " - " & Me.var_identificador & "': " & var_Error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("aerolineas").Id
+                obj_log.id_Usuario = var_id_usuario_reg
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
                 Return False
                 Exit Function
+            Else
+                Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
+
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append(Chr(34) & "Id" & Chr(34) & ":" & Chr(34) & Me.Id & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "nombre" & Chr(34) & ":" & Chr(34) & Me.nombre & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "razon_social" & Chr(34) & ":" & Chr(34) & Me.razon_social & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "identificador" & Chr(34) & ":" & Chr(34) & Me.identificador & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.direccion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "telefono_fijo" & Chr(34) & ":" & Chr(34) & Me.telefono_fijo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "telefono_movil" & Chr(34) & ":" & Chr(34) & Me.telefono_movil & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "email" & Chr(34) & ":" & Chr(34) & Me.email & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "web" & Chr(34) & ":" & Chr(34) & Me.web & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "codigo" & Chr(34) & ":" & Chr(34) & Me.codigo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "iata" & Chr(34) & ":" & Chr(34) & Me.IATA & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "comision" & Chr(34) & ":" & Chr(34) & Me.comision & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Aerolinea agregada: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("aerolineas").Id
+                obj_log.id_Usuario = var_id_usuario_reg
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
+
+                For i As Integer = 0 To obj_contacto.Count - 1
+                    obj_contacto.Item(i).id_aerolinea = Me.Id
+                    Dim var_msj2 As String = ""
+                    If Not obj_contacto.Item(i).Actualizar(var_Error) Then
+                        var_msj &= " - " & var_msj2
+                    End If
+                Next
+                Return True
             End If
-            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " where nombre=" & Sql_Texto(Me.var_nombre))
-            Return True
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",razon_social=" & Sql_Texto(Me.var_razon_social) & ",identificador=" & Sql_Texto(Me.var_identificador) & ",direccion=" & Sql_Texto(Me.var_direccion) & ",telefono_fijo=" & Sql_Texto(Me.var_telefono_fijo) & ",telefono_movil=" & Sql_Texto(Me.var_telefono_movil) & ",email=" & Sql_Texto(Me.var_email) & ",web=" & Sql_Texto(Me.var_web) & ",codigo=" & Sql_Texto(Me.var_codigo) & ",IATA=" & Sql_Texto(Me.var_IATA), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",razon_social=" & Sql_Texto(Me.var_razon_social) & ",identificador=" & Sql_Texto(Me.var_identificador) & ",direccion=" & Sql_Texto(Me.var_direccion) & ",telefono_fijo=" & Sql_Texto(Me.var_telefono_fijo) & ",telefono_movil=" & Sql_Texto(Me.var_telefono_movil) & ",email=" & Sql_Texto(Me.var_email) & ",web=" & Sql_Texto(Me.var_web) & ",codigo=" & Sql_Texto(Me.var_codigo) & ",IATA=" & Sql_Texto(Me.var_IATA) & ",comision=" & Sql_Texto(Me.var_comision), Me.var_Campo_Id & "=" & Me.var_id) Then
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error editando aerolinea '" & Me.var_id & " - " & Me.var_codigo & " - " & Me.var_nombre & " - " & Me.var_identificador & "': " & var_error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("aerolineas").Id
+                obj_log.id_Usuario = var_id_usuario_reg
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
                 Return False
                 Exit Function
+
+            Else
+
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append(Chr(34) & "Id" & Chr(34) & ":" & Chr(34) & Me.Id & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "nombre" & Chr(34) & ":" & Chr(34) & Me.nombre & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "razon_social" & Chr(34) & ":" & Chr(34) & Me.razon_social & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "identificador" & Chr(34) & ":" & Chr(34) & Me.identificador & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.direccion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "telefono_fijo" & Chr(34) & ":" & Chr(34) & Me.telefono_fijo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "telefono_movil" & Chr(34) & ":" & Chr(34) & Me.telefono_movil & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "email" & Chr(34) & ":" & Chr(34) & Me.email & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "web" & Chr(34) & ":" & Chr(34) & Me.web & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "codigo" & Chr(34) & ":" & Chr(34) & Me.codigo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "iata" & Chr(34) & ":" & Chr(34) & Me.IATA & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "comision" & Chr(34) & ":" & Chr(34) & Me.comision & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Aerolinea editada: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("aerolineas").Id
+                obj_log.id_Usuario = var_id_usuario_reg
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
             End If
             Return True
         Else
@@ -260,21 +336,8 @@ Public Class cls_aerolineas
         End If
     End Function
 
-    Public Function ListaContactos() As DataTable
-        Dim obj_dt As New System.Data.DataTable
-        obj_dt.Columns.Add("DT_RowId", GetType(System.Int32))
-        obj_dt.Columns.Add("Codigo", GetType(System.String))
-        obj_dt.Columns.Add("Nombre", GetType(System.String))
-        obj_dt.Columns.Add("Tipo", GetType(System.String))
-        For i As Integer = 0 To Me.Contacto.Count - 1
-            obj_dt.Rows.Add(i + 1, New cls_aerolineas_contactos(Me.obj_contacto(i).id_aerolinea).nombre, New cls_aerolineas_contactos(Me.obj_contacto(i).id_aerolinea).nombre, IIf((New cls_aerolineas_contactos(Me.obj_contacto(i).id_aerolinea).nombre), "Asignación", "Deducción"))
-        Next
-
-        Return obj_dt
-    End Function
-
     Public Shared Function Anular(ByVal var_id As Integer, ByVal var_id_usuario As Integer, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
         Dim obj_aerolinea As New cls_aerolineas(var_id)
         If Not ac_Funciones.Actualizar(obj_Conex_int, cls_aerolineas.Nombre_Tabla, "anulado= case when isnull(anulado,0)=0 then '1' else '0' end, fecha_anulacion=" & Sql_Texto(Now, True) & ", id_usuario_anulacion=" & var_id_usuario, cls_aerolineas.Campo_Id & "=" & var_id, var_error) Then
@@ -306,7 +369,7 @@ Public Class cls_aerolineas
         Return True
     End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
 
         If ac_Funciones.Eliminar(obj_conex, cls_aerolineas.Nombre_Tabla, cls_aerolineas.Campo_Id & "=" & var_id) < 0 Then
@@ -317,15 +380,29 @@ Public Class cls_aerolineas
         End If
     End Function
 
+    Public Function ListaContactos() As DataTable
+        Dim obj_dt As New System.Data.DataTable
+        obj_dt.Columns.Add("DT_RowId", GetType(System.Int32))
+        obj_dt.Columns.Add("Aerolinea", GetType(System.String))
+        obj_dt.Columns.Add("Nombre", GetType(System.String))
+        obj_dt.Columns.Add("Cargo", GetType(System.String))
+        obj_dt.Columns.Add("Telefono", GetType(System.String))
+        For i As Integer = 0 To Me.Contacto.Count - 1
+            obj_dt.Rows.Add(i + 1, Me.obj_contacto(i).id_aerolinea, Me.obj_contacto(i).nombre, Me.obj_contacto(i).cargo, Me.obj_contacto(i).telefono)
+        Next
+
+        Return obj_dt
+    End Function
+
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
-        Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_aerolineas.Campo_Id & " as id, " & cls_aerolineas.Campo_Validacion & " as des from " & cls_aerolineas.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_aerolineas.Campo_Validacion & "")
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_aerolineas.Campo_Id & " as id, nombre as des from " & cls_aerolineas.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_aerolineas.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int
     End Function
 
-    Public Shared Function ConsultaActivos(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Public Shared Function ConsultaActivos(Optional ByVal var_filtro As String = "", Optional ByRef var_error As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_aerolineas.ListadoActivos & "()"
         Dim var_msj As String = ""
 
@@ -334,8 +411,8 @@ Public Class cls_aerolineas
         Return obj_dt_int
     End Function
 
-    Public Shared Function ConsultaAnulados(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Public Shared Function ConsultaAnulados(Optional ByVal var_filtro As String = "", Optional ByRef var_error As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_aerolineas.ListadoAnulados & "()"
         Dim var_msj As String = ""
 
@@ -344,13 +421,17 @@ Public Class cls_aerolineas
         Return obj_dt_int
     End Function
 
-    Public Shared Function Consulta(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByRef var_error As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_aerolineas.Listado & "()"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
         var_error = var_msj
         Return obj_dt_int
+    End Function
+    Public Shared Function SiguienteNumero() As Integer
+        Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(codigo)=1 then cast(codigo as int) else 0 end as num from tbl_aerolineas) as c").ToString)
     End Function
 End Class

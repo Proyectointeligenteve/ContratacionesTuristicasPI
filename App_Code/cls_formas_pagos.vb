@@ -8,7 +8,7 @@ Public Class cls_formas_pagos
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "nombre"
     Dim var_Campos As String = "nombre,id_usuario_reg,fecha_reg"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_nombre As String = ""
@@ -117,19 +117,6 @@ Public Class cls_formas_pagos
         End If
     End Sub
 
-    'Public Sub Cargar(ByVal var_email As String)
-    '    Dim obj_dt_int As New DataTable
-    '    obj_dt_int = Abrir_Tabla(Me.obj_Conex_int, "Select * from " & Me.var_Nombre_Tabla & " WHERE ltrim(rtrim(upper(email)))=" & Sql_Texto(var_email.ToUpper))
-    '    If obj_dt_int.Rows.Count > 0 Then
-    '        Me.var_id = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id").ToString)
-    '        Me.var_nombre = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("nombre").ToString)
-    '        Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
-    '        Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
-    '    Else
-    '        Me.var_id = 0
-    '    End If
-    'End Sub
-
     Public Function Actualizar(ByRef var_Error As String) As Boolean
         If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
             If var_Error = "" Then
@@ -159,7 +146,7 @@ Public Class cls_formas_pagos
     End Function
 
     Public Shared Function Anular(ByVal var_id As Integer, ByVal var_id_usuario As Integer, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
         Dim obj_forma_pago As New cls_formas_pagos(var_id)
         If Not ac_Funciones.Actualizar(obj_Conex_int, cls_formas_pagos.Nombre_Tabla, "anulado= case when isnull(anulado,0)=0 then '1' else '0' end, fecha_anulacion=" & Sql_Texto(Now, True) & ", id_usuario_anulacion=" & var_id_usuario, cls_formas_pagos.Campo_Id & "=" & var_id, var_error) Then
@@ -191,7 +178,7 @@ Public Class cls_formas_pagos
         Return True
     End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
 
         If ac_Funciones.Eliminar(obj_conex, cls_formas_pagos.Nombre_Tabla, cls_formas_pagos.Campo_Id & "=" & var_id) < 0 Then
@@ -203,14 +190,14 @@ Public Class cls_formas_pagos
     End Function
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_formas_pagos.Campo_Id & " as id, " & cls_formas_pagos.Campo_Validacion & " as des from " & cls_formas_pagos.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_formas_pagos.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int
     End Function
 
     Public Shared Function ConsultaActivos(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_formas_pagos.ListadoActivos & "()"
         Dim var_msj As String = ""
 
@@ -220,7 +207,7 @@ Public Class cls_formas_pagos
     End Function
 
     Public Shared Function ConsultaAnulados(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_formas_pagos.ListadoAnulados & "()"
         Dim var_msj As String = ""
 
@@ -230,7 +217,7 @@ Public Class cls_formas_pagos
     End Function
 
     Public Shared Function Consulta(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_formas_pagos.Listado & "()"
         Dim var_msj As String = ""
 

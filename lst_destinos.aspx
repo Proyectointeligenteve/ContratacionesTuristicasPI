@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Principal.master" AutoEventWireup="false" CodeFile="lst_destinos.aspx.vb" Inherits="lst_destinos" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_destinos.aspx.vb" Inherits="lst_destinos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
@@ -18,31 +18,27 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <div class="container">
+        <div class="alert alert-danger" id="dv_error" name="dv_error">
+        </div>
+        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
+        </div>
+    </div>
         <div class="container">
-            <br />
             <div style ="width :100%">
-                <div class ="row-fluid">
-                    <div class="span10">
-                        <span style="font-size: 14px;color:white"><b>LISTADO DE DESTINOS</b></span>
-                    </div>
-                    <div class="span2">
-                        <img src="img/logo.png" width="32px" />
-                    </div>
-                </div>
-            </div>
-            <hr />
-        <div class="izq">
-            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
+            <span style="font-size: 14px;color:white">LISTADO DE DESTINOS</span><hr />            
+        </div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
         <div class="hr">
-            <br />
+            <hr />
         </div>
         <div class="der">
             <div class="btn-group">
                 <img src='img/loading2.gif' class="loading" />
-                <button class="btn hide" id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
-                <button class="btn hide" id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn hide" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
-                <button class="btn hide" id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
+                <button class="btn hide"  id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn hide"  id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
+                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Activar/Inactivar</button>
+                <button class="btn hide"  id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         
@@ -58,12 +54,6 @@
             }
         </style>
         </div>
-    <div class="container">
-        <div class="alert alert-danger" id="dv_error" name="dv_error">
-        </div>
-        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
-        </div>
-    </div>
     <div class="container" style="margin-top: 10px">
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">
             <thead>
@@ -76,10 +66,10 @@
             </tbody>
         </table>
     </div>
-    <div class="remodal" data-remodal-id="modal">
+    <div class="remodal" data-remodal-id="modal" style="background-color:#013b63;color:white;font-size:14px !important">
 
         <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Formulario de destinos</h4>
+            <h4 class="modal-title" id="myModalLabel">Formulario de Destinos</h4>
         </div>
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
@@ -90,15 +80,17 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
                             <div class="col-sm-10">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="200" />
+                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
                             </div>
                         </div>
                     </div>
+                    <!--/span-->
+
                     <div class="span6">
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Numero"></label>
                             <div class="col-sm-10">
-                                <%--<input type="text" id="Numero" name="Numero" class="form-control" maxlength="50"/>--%>
+                                <%--<input type="text" id="Numero" name="Numero" class="form-control" />--%>
                             </div>
                         </div>
                     </div>
@@ -108,7 +100,6 @@
 
             </form>
             <br />
-            <hr />
            
         </div>
         <div class="modal-footer">
@@ -136,7 +127,7 @@
         });
     </script>
 
-    <div class="remodal" data-remodal-id="anularmodal">
+    <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
             <h4>Activar/Inactivar</h4>
         </div>
@@ -150,7 +141,7 @@
         </div>
     </div>
 
-    <div class="remodal" data-remodal-id="deletemodal">
+    <div class="remodal" data-remodal-id="deletemodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
             <h4>Eliminar</h4>
         </div>
@@ -164,7 +155,7 @@
         </div>
     </div>
 
-   <div class="remodal" data-remodal-id="msjModal">
+   <div class="remodal" data-remodal-id="msjModal" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Mensaje</h4>
             </div>

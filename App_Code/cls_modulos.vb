@@ -5,7 +5,7 @@ Imports ac_Funciones
 
 Public Class cls_modulos
     Dim var_Nombre_Tabla As String = "tbl_modulos"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
     Dim var_id As Integer = 0
     Dim var_nombre As String = ""
 

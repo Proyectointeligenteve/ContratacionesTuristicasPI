@@ -11,7 +11,7 @@ Public Class cls_vouchers
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "numero"
     Dim var_Campos As String = "numero,id_hotel,id_aerolinea,reserva,fecha_entrada,fecha_salida,tipo_habitacion,desayuno,todo_incluido,hospedaje,id_usuario_registro,fecha_registro"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer
     Dim var_numero As String = ""
@@ -215,7 +215,7 @@ Public Class cls_vouchers
     End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         'Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select id, nombre as des from tbl_tipos_acciones" & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by nombre")
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_vouchers.Campo_Id & " as id, " & cls_vouchers.Campo_Validacion & " as des from " & cls_vouchers.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_vouchers.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "SELECCIONE")
@@ -235,25 +235,85 @@ Public Class cls_vouchers
 
         If Me.var_id = 0 Then   'NUEVO
             If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_numero) & "," & Sql_Texto(Me.var_id_hotel) & "," & Sql_Texto(Me.var_id_aerolinea) & "," & Sql_Texto(Me.var_reserva) & "," & Sql_Texto(Me.var_fecha_entrada) & "," & Sql_Texto(Me.var_fecha_salida) & "," & Sql_Texto(Me.var_tipo_habitacion) & "," & Sql_Texto(Me.var_desayuno) & "," & Sql_Texto(Me.var_todo_incluido) & "," & Sql_Texto(Me.var_hospeaje) & "," & Sql_Texto(Me.var_id_usuario_registro) & "," & Sql_Texto(Me.var_fecha_registro), var_error) Then
-                var_msj = var_error
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error agregando voucher '" & Me.var_numero & " - " & Me.var_id_hotel & " - " & Me.var_fecha_entrada & "': " & var_error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("vouchers").Id
+                obj_log.id_Usuario = var_id_usuario_registro
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
                 Return False
                 Exit Function
-            End If
-            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
+            Else
+                Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
 
-            For i As Integer = 0 To obj_detalles.Count - 1
-                obj_detalles.Item(i).Id_voucher = Me.Id
-                Dim var_msj2 As String = ""
-                If Not obj_detalles.Item(i).Actualizar(var_error) Then
-                    var_msj &= " - " & var_msj2
-                End If
-            Next
-            Return True
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append(Chr(34) & "Id" & Chr(34) & ":" & Chr(34) & Me.Id & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Numero" & Chr(34) & ":" & Chr(34) & Me.Numero & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "IdHotel" & Chr(34) & ":" & Chr(34) & Me.IdHotel & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "IdAerolinea" & Chr(34) & ":" & Chr(34) & Me.IdAerolinea & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.FechaEntrada & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "TipoHabitacion" & Chr(34) & ":" & Chr(34) & Me.TipoHabitacion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Desayuno" & Chr(34) & ":" & Chr(34) & Me.Desayuno & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "TodoIncluido" & Chr(34) & ":" & Chr(34) & Me.TodoIncluido & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Hospedaje" & Chr(34) & ":" & Chr(34) & Me.Hospedaje & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Voucher agregada: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("vouchers").Id
+                obj_log.id_Usuario = var_id_usuario_registro
+                obj_log.idAccion = New cls_acciones("agregar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
+                For i As Integer = 0 To obj_detalles.Count - 1
+                    obj_detalles.Item(i).Id_voucher = Me.Id
+                    Dim var_msj2 As String = ""
+                    If Not obj_detalles.Item(i).Actualizar(var_error) Then
+                        var_msj &= " - " & var_msj2
+                    End If
+                Next
+                Return True
+            End If
         ElseIf Me.var_id > 0 Then 'EDICION
             If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "numero=" & Sql_Texto(Me.var_numero) & ",id_hotel=" & Sql_Texto(Me.var_id_hotel) & ",id_aerolinea=" & Sql_Texto(Me.var_id_aerolinea) & ",reserva=" & Sql_Texto(Me.var_reserva) & ",fecha_entrada=" & Sql_Texto(Me.var_fecha_entrada) & ",fecha_salida=" & Sql_Texto(Me.var_fecha_salida) & ",tipo_habitacion=" & Sql_Texto(Me.var_tipo_habitacion) & ",desayuno=" & Sql_Texto(Me.var_desayuno) & ",todo_incluido=" & Sql_Texto(Me.var_todo_incluido) & ",hospedaje=" & Sql_Texto(Me.var_hospeaje), Me.var_Campo_Id & "=" & Me.var_id) Then
+                var_msj = var_error
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Error editando voucher '" & Me.var_numero & " - " & Me.var_id_hotel & " - " & Me.var_fecha_entrada & "': " & var_error
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("vouchers").Id
+                obj_log.id_Usuario = var_id_usuario_registro
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = False
+                obj_log.InsertarLog()
+
                 Return False
                 Exit Function
-            End If
+
+            Else
+
+                Dim obj_sb As New StringBuilder
+                obj_sb.Append(Chr(34) & "Id" & Chr(34) & ":" & Chr(34) & Me.Id & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Numero" & Chr(34) & ":" & Chr(34) & Me.Numero & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "IdHotel" & Chr(34) & ":" & Chr(34) & Me.IdHotel & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "IdAerolinea" & Chr(34) & ":" & Chr(34) & Me.IdAerolinea & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.FechaEntrada & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "TipoHabitacion" & Chr(34) & ":" & Chr(34) & Me.TipoHabitacion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Desayuno" & Chr(34) & ":" & Chr(34) & Me.Desayuno & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "TodoIncluido" & Chr(34) & ":" & Chr(34) & Me.TodoIncluido & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Hospedaje" & Chr(34) & ":" & Chr(34) & Me.Hospedaje & Chr(34) & "")
+
+                Dim obj_log As New cls_logs
+                obj_log.ComentarioLog = "Voucher editada: {" & obj_sb.ToString & "}"
+                obj_log.FechaLog = Now
+                obj_log.id_Menu = New cls_modulos("vouchers").Id
+                obj_log.id_Usuario = var_id_usuario_registro
+                obj_log.idAccion = New cls_acciones("editar").Id
+                obj_log.ResultadoLog = True
+                obj_log.InsertarLog()
 
             Dim var_ids As String = ""
             For i As Integer = 0 To Me.obj_detalles.Count - 1
@@ -270,7 +330,8 @@ Public Class cls_vouchers
                 ac_Funciones.Eliminar(Me.obj_Conex_int, cls_vouchers_detalles.Nombre_Tabla, "id_voucher=" & Me.var_id)
             End If
 
-            Return True
+                Return True
+            End If
         Else
             var_error = "No se encontro el Registro"
             Return False
@@ -289,13 +350,45 @@ Public Class cls_vouchers
 
         Return obj_dt
     End Function
+    Public Shared Function Anular(ByVal var_id As Integer, ByVal var_id_usuario As Integer, ByRef var_mensaje As String) As Boolean
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim var_error As String = ""
+        Dim obj_voucher As New cls_vouchers(var_id)
+        If Not ac_Funciones.Actualizar(obj_Conex_int, cls_vouchers.Nombre_Tabla, "anulado= case when isnull(anulado,0)=0 then '1' else '0' end, fecha_anulacion=" & Sql_Texto(Now, True) & ", id_usuario_anulacion=" & var_id_usuario, cls_vouchers.Campo_Id & "=" & var_id, var_error) Then
+            var_mensaje = var_error
+
+            Dim obj_log As New cls_logs
+            obj_log.ComentarioLog = "Error anulando voucher '" & obj_voucher.Id & " - " & obj_voucher.Numero & "': " & var_error
+            obj_log.FechaLog = Now
+            obj_log.id_Menu = New cls_modulos("vouchers").Id
+            obj_log.id_Usuario = var_id_usuario
+            obj_log.idAccion = New cls_acciones("anular").Id
+            obj_log.ResultadoLog = False
+            obj_log.InsertarLog()
+
+            Return False
+        Else
+
+            Dim obj_log As New cls_logs
+            obj_log.ComentarioLog = "voucher anulado '" & obj_voucher.Id & " - " & obj_voucher.var_numero
+            obj_log.FechaLog = Now
+            obj_log.id_Menu = New cls_modulos("vouchers").Id
+            obj_log.id_Usuario = var_id_usuario
+            obj_log.idAccion = New cls_acciones("anular").Id
+            obj_log.ResultadoLog = True
+            obj_log.InsertarLog()
+
+            Return True
+        End If
+        Return True
+    End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_vouchers.Nombre_Tabla, cls_vouchers.Campo_Id & "=" & var_id)
         Return True
     End Function
     Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_vouchers.Listado & "()"
         Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     End Function

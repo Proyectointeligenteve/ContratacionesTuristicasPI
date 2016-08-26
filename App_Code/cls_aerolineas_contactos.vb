@@ -8,11 +8,11 @@ Public Class cls_aerolineas_contactos
     Dim var_Nombre_Tabla As String = "tbl_aerolineas_contactos"
     Dim var_Campo_Id As String = "id"
     Dim var_Campos As String = "id_aerolinea,nombre,cargo,telefono"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
-    Dim var_id_aerolinea As String = ""
-    Dim var_nombre As Integer = 0
+    Dim var_id_aerolinea As Integer = 0
+    Dim var_nombre As String = ""
     Dim var_cargo As String = ""
     Dim var_telefono As String = ""
 
@@ -103,7 +103,7 @@ Public Class cls_aerolineas_contactos
     End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         'Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select id, nombre as des from tbl_tipos_acciones" & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by nombre")
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_aerolineas_contactos.Campo_Id & " as id, " & cls_aerolineas_contactos.Campo_Validacion & " as des from " & cls_aerolineas_contactos.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_aerolineas_contactos.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "SELECCIONE")
@@ -141,12 +141,12 @@ Public Class cls_aerolineas_contactos
     End Function
 
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_aerolineas_contactos.Nombre_Tabla, cls_aerolineas_contactos.Campo_Id & "=" & var_id)
         Return True
     End Function
     'Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
-    '    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    '    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
     '    Dim var_consulta As String = "Select * from " & cls_aerolineas_contactos.Listado & "()"
     '    Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     'End Function

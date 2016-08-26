@@ -9,7 +9,7 @@ Public Class cls_Roles
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "nombre"
     'Dim var_Campos As String = "nombre,descripcion, id_usuario_reg, fecha_modificacion"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id_Rol As Integer
     Dim var_nombre_Rol As String = ""
@@ -252,7 +252,7 @@ Public Class cls_Roles
     'End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim obj_dt_int As DataTable = ac_Funciones.Abrir_Tabla(obj_Conex_int, "select " & cls_Roles.Campo_Id & " as id, " & cls_Roles.Campo_Validacion & " as des from " & cls_Roles.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_Roles.Campo_Id & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int

@@ -3,6 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
         @import "css/jquery.dataTables.css";
+        @import "css/frm_envios.css";
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -30,22 +31,30 @@
 
         <form id="form1" style="margin-top: 20px">
             <input type="hidden" id="hdn_id_envio" name="hdn_id_envio" value="0"/>
-            <div class="row-fluid">
+           
+             <div class="row-fluid">
                     <div class="span6">
                         <div class="control-group">
-                            <label class="col-sm-4 control-label" for="Codigo">Codigo</label>
-                            <div class="col-sm-8">
+                            <label class="span2 control-label" for="Codigo">Codigo</label>
+                            <div class="span10">
                                 <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="200" />
                             </div>
                         </div>
                     </div>
             </div>
-            <%--<div class="container"><h5>Emisor</h5></div>--%>
+            <br />
             <div class="row-fluid">
-                <div class="span6">
+                <div class="span2">
                     <div class="control-group">
-                        <label class="col-sm-2 control-label" for="IdClienteEmisor">Emisor</label>
-                        <div class="col-sm-10">
+                        <label class="span2 control-label" for="Codigo" style ="font-size :14px !important"><b>Emisor:</b></label>
+                        <div class="span10">
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="span3 control-label" for="IdClienteEmisor">Identificador</label>
+                        <div class="span9">
                             <div class="input-group">
                                 <div class="input-group-btn">
                                 <input type="text" class="form-control" placeholder="" name="IdClienteEmisor" id="IdClienteEmisor" onchange="BuscarClientesE()" />
@@ -57,15 +66,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span5">
                     <div class="control-group">
-                        <label class="col-sm-2 control-label" for="NombreE">Nombre</label>
-                        <div class="col-sm-10">
+                        <label class="span3 control-label" for="NombreE">Nombre</label>
+                        <div class="span9">
                             <input type="text" id="NombreE" name="NombreE" class="form-control" />
                         </div>
                     </div>
                 </div>
             </div>
+            <br />
             <div class="row-fluid">   
                 <div class="span4">
                     <div class="control-group">
@@ -98,11 +108,19 @@
                     </div>
                 </div>
             </div>
-                <div class="row-fluid">
-                <div class="span6">
+            <br />
+            <div class="row-fluid">
+                <div class="span2">
                     <div class="control-group">
-                        <label class="col-sm-2 control-label" for="IdClienteReceptor">Receptor</label>
-                        <div class="col-sm-10">
+                        <label class="span2 control-label" for="Codigo" style ="font-size :14px !important"><b>Receptor:</b></label>
+                        <div class="span10">
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="IdClienteReceptor">Identificador</label>
+                        <div class="span10">
                             <div class="input-group">
                                 <div class="input-group-btn">
                                 <input type="text" class="form-control" placeholder="" name="IdClienteReceptor" id="IdClienteReceptor" onchange="BuscarClientesR()" />
@@ -114,15 +132,16 @@
                         </div>
                     </div>
                 </div>
-                    <div class="span6">
-                        <div class="control-group">
-                            <label class="col-sm-2 control-label" for="NombreR">Nombre</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="NombreR" name="NombreR" class="form-control" />
-                            </div>
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="NombreR">Nombre</label>
+                        <div class="span10">
+                            <input type="text" id="NombreR" name="NombreR" class="form-control" />
                         </div>
                     </div>
                 </div>
+            </div>
+            <br />
             <div class="row-fluid">   
                 <div class="span4">
                     <div class="control-group">
@@ -161,7 +180,7 @@
                     <div class="control-group">
                         <label class="span6 control-label" for="DireccionEnvio">Direccion</label>
                         <div class="span6">
-                        <textarea id="DireccionEnvio" rows="3" name="DireccionEnvio" maxlength="250"></textarea>
+                        <textarea id="DireccionEnvio" rows="3" name="DireccionEnvio" maxlength="250" style="width :100%"></textarea>
                         </div>
                     </div>
                 </div>

@@ -7,16 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="shortcut icon" href="ico/favicon.ico" />
-    <title>.::ContratacionesTuristicas::.</title>
+    <title>.::CONTRATACIONE TURISTICAS::.</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="css/master.css" rel="stylesheet" />
 </head>
-<body style="background-color:#b52b25; color:white; font-size:14px">
+<body style="background-color:#FFF; color:BLACK; font-size:14px">
     <form id="form1" runat="server">
         <div class="container">
             <div><center>
-                <p>Su sesión ha expirado o no posee permiso para realizar la acción.<br /> Presione <a href="login.aspx">AQUI</a> para iniciar una nueva sesión</p>
+                <p>Su sesión ha expirado!.<br /> Presione <a href="login.aspx">AQUI</a> para iniciar una nueva sesión</p>
+                <img src="img/loguito.png" />
             </center></div>
         </div>
     </form>

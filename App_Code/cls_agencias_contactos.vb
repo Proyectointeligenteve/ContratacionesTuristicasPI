@@ -10,10 +10,10 @@ Public Class cls_agencias_contactos
     'Dim var_Campo_Validacion As String = "nombre"
     'Dim var_Campos As String = "nombre,id_usuario_registro,fecha_registro,id_usuario_ult,fecha_ult"
     Dim var_Campos As String = "id_agencia,nombre,cargo,telefono"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer
-    Dim var_id_agencia As String = ""
+    Dim var_id_agencia As Integer = 0
     Dim var_nombre As String = ""
     Dim var_cargo As String = ""
     Dim var_telefono As String = ""
@@ -114,7 +114,7 @@ Public Class cls_agencias_contactos
     End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         'Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select id, nombre as des from tbl_tipos_acciones" & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by nombre")
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_agencias_contactos.Campo_Id & " as id, " & cls_agencias_contactos.Campo_Validacion & " as des from " & cls_agencias_contactos.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_agencias_contactos.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "SELECCIONE")
@@ -152,12 +152,12 @@ Public Class cls_agencias_contactos
     End Function
 
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_agencias_contactos.Nombre_Tabla, cls_agencias_contactos.Campo_Id & "=" & var_id)
         Return True
     End Function
     Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_agencias_contactos.Listado & "()"
         Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     End Function

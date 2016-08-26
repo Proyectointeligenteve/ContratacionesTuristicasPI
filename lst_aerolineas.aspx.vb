@@ -32,6 +32,8 @@ Partial Class lst_aerolineas
                     Cargar()
                 Case "eliminar"
                     Eliminar()
+                Case "Anular"
+                    Anular()
             End Select
         End If
     End Sub
@@ -71,6 +73,7 @@ Partial Class lst_aerolineas
             obj_sb.Append("," & Chr(34) & "Agregar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("aerolineas").Id, New cls_acciones("agregar").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Ver" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("aerolineas").Id, New cls_acciones("ver").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Editar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("aerolineas").Id, New cls_acciones("editar").Id).permiso, 1, 0) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Anular" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("aerolineas").Id, New cls_acciones("anular").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Eliminar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("aerolineas").Id, New cls_acciones("eliminar").Id).permiso, 1, 0) & Chr(34) & "")
 
         Catch ex As Exception
@@ -99,11 +102,11 @@ Partial Class lst_aerolineas
 
         Dim obj_dt_int As System.Data.DataTable
         If var_estatus = 1 Then
-            obj_dt_int = cls_aerolineas.ConsultaActivos(var_error)
+            obj_dt_int = cls_aerolineas.ConsultaActivos("", var_error)
         ElseIf var_estatus = 2 Then
-            obj_dt_int = cls_aerolineas.ConsultaAnulados(var_error)
-        Else 'Todos
-            obj_dt_int = cls_aerolineas.Consulta(var_error)
+            obj_dt_int = cls_aerolineas.ConsultaAnulados("", var_error)
+        Else
+            obj_dt_int = cls_aerolineas.Consulta("", var_error)
         End If
         Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
 
@@ -128,6 +131,23 @@ Partial Class lst_aerolineas
         Response.ClearHeaders()
         Response.ClearContent()
         If Not cls_aerolineas.Eliminar(CInt(var_data("id").ToString), obj_Session.Usuario, var_error) Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")
+        End If
+        Response.End()
+    End Sub
+
+    Sub Anular()
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+        Dim var_error As String = ""
+
+        Response.ContentType = "application/json"
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        If Not cls_aerolineas.Anular(CInt(var_data("id").ToString), obj_Session.Usuario.Id, var_error) Then
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")

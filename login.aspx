@@ -7,14 +7,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <link rel="shortcut icon" href="ico/favicon.ico"/>
-    <title>.::ContratacionesTuristicas::.</title>
+    <title>.::CONTRATACIONES TURISTICAS::.</title>
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/login.css" rel="stylesheet"/>
     <style>
         .pnl_login {
             padding: 20px;
-            background-color: #fff;
+            /*background-color: #ffffff;
+            background-image: linear-gradient(to right,#12abb8 0,#0a72a0 50%);*/
+            background-image: url(img/fondo_inicio.png);
+            /*background-size:320px;*/
             border: 5px solid #00233e;
+            -webkit-border-radius: 40px;
+            -moz-border-radius: 40px;
+            border-radius: 40px;
+            /*background-image :url();*/
             /*-webkit-border-radius: 8px;
             -moz-border-radius: 8px;
             border-radius: 8px;
@@ -37,10 +44,8 @@
             <div class="pnl_login">
                 <table style="width:100%;">
                     <tr>
-                        <td>
-                            <center>
-                            <img src="img/logo.png" style="width: 64px" />
-                                </center>
+                        <td style ="text-align :center !important">
+                            <img src="img/logo_ctg.png" style="width: 200px" />
                         </td>
                     </tr>
                 </table>
@@ -77,7 +82,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var showerr = $("#hf_error");
-            //la funcion trim elimina los espacios extras en el texto
             if ($.trim(showerr.val()) == "") { $("#dv_error").hide(); }
             else { $("#dv_error").show(); showerr.val(""); }
 

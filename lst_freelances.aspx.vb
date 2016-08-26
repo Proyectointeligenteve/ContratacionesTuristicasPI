@@ -144,7 +144,7 @@ Partial Class lst_freelances
         Response.ClearHeaders()
         Response.ClearContent()
         Dim var_error As String = ""
-        If Not obj_freelances.Actualizar(var_error) Then
+        If Not obj_freelances.Actualizar(var_error, obj_Session.Usuario.Id) Then
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "}")

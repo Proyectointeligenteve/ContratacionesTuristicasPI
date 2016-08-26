@@ -7,9 +7,9 @@ Public Class cls_envios
 #Region "VARIABLES"
     Dim var_Nombre_Tabla As String = "tbl_envios"
     Dim var_Campo_Id As String = "id"
-    Dim var_Campo_Validacion As String = "identificador"
+    Dim var_Campo_Validacion As String = "codigo"
     Dim var_Campos As String = "codigo,id_cliente_emisor,id_cliente_receptor,id_pais_origen,id_estado_origen,id_ciudad_origen,id_pais_destino,id_estado_destino,id_estado_destino,id_ciudad_destino,direccion_destino,costo_envio,estatus,id_usuario_reg,fecha_reg"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_codigo As String = ""
@@ -317,7 +317,7 @@ Public Class cls_envios
     End Function
 
     Public Shared Function Anular(ByVal var_id As Integer, ByVal var_id_usuario As Integer, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
         Dim obj_envio As New cls_envios(var_id)
         If Not ac_Funciones.Actualizar(obj_Conex_int, cls_envios.Nombre_Tabla, "anulado= case when isnull(anulado,0)=0 then '1' else '0' end, fecha_anulacion=" & Sql_Texto(Now, True) & ", id_usuario_anulacion=" & var_id_usuario, cls_envios.Campo_Id & "=" & var_id, var_error) Then
@@ -349,7 +349,7 @@ Public Class cls_envios
         Return True
     End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_error As String = ""
 
         If ac_Funciones.Eliminar(obj_conex, cls_envios.Nombre_Tabla, cls_envios.Campo_Id & "=" & var_id) < 0 Then
@@ -361,14 +361,14 @@ Public Class cls_envios
     End Function
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_envios.Campo_Id & " as id, " & cls_envios.Campo_Validacion & " as des from " & cls_envios.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_envios.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int
     End Function
 
     Public Shared Function ConsultaPorEntregar(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_envios.ListadoPorEntregar & "()"
         Dim var_msj As String = ""
 
@@ -378,7 +378,7 @@ Public Class cls_envios
     End Function
 
     Public Shared Function ConsultaTransito(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_envios.ListadoTransito & "()"
         Dim var_msj As String = ""
 
@@ -387,7 +387,7 @@ Public Class cls_envios
         Return obj_dt_int
     End Function
     Public Shared Function ConsultaEntregados(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_envios.ListadoEntregados & "()"
         Dim var_msj As String = ""
 
@@ -396,7 +396,7 @@ Public Class cls_envios
         Return obj_dt_int
     End Function
     Public Shared Function ConsultaExtraviados(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_envios.ListadoExtraviados & "()"
         Dim var_msj As String = ""
 
@@ -406,7 +406,7 @@ Public Class cls_envios
     End Function
 
     Public Shared Function Consulta(ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_envios.Listado & "()"
         Dim var_msj As String = ""
 

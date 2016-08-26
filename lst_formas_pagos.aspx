@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Principal.master" AutoEventWireup="false" CodeFile="lst_formas_pagos.aspx.vb" Inherits="lst_formas_pagos" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_formas_pagos.aspx.vb" Inherits="lst_formas_pagos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
@@ -26,7 +26,7 @@
                         <span style="font-size: 14px;color:white"><b>LISTADO DE FORMAS DE PAGO</b></span>
                     </div>
                     <div class="span2">
-                        <img src="img/logo_sirca.png" width="32px" />
+                        <img src="img/logo_ctg.png" width="32px" />
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <img src='img/loading2.gif' class="loading" />
                 <button class="btn hide"  id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
                 <button class="btn hide"  id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
+                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Activar/Inactivar</button>
                 <button class="btn hide"  id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
@@ -90,7 +90,7 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
                             <div class="col-sm-10">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="200" />
+                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Numero"></label>
                             <div class="col-sm-10">
-                                <%--<input type="text" id="Numero" name="Numero" class="form-control" maxlength="50" />--%>
+                                <%--<input type="text" id="Numero" name="Numero" class="form-control" />--%>
                             </div>
                         </div>
                     </div>

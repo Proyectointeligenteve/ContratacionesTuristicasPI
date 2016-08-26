@@ -8,7 +8,7 @@ Public Class cls_hoteles_contactos
     Dim var_Nombre_Tabla As String = "tbl_hoteles_contactos"
     Dim var_Campo_Id As String = "id"
     Dim var_Campos As String = "id_hotel,nombre,cargo,telefono"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_id_hotel As Integer = 0
@@ -103,7 +103,7 @@ Public Class cls_hoteles_contactos
     End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         'Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select id, nombre as des from tbl_tipos_acciones" & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by nombre")
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_hoteles_contactos.Campo_Id & " as id, " & cls_hoteles_contactos.Campo_Validacion & " as des from " & cls_hoteles_contactos.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_hoteles_contactos.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "SELECCIONE")
@@ -111,16 +111,8 @@ Public Class cls_hoteles_contactos
     End Function
 
     Public Function Actualizar(ByRef var_Error As String) As Boolean
-        'If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
-        '    If var_Error = "" Then
-        '        var_Error = Me.var_nombre & "' ya existe en la base de datos"
-        '    End If
-        '    Return False
-        '    Exit Function
-        'End If
-
         If Me.var_id = 0 Then   'NUEVO
-            'If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_horas) & "," & Sql_Texto(Me.var_hoteles_contactos, True), var_Error) Then
+
             If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_id_hotel) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_cargo) & "," & Sql_Texto(Me.var_telefono), var_Error) Then
                 Return False
                 Exit Function
@@ -128,7 +120,7 @@ Public Class cls_hoteles_contactos
             Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
             Return True
         ElseIf Me.var_id > 0 Then 'EDICION
-            'If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ", horas=" & Sql_Texto(Me.var_horas) & ", turno=" & Sql_Texto(Me.var_hoteles_contactos), Me.var_Campo_Id & "=" & Me.var_id) Then
+
             If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "id_hotel=" & Sql_Texto(Me.var_id_hotel) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",cargo=" & Sql_Texto(Me.var_cargo) & ",telefono=" & Sql_Texto(Me.var_telefono), Me.var_Campo_Id & "=" & Me.var_id) Then
                 Return False
                 Exit Function
@@ -141,12 +133,12 @@ Public Class cls_hoteles_contactos
     End Function
 
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_hoteles_contactos.Nombre_Tabla, cls_hoteles_contactos.Campo_Id & "=" & var_id)
         Return True
     End Function
     'Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
-    '    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    '    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
     '    Dim var_consulta As String = "Select * from " & cls_hoteles_contactos.Listado & "()"
     '    Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     'End Function

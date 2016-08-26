@@ -21,6 +21,7 @@ function Permisos() {
 
             if (response.rslt == 'exito') {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
+                if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
                 if (response.Anular == 1) { $("#btn_anular").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
@@ -104,8 +105,10 @@ function CargarListado() {
             $('<li class="next disabled"><a href="#">&raquo;</a></li>').appendTo($("ul", nPaging)).find("a").bind('click.DT', { action: "next" }, fnClickHandler);
         },
         "aoColumns": [
+            { "mDataProp": "Codigo" },
             { "mDataProp": "Nombre" },
             { "mDataProp": "rif" },
+            { "mDataProp": "Telefonofijo" },
             { "mDataProp": "Telefonomovil" },
             { "mDataProp": "Email" },
             { "mDataProp": "Estatus" }
@@ -145,101 +148,49 @@ function Validar() {
 }
 
 function Nuevo() {
-    $('#id').val(0);
-    $('#Nombre').val('');
-    $.ajax({
-        success: function (response) {
-            modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
-            modal.open();
-        },
-        error: function () {
-            $('#basicModal').hide();
-            $("#dv_mensaje").hide();
-            $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
-            $("#dv_error").show();
-            $('#basicModal').modal('hide');
-        }
-    });
+    $('.loading').show()
+    $('.btn').hide();
+    window.location.href = 'frm_freelances.aspx';
 }
-function Editar() {
-    var id
+
+function Ver() {
+    var id = '';
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {
             id = this.id;
-            $("#id").val(id);
         }
     });
 
-    $.ajax({
-        type: "POST",
-        url: "lst_freelances.aspx?fn=editar",
-        data: '{"id":"' + id  + '"}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            if (response.rslt == 'exito') {
-                $('#Nombre').val(response.Nombre);
-                modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
-                modal.open();
-            }
-            else {
-                $("#dv_mensaje").hide()
-                $("#dv_error").html(response.msj);
-                $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
-            }
-        },
-        error: function () {
-            $('#basicModal').hide();
-            $("#dv_mensaje").hide();
-            $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
-            $("#dv_error").show();
-            $('#basicModal').modal('hide');
-        }
-    });
-        
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+
+    $('.loading').show()
+    $('.btn').hide();
+    window.location.href = 'frm_freelances.aspx?id=' + id + '&v=1';
 }
 
-function Guardar() {
-        var registro = {};
-        registro.id = $('#id').val();
-        registro.Nombre = $('#nombre').val();
-        registro.Rif = $('#rif').val();
-        registro.Direccion = $('#direccion').val();
-        registro.Telefono_fijo = $('#telefono_fijo').val();
-        registro.Telefono_movil = $('#telefono_movil').val();
-        registro.Email = $('#email').val();
+function Editar() {
+    var id = '';
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+        }
+    });
 
-          $.ajax({
-            type: "POST",
-            url: "lst_freelances.aspx?fn=guardar",
-            data: JSON.stringify(registro),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                
-                //$('#basicModal').modal('hide');
-                modal.close();
-                if (response.rslt == 'exito') {
-                    $("#dv_error").hide()
-                    $("#dv_mensaje").html('El registro ha sido procesado con exito.');
-                    $("#dv_mensaje").show();
-                    setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
-                }
-                else {
-                    $("#dv_error").html(response.msj);
-                    $("#dv_error").show();
-                    setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                }
-                $('#tbDetails').dataTable().fnDestroy();
-                CargarListado();
-            },
-            error: function () {
-                $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
-                $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
-            }
-        });
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+
+    $('.loading').show()
+    $('.btn').hide();
+    window.location.href = 'frm_freelances.aspx?id=' + id;
 }
 
 function Confirmar() {

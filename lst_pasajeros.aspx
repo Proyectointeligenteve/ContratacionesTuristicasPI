@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_bancos.aspx.vb" Inherits="lst_bancos" %>
+﻿<%@ Page Title="" Language="VB" AutoEventWireup="false" MasterPageFile="principal.master" CodeFile="lst_pasajeros.aspx.vb" Inherits="lst_pasajeros" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
@@ -18,34 +18,21 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-        <div class="container">
-            <br />
-            <div style ="width :100%">
-                <div class ="row-fluid">
-                    <div class="span10">
-                        <span style="font-size: 14px;color:white"><b>LISTADO DE BANCOS</b></span>
-                    </div>
-                    <div class="span2">
-                        <img src="img/logo_ctg.png" width="32px" />
-                    </div>
-                </div>
-            </div>
-            <hr />
-        <div class="izq">
-            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
+    <div class="container">
+        <div style ="width :100%">
+            <span style="font-size: 14px;color:white">LISTADO DE PASAJEROS</span><hr />
+        </div>
         <div class="hr">
-            <br />
+            <hr />
         </div>
         <div class="der">
             <div class="btn-group">
                 <img src='img/loading2.gif' class="loading" />
-                <button class="btn hide"  id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
-                <button class="btn hide"  id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
-                <button class="btn hide"  id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
+                <button class="btn hide" id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn hide" id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
+                <button class="btn hide" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
             </div>
-        </div>
-        
+        </div>        
         <style>
             @media (max-width:400px) {
                 .btn-group {
@@ -57,7 +44,7 @@
                 }
             }
         </style>
-        </div>
+    </div>
     <div class="container">
         <div class="alert alert-danger" id="dv_error" name="dv_error">
         </div>
@@ -68,49 +55,61 @@
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">
             <thead>
                 <tr>
-                    <td data-class="expand">Nombre</td>
-                    <td data-class="phone,tablet">Estatus</td>
+                    <td data-class="expand">NOMBRE</td>
+                    <td data-class="phone,tablet">APELLIDO</td>
+                    <td data-class="phone,tablet">RIF</td>
+                    <%--<td data-class="phone,tablet">Tipo</td>
+                    <td data-class="phone,tablet">Estatus</td>--%>
                 </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
-    <div class="remodal" data-remodal-id="modal">
-
+    <div class="remodal" data-remodal-id="modal" style ="background-color :#013b63;color:white;">
         <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Formulario de bancos</h4>
+            <h4 class="modal-title" id="myModalLabel">Formulario de pasajeros</h4>
         </div>
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
                 <input type="hidden" id="id" name="id" />
 
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span12">
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
                             <div class="col-sm-10">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-
-                    <div class="span6">
-                        <div class="control-group">
-                            <label class="col-sm-2 control-label" for="Numero"></label>
-                            <div class="col-sm-10">
-                                <%--<input type="text" id="Numero" name="Numero" class="form-control" />--%>
+                                <input type="text" id="Nombre" name="Nombre" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <!--/span-->
                 </div>
+                <br />
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="col-sm-2 control-label" for="Apellido">Apellido</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="Apellido" name="Apellido" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                </div>
+                <br />
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label class="col-sm-2 control-label" for="Rif">Rif</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Rif" name="Rif" class="form-control" />
+                            </ div>
+                    </div>
+                </div>
                 <!--/row-->
 
             </form>
             <br />
-            <hr />
            
         </div>
         <div class="modal-footer">
@@ -126,6 +125,12 @@
             $('#form1').validate({
                 rules: {
                     Nombre: {
+                        required: true
+                    },
+                    Apellido: {
+                        required: true
+                    },
+                    Rif: {
                         required: true
                     }
 
@@ -174,10 +179,10 @@
                 <p><span id="Span1" name="msj">El registro ha sido guardado.</span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="bancosLista()">Ok</button>
+                <button type="button" class="btn btn-success" onclick="pasajerosLista()">Ok</button>
             </div>
         </div> 
-    <script type="text/javascript" language="javascript" src="js/lst_bancos.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
+    <script type="text/javascript" language="javascript" src="js/lst_pasajeros.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
     <script>
 
         $(document).ready(function () {

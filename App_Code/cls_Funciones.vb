@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic
 Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Net.Mail
 Imports System.IO
 
 Public Class ac_Funciones
@@ -361,6 +362,52 @@ Public Class ac_Funciones
         'Rtn_String = Trim(Rtn_String) & " " & String(120, "*")
         MontoEscrito = Rtn_String
     End Function
+    Shared Function EnviarCorreo(ByVal var_cuerpo As String, Optional ByRef var_error As String = "", Optional ByVal var_asunto As String = "", Optional ByVal var_correo As String = "", Optional ByVal adjunto As String = "", Optional ByVal var_enviaratodos As Boolean = False) As Boolean
+        Dim msg As New System.Net.Mail.MailMessage()
+        If var_correo.Trim.Length > 0 Then
+            msg.To.Add(var_correo)
+        End If
+        msg.From = New MailAddress("contacto@respiro1510.com", "COMPRA RESPIRO", System.Text.Encoding.UTF8)
+        msg.Subject = var_asunto
+        msg.SubjectEncoding = System.Text.Encoding.UTF8
+        msg.Body = var_cuerpo
+        msg.BodyEncoding = System.Text.Encoding.UTF8
+        msg.IsBodyHtml = True
 
+        If adjunto.Trim.Length > 0 Then
+            msg.Attachments.Add(New Attachment(adjunto))
+        End If
+
+        Dim client As New SmtpClient()
+
+        client.Credentials = New System.Net.NetworkCredential("contacto@respiro1510.com", "REmail123")
+
+        'client.Port = 587
+        'client.Host = "smtp.gmail.com"
+        'client.EnableSsl = True
+
+        client.Host = "relay-hosting.secureserver.net"
+        client.EnableSsl = False
+
+
+        Try
+            client.Send(msg)
+        Catch ex As Exception
+            var_error = ex.Message
+
+            Dim obj_log As New cls_logs
+            obj_log.ComentarioLog = "Error enviando correo: '" & var_asunto & "'. " & ex.Message
+            obj_log.FechaLog = Now
+            obj_log.id_Menu = 0
+            obj_log.id_Usuario = 0
+            obj_log.idAccion = New cls_acciones("error").Id
+            obj_log.ResultadoLog = False
+            obj_log.InsertarLog()
+
+            Return False
+        End Try
+
+        Return True
+    End Function
 End Class
 

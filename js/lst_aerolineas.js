@@ -23,7 +23,7 @@ function Permisos() {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
                 if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
-                //if (response.Imprimir == 1) { $("#btn_imprimir").removeClass('hide'); }
+                if (response.Anular == 1) { $("#btn_anular").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
             }
             else {
@@ -72,7 +72,6 @@ function EventosListado() {
 
 var oTable;
 function CargarListados() {
-    //var oTable;
     $('#tbDetails').dataTable().fnDestroy();
     var giRedraw = false;
     var responsiveHelper;
@@ -81,26 +80,30 @@ function CargarListados() {
         phone: 480
     };
 
+    var v = $("#vista_estatus").val();
 
-    //oTable = $('#tbDetails').dataTable({
-        var v = $("#vista_estatus").val();
         tableElement = $('#tbDetails')
         tableElement.dataTable({
         "bProcessing": true,
-        "bServerSide": true,
+        "bServerSide": false,
         "sAjaxSource": "lst_aerolineas.aspx?fn=cargar&v=" + v,
+        "sPaginationType": "full_numbers",
+        "bAutoWidth": false,
+        "bLengthChange": false,
         "oLanguage": {
-            "sInfo": "_TOTAL_ Registro(s) encontrado(s)",
+            "sInfo": "<span style='color:#fff'>_TOTAL_ Registro(s)</pan>",
             "sInfoFiltered": " - de _MAX_ registros",
             "sInfoThousands": ",",
             "sLengthMenu": "Mostrar _MENU_ Registros",
-            "sLoadingRecords": "Por favor espere  - CARGANDO...",
+            "sLoadingRecords": "<img src='img/loading2.gif' />",
             "sProcessing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROCESANDO...",
-            "sSearch": "Buscar:",
+            "sSearch": "",
             "sZeroRecords": "No se encontraron registros",
             "oPaginate": {
-                "sNext": " SIGUIENTE",
-                "sPrevious": "ANTERIOR "
+                "sNext": " > ",
+                "sPrevious": " < ",
+                "sFirst": " << ",
+                "sLast": " >> "
             }
         },
         "sDom": 'frt<"izq"i><"der"p>',
@@ -115,21 +118,40 @@ function CargarListados() {
         fnDrawCallback: function (oSettings) {
             responsiveHelper.respond();
         },
-            //informacion de la funcion de aerolineas de la base de datos
+        "fnInit": function (oSettings, nPaging, fnDraw) {
+            var oLang = oSettings.oLanguage.oPaginate;
+            var fnClickHandler = function (e) {
+                e.preventDefault();
+                if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) { fnDraw(oSettings); }
+            };
+
+            $(nPaging).addClass('pagination').append("<ul></ul>");
+            $('<li class="prev disabled"><a href="#">&laquo;</a></li>').appendTo($("ul", nPaging)).find("a").bind('click.DT', { action: "previous" }, fnClickHandler);
+            $('<li class="next disabled"><a href="#">&raquo;</a></li>').appendTo($("ul", nPaging)).find("a").bind('click.DT', { action: "next" }, fnClickHandler);
+        },
         "aoColumns": [
+            { "mDataProp": "Codigo" },
             { "mDataProp": "Nombre" },
             { "mDataProp": "Identificador" },
             { "mDataProp": "Telefono_fijo" },
             { "mDataProp": "Email" },
-            { "mDataProp": "Codigo" },
             { "mDataProp": "IATA" },
             { "mDataProp": "Estatus" }
         ]
         });
 
-        $(".first.paginate_button, .last.paginate_button").hide();
-        var search_input = tableElement.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-        search_input.attr('placeholder', "Buscar");
+    $(".first.paginate_button, .last.paginate_button ").hide();
+    var $ul = $("<ul>");
+    $("#tbDetails_paginate").children().each(function () {
+        var $li = $("<li>").append($(this));
+        $ul.append($li);
+    });
+    $("#tbDetails_paginate").append($ul);
+    $("#tbDetails_paginate ul").addClass('pagination');
+
+    $(".first.paginate_button, .last.paginate_button").hide();
+    var search_input = tableElement.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+    search_input.attr('placeholder', "Buscar");
 }
 
 function Nuevo() {
@@ -197,7 +219,6 @@ function Imprimir() {
     window.location.href = 'rpt_aerolineas.aspx?var_id=' + id;
 }
 
-
 function Confirmar() {
     var id = '';
     $('#tbDetails tr').each(function () {
@@ -260,6 +281,80 @@ function Eliminar() {
             deletemodal.close();
             $("#dv_mensaje").hide();
             $("#dv_error").html('Error de comunicación con el servidor. Función Eliminar().');
+            $("#dv_error").show();
+            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        }
+    });
+
+}
+
+function ConfirmarAnular() {
+    var id = '';
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+            $("#id").val(id);
+        }
+    });
+
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+
+
+    anularmodal = $.remodal.lookup[$('[data-remodal-id=anularmodal]').data('remodal')];
+    anularmodal.open();
+}
+
+function Anular() {
+    var id
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+            $("#id").val(id);
+        }
+    });
+
+    $('.loading').show()
+    $('.btn').hide();
+    $.ajax({
+        type: "POST",
+        url: "lst_aerolineas.aspx?fn=Anular",
+        data: '{"id":"' + id + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            anularmodal.close();
+            $('.loading').hide()
+            $('.btn').show();
+
+            if (response.error == '-1') {
+                window.location.href = 'info.aspx';
+                return false;
+            }
+
+            if (response.rslt == 'exito') {
+                $("#dv_error").hide()
+                $("#dv_mensaje").html('El registro ha sido activado/inactivado.');
+                $("#dv_mensaje").show();
+                setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+                $('#tbDetails').dataTable().fnDestroy();
+                CargarListado();
+            }
+            else {
+                $("#dv_error").html(response.msj);
+                $("#dv_error").show();
+                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            }
+        },
+        error: function () {
+            anularmodal.close();
+            $('.loading').hide()
+            $('.btn').show();
+            $("#dv_error").html('Error de comunicación con el servidor. Función Anular().');
             $("#dv_error").show();
             setTimeout(function () { $('#dv_error').hide(); }, 10000);
         }

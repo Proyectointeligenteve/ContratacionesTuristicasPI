@@ -28,6 +28,8 @@ Partial Class lst_paquetes
                     Editar()
                 Case "Anular"
                     Anular()
+                Case "cargar_destinos"
+                    cargar_destinos()
                 Case "eliminar"
                     Eliminar()
 
@@ -68,7 +70,7 @@ Partial Class lst_paquetes
             End If
 
             obj_sb.Append("," & Chr(34) & "Agregar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("agregar").Id).permiso, 1, 0) & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Ver" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("ver").Id).permiso, 1, 0) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Ver" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("ver").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Editar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("editar").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Anular" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("anular").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Eliminar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("paquetes").Id, New cls_acciones("eliminar").Id).permiso, 1, 0) & Chr(34) & "")
@@ -117,6 +119,7 @@ Partial Class lst_paquetes
         End If
         Response.End()
     End Sub
+
     Sub Guardar()
         Dim var_sr = New System.IO.StreamReader(Request.InputStream)
         Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
@@ -130,8 +133,9 @@ Partial Class lst_paquetes
         obj_paquetes.fecha_inicio = ac_Funciones.formato_Fecha(var_data("FechaInicio").ToString)
         obj_paquetes.fecha_fin = ac_Funciones.formato_Fecha(var_data("FechaFin").ToString)
         obj_paquetes.id_destino = var_data("Destino")
-        obj_paquetes.tipo = var_data("Tipo")
-        obj_paquetes.grupo = var_data("Grupo")
+        obj_paquetes.tipo = ac_Funciones.formato_boolean(var_data("Tipo").ToString)
+        obj_paquetes.grupo = ac_Funciones.formato_boolean(var_data("Grupo").ToString)
+        obj_paquetes.precio = ac_Funciones.formato_Numero(var_data("Precio").ToString, True)
         obj_paquetes.activo = ac_Funciones.formato_boolean(var_data("Activo").ToString)
 
         Response.ContentType = "application/json"
@@ -157,15 +161,27 @@ Partial Class lst_paquetes
         obj_sb.Append("," & Chr(34) & "FechaInicio" & Chr(34) & ":" & Chr(34) & obj_paquetes.fecha_inicio & Chr(34) & "")
         obj_sb.Append("," & Chr(34) & "FechaFin" & Chr(34) & ":" & Chr(34) & obj_paquetes.fecha_fin & Chr(34) & "")
         obj_sb.Append("," & Chr(34) & "Destino" & Chr(34) & ":" & Chr(34) & obj_paquetes.id_destino & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Tipo" & Chr(34) & ":" & Chr(34) & obj_paquetes.tipo & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Grupo" & Chr(34) & ":" & Chr(34) & obj_paquetes.grupo & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Activo" & Chr(34) & ":" & Chr(34) & obj_paquetes.activo & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Tipo" & Chr(34) & ":" & Chr(34) & IIf(obj_paquetes.tipo, 1, 0) & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Grupo" & Chr(34) & ":" & Chr(34) & IIf(obj_paquetes.grupo, 1, 0) & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Precio" & Chr(34) & ":" & Chr(34) & ac_Funciones.formato_Numero_Pantalla(obj_paquetes.precio) & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Activo" & Chr(34) & ":" & Chr(34) & IIf(obj_paquetes.activo, 1, 0) & Chr(34) & "")
         Response.ContentType = "application/json"
         Response.Clear()
         Response.ClearHeaders()
         Response.ClearContent()
         Dim var_error As String = ""
         Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        Response.End()
+    End Sub
+
+    Sub cargar_destinos()
+        Dim var_error As String = ""
+        Dim obj_dt_int As System.Data.DataTable = cls_destinos.Lista
+        Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
         Response.End()
     End Sub
 
@@ -202,4 +218,5 @@ Partial Class lst_paquetes
         End If
         Response.End()
     End Sub
+
 End Class

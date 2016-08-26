@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_bancos.aspx.vb" Inherits="lst_bancos" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_sucursales.aspx.vb" Inherits="lst_sucursales" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
@@ -18,30 +18,26 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <div class="container">
+        <div class="alert alert-danger" id="dv_error" name="dv_error">
+        </div>
+        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
+        </div>
+    </div>
         <div class="container">
-            <br />
             <div style ="width :100%">
-                <div class ="row-fluid">
-                    <div class="span10">
-                        <span style="font-size: 14px;color:white"><b>LISTADO DE BANCOS</b></span>
-                    </div>
-                    <div class="span2">
-                        <img src="img/logo_ctg.png" width="32px" />
-                    </div>
-                </div>
-            </div>
-            <hr />
-        <div class="izq">
-            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
+            <span style="font-size: 14px;color:white">LISTADO DE SUCURSALES</span><hr />            
+        </div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
         <div class="hr">
-            <br />
+            <hr />
         </div>
         <div class="der">
             <div class="btn-group">
                 <img src='img/loading2.gif' class="loading" />
                 <button class="btn hide"  id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
                 <button class="btn hide"  id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
+                <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Activar/Inactivar</button>
                 <button class="btn hide"  id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
@@ -58,17 +54,13 @@
             }
         </style>
         </div>
-    <div class="container">
-        <div class="alert alert-danger" id="dv_error" name="dv_error">
-        </div>
-        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
-        </div>
-    </div>
     <div class="container" style="margin-top: 10px">
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">
             <thead>
                 <tr>
+                    <td data-class="phone,tablet">Codigo</td>
                     <td data-class="expand">Nombre</td>
+                    <td data-class="phone,tablet">Rif</td>
                     <td data-class="phone,tablet">Estatus</td>
                 </tr>
             </thead>
@@ -76,21 +68,34 @@
             </tbody>
         </table>
     </div>
-    <div class="remodal" data-remodal-id="modal">
+    <div class="remodal" data-remodal-id="modal" style="background-color:#013b63;color:white;font-size:14px !important">
 
         <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Formulario de bancos</h4>
+            <h4 class="modal-title" id="myModalLabel">Formulario de Sucursales</h4>
         </div>
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
                 <input type="hidden" id="id" name="id" />
 
-                <div class="row-fluid">
+                <div class="row-fluid">                  
                     <div class="span6">
                         <div class="control-group">
-                            <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
+                            <label class="col-sm-2 control-label" for="Codigo">Codigo</label>
                             <div class="col-sm-10">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
+                                <input type="text" id="Codigo" name="Codigo" class="form-control" disabled="disabled"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    
+                </div>
+                <br />
+                <div class="row-fluid">  
+                    <div class="span6">
+                        <div class="control-group">
+                            <label class="col-sm-2 control-label" for="Rif">Rif</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="Rif" name="Rif" class="form-control" onchange="buscarSucursal()" style="text-transform: uppercase;" maxlength="10"/>
                             </div>
                         </div>
                     </div>
@@ -98,9 +103,9 @@
 
                     <div class="span6">
                         <div class="control-group">
-                            <label class="col-sm-2 control-label" for="Numero"></label>
+                            <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
                             <div class="col-sm-10">
-                                <%--<input type="text" id="Numero" name="Numero" class="form-control" />--%>
+                                <input type="text" id="Nombre" name="Nombre" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -110,9 +115,12 @@
 
             </form>
             <br />
-            <hr />
            
         </div>
+    <div class="container">
+        <div class="alert alert-danger" id="dv_error1" name="dv_error1">
+        </div>
+    </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close()">Cerrar</button>
             <button type="button" class="btn btn-primary" onclick="if(Validar()){Guardar()}">Aceptar</button>
@@ -125,6 +133,9 @@
         $(function () {
             $('#form1').validate({
                 rules: {
+                    Rif: {
+                        required: true
+                    },
                     Nombre: {
                         required: true
                     }
@@ -138,7 +149,7 @@
         });
     </script>
 
-    <div class="remodal" data-remodal-id="anularmodal">
+    <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
             <h4>Activar/Inactivar</h4>
         </div>
@@ -152,7 +163,7 @@
         </div>
     </div>
 
-    <div class="remodal" data-remodal-id="deletemodal">
+    <div class="remodal" data-remodal-id="deletemodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
             <h4>Eliminar</h4>
         </div>
@@ -166,7 +177,7 @@
         </div>
     </div>
 
-   <div class="remodal" data-remodal-id="msjModal">
+   <div class="remodal" data-remodal-id="msjModal" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Mensaje</h4>
             </div>
@@ -174,15 +185,16 @@
                 <p><span id="Span1" name="msj">El registro ha sido guardado.</span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="bancosLista()">Ok</button>
+                <button type="button" class="btn btn-success" onclick="sucursalesLista()">Ok</button>
             </div>
         </div> 
-    <script type="text/javascript" language="javascript" src="js/lst_bancos.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
+    <script type="text/javascript" language="javascript" src="js/lst_sucursales.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
     <script>
 
         $(document).ready(function () {
             $("#dv_mensaje").hide();
             $("#dv_error").hide();
+            $("#dv_error1").hide();
             Cargar();
         });
 

@@ -6,7 +6,7 @@ Imports ac_Funciones
 Public Class cls_permisos
 
     Dim var_Nombre_Tabla As String = "tbl_permisos"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id_permiso As Integer = 0
     Dim var_id_modulo As Integer = 0

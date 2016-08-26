@@ -84,10 +84,10 @@ function CargarListado() {
                 responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition);
             }
         },
-        fnRowCallback  : function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             responsiveHelper.createExpandIcon(nRow);
         },
-        fnDrawCallback : function (oSettings) {
+        fnDrawCallback: function (oSettings) {
             responsiveHelper.respond();
         },
         "fnInit": function (oSettings, nPaging, fnDraw) {
@@ -121,8 +121,7 @@ function CargarListado() {
     search_input.attr('placeholder', "Buscar");
 }
 
-function EventosListado()
-{
+function EventosListado() {
     $("#tbDetails tbody").click(function (event) {
 
         $(tableElement.fnSettings().aoData).each(function () {
@@ -169,7 +168,7 @@ function Editar() {
     $.ajax({
         type: "POST",
         url: "lst_bancos.aspx?fn=editar",
-        data: '{"id":"' + id  + '"}',
+        data: '{"id":"' + id + '"}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
@@ -192,43 +191,43 @@ function Editar() {
             setTimeout(function () { $('#dv_error').hide(); }, 10000);
         }
     });
-        
+
 }
 
 function Guardar() {
-        var registro = {};
-        registro.id = $('#id').val();
-        registro.Nombre = $('#Nombre').val();
-        //registro.Numero = $('#Numero').val();
-          $.ajax({
-            type: "POST",
-            url: "lst_bancos.aspx?fn=guardar",
-            data: JSON.stringify(registro),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                //$('#basicModal').modal('hide');
-                modal.close();
-                if (response.rslt == 'exito') {
-                    $("#dv_error").hide()
-                    $("#dv_mensaje").html('El registro ha sido procesado con exito.');
-                    $("#dv_mensaje").show();
-                    setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
-                }
-                else {
-                    $("#dv_error").html(response.msj);
-                    $("#dv_error").show();
-                    setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                }
-                $('#tbDetails').dataTable().fnDestroy();
-                CargarListado();
-            },
-            error: function () {
-                $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
+    var registro = {};
+    registro.id = $('#id').val();
+    registro.Nombre = $('#Nombre').val();
+    //registro.Numero = $('#Numero').val();
+    $.ajax({
+        type: "POST",
+        url: "lst_bancos.aspx?fn=guardar",
+        data: JSON.stringify(registro),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            //$('#basicModal').modal('hide');
+            modal.close();
+            if (response.rslt == 'exito') {
+                $("#dv_error").hide()
+                $("#dv_mensaje").html('El registro ha sido procesado con exito.');
+                $("#dv_mensaje").show();
+                setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+            }
+            else {
+                $("#dv_error").html(response.msj);
                 $("#dv_error").show();
                 setTimeout(function () { $('#dv_error').hide(); }, 10000);
             }
-        });
+            $('#tbDetails').dataTable().fnDestroy();
+            CargarListado();
+        },
+        error: function () {
+            $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
+            $("#dv_error").show();
+            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        }
+    });
 }
 
 function ConfirmarAnular() {

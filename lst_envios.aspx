@@ -19,22 +19,18 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container">
-            <br />
-                <div style ="width :100%">
-                    <div class ="row-fluid">
-                        <div class="span10">
-                        <span style="font-size: 14px;color:white">LISTADO DE ENVIOS</span>
-                        </div>
-                    <div class="span2">
-                        <img src="img/logo.png" width="32px" />
-                    </div>
-                </div>
-            </div>
-            <hr />
-        <div class="izq">
-            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListados()"><option value ="1">Por Entregar</option><option value ="2">En Transito</option><option value ="3">Extraviados</option></select></div>
+        <div class="alert alert-danger" id="dv_error" name="dv_error">
+        </div>
+        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
+        </div>
+    </div>
+        <div class="container">
+            <div style ="width :100%">
+            <span style="font-size: 14px;color:white">LISTADO DE ENVIOS</span><hr />            
+        </div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:180px !important" onchange="CargarListado()"><option value ="0">Ver Por Entregar</option><option value ="1">Ver En Transito</option><option value ="2">Ver Entregados</option><option value ="3">Ver Extraviados</option><option value ="4">Ver Todos</option></select></div>
         <div class="hr">
-            <br />
+            <hr />
         </div>
         <div class="der">
             <div class="btn-group">
@@ -57,14 +53,8 @@
             }
         </style>
     </div>
-    <div class="container">       
-        <div class="alert alert-danger" id="dv_error" name="dv_error">
-        </div>
-        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
-        </div>
-    </div>
     <div class="container" style="margin-top: 10px">
-        <table style= "font-size: 10px"  id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-responsive table-striped table-bordered">
+        <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">
             <thead>
                 <tr>
                     <td  data-class="expand">Codigo</td>

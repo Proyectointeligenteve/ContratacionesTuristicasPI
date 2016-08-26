@@ -9,7 +9,7 @@ Public Class cls_vouchers_detalles
     Dim var_Campo_Id As String = "id"
     ' Dim var_Campo_Validacion As String = "nombre"
     Dim var_Campos As String = "id_voucher,id_venta,nombre_pasajero"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer
     Dim var_id_voucher As String = ""
@@ -104,7 +104,7 @@ Public Class cls_vouchers_detalles
     End Sub
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         'Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select id, nombre as des from tbl_tipos_acciones" & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by nombre")
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_vouchers_detalles.Campo_Id & " as id, " & cls_vouchers_detalles.Campo_Validacion & " as des from " & cls_vouchers_detalles.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_vouchers_detalles.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "SELECCIONE")
@@ -142,12 +142,12 @@ Public Class cls_vouchers_detalles
     End Function
 
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_vouchers_detalles.Nombre_Tabla, cls_vouchers_detalles.Campo_Id & "=" & var_id)
         Return True
     End Function
     Public Shared Function Consulta(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from " & cls_vouchers_detalles.Listado & "()"
         Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     End Function

@@ -549,8 +549,9 @@ a.bg-danger:hover {
 }
 
 .page-header {
-    /*padding-bottom: 9px;
-    margin: 10px 0 10px;*/
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee;
 }
 
 ul, ol {
@@ -1655,9 +1656,9 @@ th {
     .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
         border-bottom-width: 2px;
     }
-
+    /*******************AQUI CAMBIE EL FONDO DE LA TABLA************************/
 .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    /*background-color: #f9f9f9;*/
 }
 
 .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
@@ -4406,7 +4407,8 @@ textarea.input-group-sm > .form-control, textarea.input-group-sm > .input-group-
     }
 
     .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-        background-color: #080808;
+        /*background-color: #080808;*/
+        background-color: #013b63;
         color: #fff;
     }
 

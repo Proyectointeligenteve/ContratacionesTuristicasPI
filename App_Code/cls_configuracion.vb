@@ -6,7 +6,7 @@ Imports ac_Funciones
 Public Class cls_configuracion
     Dim var_Nombre_Tabla As String = "tbl_impuestos"
     Dim var_Campo_Id As String = "id"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
     Dim var_id As Integer
     Dim var_nombre As String = ""
     Dim var_interes As Double = 0
@@ -100,7 +100,7 @@ Public Class cls_configuracion
     End Function
 
     Public Shared Function Consulta3(ByVal id_moneda As Integer) As Integer
-        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Return Valor_De(obj_conex, "SELECT id from tbl_impuestos where id_moneda=" & Sql_Texto(id_moneda) & "")
     End Function
 

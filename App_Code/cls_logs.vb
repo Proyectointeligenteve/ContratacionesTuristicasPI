@@ -8,7 +8,7 @@ Public Class cls_logs
     Dim var_Nombre_Tabla As String = "tbl_operaciones"
     Dim var_Campo_Id As String = "id"
     Dim var_Campos As String = "id_modulo,id_accion,id_usuario_registro,fecha_registro,comentario,resultado"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Private var_id_menu As Integer = 0
     Private var_id_accion As Integer = 0

@@ -3,6 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
         @import "css/jquery.dataTables.css";
+        @import "css/frm_hoteles.css";
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -28,14 +29,21 @@
             <div class="espacio"></div>
                 <div class="row-fluid">
                     <div class="span6">
+                        <label class="col-sm-2 control-label" for="Codigo">Codigo</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="50" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="span6">
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="Identificador">Identificador</label>
                             <div class="col-sm-10">
-                                <input type="text" id="Identificador" name="Identificador" class="form-control" maxlength="15" />
+                                <input type="text" id="Identificador" name="Identificador" class="form-control" onchange="buscarHotel()" style="text-transform: uppercase;" maxlength="15" />
                             </div>
                          </div>
                     </div>
                 </div>
+                     <br />
                  <div class="row-fluid">
                     <div class="span6">
                         <div class="control-group">
@@ -52,14 +60,16 @@
                         </div>
                     </div>
                 </div>
+                     <br />
                     <div class="row-fluid">
                         <div class="span12">
                             <label class="col-sm-1 control-label" for="Direccion">Direccion</label>
                             <div class="col-sm-11">
-                                <textarea id="Direccion" name="Direccion" rows="3" class="form-control" style="width:100% !important"></textarea>
+                                <textarea id="Direccion" name="Direccion" rows="3" class="form-control" style="width:87% !important"></textarea>
                             </div>
                         </div>
                     </div>
+                     <br />
                     <div class="row-fluid">
                         <div class="span6">
                             <label class="col-sm-2 control-label" for="TelefonoFijo">Telefono fijo</label>
@@ -74,6 +84,7 @@
                             </div>
                         </div>
                     </div>
+                     <br />
                     <div class="row-fluid">
                         <div class="span6">
                             <label class="col-sm-2 control-label" for="Email">Email</label>
@@ -82,12 +93,15 @@
                             </div>
                         </div>
                         <div class="span6">
-                            <label class="col-sm-2 control-label" for="Codigo">Codigo</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="50" />
+                            <div class="control-group">
+                                <label class="col-sm-2 control-label" for="comision">Comision</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="Comision" name="comision" class="form-control" />
+                                </div>
                             </div>
                         </div>
                     </div>
+                <br />
             
             <style type="text/css" title="currentStyle">
                 @import "css/jquery.dataTables.css";
@@ -129,6 +143,9 @@
                         },
                         RazonSocial: {
                             required: true
+                        },
+                        Comision: {
+                            required: true
                         }
                     }
                 });
@@ -141,19 +158,19 @@
                 <%--contactos--%>
         <hr />
         <div style="width: 50%; float: left">
-            <h4>contactos</h4>
+            <h4 style="margin-bottom :20px !important">Contactos</h4>
         </div>
         <div class="der">
             <div class="btn-group">
             <img src='img/loading2.gif' class="loading" />
-                <button class="btn" id="btn_contactoAdd" onclick="contactoAdd(); return (false);"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
-                <button class="btn" id="btn_contactoEdit" onclick="contactoEdit(); return (false);"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn" id="btn_contactoDelete" onclick="contactoConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
+                <button class="btn btn-default" id="btn_contactoAdd" onclick="contactoAdd(); return (false);"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn btn-default" id="btn_contactoEdit" onclick="contactoEdit(); return (false);"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
+                <button class="btn btn-default" id="btn_contactoDelete" onclick="contactoConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         <div>
             <div>
-                <table style="font-size: 12px" id="tbl_contacto" cellpadding="0" cellspacing="0" border="0" class="table table-responsive table-striped table-bordered">
+                <table style="font-size: 12px;background-color:#12abb8" id="tbl_contacto" cellpadding="0" cellspacing="0" border="0" class="table table-responsive table-striped table-bordered">
                     <thead>
                         <tr>
                             <td  data-class="expand">Nombre</td>
@@ -166,13 +183,12 @@
                 <input type="hidden" id="hdn_TotalcontactoRecords" name="hdn_TotalcontactoRecords" value="0" />
             </div>
         </div>
-
-     
-        <div class="remodal" data-remodal-id="basicModal2">
+             
+        <div class="remodal" data-remodal-id="basicModal2" style="background-color:#013b63;">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Formulario de contactos</h4>
+                <h4 class="modal-title" id="myModalLabel"><span style="color :white;">Formulario de contactos</span></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color:#013b63;color:white;">
                 <form id="form2">
                 <input type="hidden" id="hdn_contactoId" name="hdn_contactoId" value="0"/>
                     <div class="espacio"></div>
@@ -239,7 +255,7 @@
         </div>
     </div>
        
-        <div class="remodal" data-remodal-id="deleteModal2">
+        <div class="remodal" data-remodal-id="deleteModal2" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Eliminar</h4>
             </div>
@@ -253,7 +269,7 @@
             </div>
         </div>
         
-        <div class="remodal" data-remodal-id="msjModal">
+        <div class="remodal" data-remodal-id="msjModal" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Mensaje</h4>
             </div>

@@ -47,8 +47,12 @@ Partial Class frm_hoteles
                 Case "saveAll"
                     saveAll()
 
+                Case "validar_hotel"
+                    validarHotel()
 
                     '* contactos
+                Case "CargarContactos"
+                    CargarContactos()
                 Case "contactoDelete"
                     contactoDelete()
                 Case "contactoEdit"
@@ -176,6 +180,7 @@ Partial Class frm_hoteles
             obj_sb.Append("," & Chr(34) & "TelefonoMovil" & Chr(34) & ":" & Chr(34) & obj_hotel.telefono_movil & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_hotel.codigo & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Email" & Chr(34) & ":" & Chr(34) & obj_hotel.email & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Comision" & Chr(34) & ":" & Chr(34) & obj_hotel.comision & Chr(34) & "")
 
         Catch ex As Exception
             var_error = ex.Message
@@ -206,15 +211,19 @@ Partial Class frm_hoteles
         If obj_hotel.Id = 0 Then
             obj_hotel.id_usuario_reg = DirectCast(Session.Contents("obj_Session"), cls_Sesion).Usuario.Id
             obj_hotel.fecha_reg = Now.Date
+            obj_hotel.codigo = Right("AE" & Right("0000" & (cls_hoteles.SiguienteNumero() + 1).ToString, 4).ToString, 6)
+        Else
+            obj_hotel.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
         End If
-        obj_hotel.identificador = ac_Funciones.formato_Texto(var_JObject("Identificador").ToString)
+        obj_hotel.identificador = ac_Funciones.formato_Texto(var_JObject("Identificador").ToString).ToUpper
         obj_hotel.nombre = ac_Funciones.formato_Texto(var_JObject("Nombre").ToString)
         obj_hotel.razon_social = ac_Funciones.formato_Texto(var_JObject("RazonSocial").ToString)
         obj_hotel.direccion = ac_Funciones.formato_Texto(var_JObject("Direccion").ToString)
         obj_hotel.telefono_fijo = ac_Funciones.formato_Texto(var_JObject("TelefonoFijo").ToString)
         obj_hotel.telefono_movil = ac_Funciones.formato_Texto(var_JObject("TelefonoMovil").ToString)
-        obj_hotel.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
+        'obj_hotel.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
         obj_hotel.email = ac_Funciones.formato_Texto(var_JObject("Email").ToString)
+        obj_hotel.comision = ac_Funciones.formato_Texto(var_JObject("Comision").ToString)
 
         Response.ContentType = "application/json"
         Response.Clear()
@@ -228,6 +237,49 @@ Partial Class frm_hoteles
         Response.End()
     End Sub
 
+    Private Sub validarHotel()
+        Dim var_error As String = ""
+        Dim obj_sb As New StringBuilder
+
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+        Dim var_rif As String = ac_Funciones.formato_Texto(var_data("rif").ToString)
+
+
+        Dim obj_dt_int As System.Data.DataTable = cls_hoteles.ConsultaHotel(var_rif, var_error)
+        If obj_dt_int.Rows.Count > 0 Then
+            obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Nombre").ToString() & Chr(34) & "")
+        Else
+            obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "")
+        End If
+
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+
+        Dim var_json As String = ""
+        If var_error.Trim.Length > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        ElseIf obj_dt_int.Rows.Count > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "vacio" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        End If
+
+        Response.End()
+    End Sub
+
+    Sub CargarContactos()
+        Dim var_error As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = cls_hoteles_contactos.Lista()
+        Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
+        Response.End()
+    End Sub
 #End Region
 
 #Region "   >> contacto"

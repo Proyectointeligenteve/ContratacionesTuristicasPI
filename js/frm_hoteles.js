@@ -7,13 +7,23 @@ function backToList() {
 };
 function load() {
     Permisos()
+    $("#identificador").focus();
+
     $("#dv_Message").hide();
     $("#dv_Error").hide();
     $("#dv_error_modal").hide();
     $("#dv_error_modal2").hide();
     
+    $("#Comision").blur(function () {
+        var number = $(this).val();
+        number = number.replace('.', '');
+        number = number.replace(',', '.');
+        number = $.formatNumber(number, { format: "#,##0.00", locale: "es" });
+        $("#Comision").val(number);
+    });
     var recordId = $.url().param('id');
     var idt1 = $.url().param('idhotel');
+    
 
     $('.loading').show()
     $('.btn').hide();
@@ -40,6 +50,7 @@ function load() {
                 $('#TelefonoMovil').val(response.TelefonoMovil);
                 $('#Codigo').val(response.Codigo);
                 $('#Email').val(response.Email);
+                $('#Comision').val(response.Comision);
                 
                 //professionLoad()
                 contactoLoad()
@@ -90,6 +101,7 @@ function Permisos() {
                     $("#TelefonoMovil").attr("disabled", "disabled");
                     $("#Email").attr("disabled", "disabled");
                     $("#Codigo").attr("disabled", "disabled");
+                    $("#Comision").attr("disabled", "disabled");
 
                     $('#btn_contactoAdd').attr("disabled", "disabled");
                     $('#btn_contactoEdit').attr("disabled", "disabled");
@@ -126,8 +138,7 @@ function save() {
         record.TelefonoMovil = $('#TelefonoMovil').val();
         record.Email = $('#Email').val();
         record.Codigo = $('#Codigo').val();
-        //alert("valor del id hotel escondido" + record.hdn_id_hotel + " ");
-        //alert("ok");
+        record.Comision = $('#Comision').val();
     
         $('.loading').show()
         $('.btn').hide();
@@ -418,3 +429,56 @@ function save() {
         return result;
     };
      
+    function buscarHotel() {
+        var rif = $("#Identificador").val();
+
+        $('.loading').show()
+        $('.btn').hide();
+        $.ajax({
+            type: "POST",
+            url: "frm_hoteles.aspx?fn=validar_hotel",
+            data: '{"rif":"' + rif + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('.loading').hide()
+                $('.btn').show();
+
+                if (response.error == '-1') {
+                    window.location.href = 'info.aspx';
+                    return false;
+                }
+                if (response.rslt == 'exito') {
+                    $("#Identificador").val('');
+                    $("#Identificador").focus();
+                    $("#dv_Error").html("El Hotel '" + response.Nombre + "' ya esta registrado.");
+                    $("#dv_Error").show();
+                    setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+                    return false;
+                }
+                if (response.rslt == '') {
+                    $("#dv_Error").show();
+                    return false;
+                }
+                if (response.rslt == 'vacio') {
+                    $("#Nombre").focus();
+                    return false;
+                }
+                else {
+                    $("#dv_Error").html(response.msj);
+                    $("#dv_Error").show();
+                    setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+                    $("#Identificador").focus();
+                }
+            },
+            error: function () {
+                $('.loading').hide()
+                $('.btn').show();
+                $("#dv_Error").html('Error de comunicación con el servidor. Funcion CargarHotel().');
+                $("#dv_Error").show();
+                setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+                $("#Identificador").focus();
+            }
+        });
+
+    }
