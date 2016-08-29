@@ -428,9 +428,9 @@ function save() {
      
     var modalcliente;
     function BuscarClientesE() {
+        //coloca el nombre en blanco
         $("#NombreE").val('');
         //prueba
-
         $('#btn_cargar').hide();
         $('#dvloader').show();
         var var_identificador = $('#IdClienteEmisor').val();
@@ -475,7 +475,7 @@ function save() {
                     $('#dvloader').hide()
                     try {
                         if (json.error == '-1') {
-                            alert(1);
+                            alert("no se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").html("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").show();
                             $("#IdClienteEmisor").focus();
@@ -484,6 +484,7 @@ function save() {
                         }
 
                         if (json.error == '-2') {
+                            alert("error en el sistema");
                             $("#dv_error").html("Se ha producido un error en el sistema. Intente de nuevo. Si el problema persiste comuniquese con el administrador del sistema");
                             $("#dv_error").show();
                             setTimeout(function () { $('#dv_error').hide(); }, 10000);
@@ -491,11 +492,12 @@ function save() {
                             return false;
                         }
 
-                        if (json.idcliente) {
+                        if (json.idclienteEmisor) {
                             var id = ""
 
                             try {
-                                id = json.idcliente;
+                                id = json.idclienteEmisor;
+                                alert("entrega correcta de idclienteEmisor");
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -503,8 +505,8 @@ function save() {
                                 return false;
                             }
 
-                            $("#Cliente").val(id)
-                            CargarCliente()
+                            $("#ClienteE").val(id)
+                            CargarClienteE()
                             return false;
                         }
                     } catch (e) { }
@@ -527,9 +529,9 @@ function save() {
             },
             "aoColumns": [
                     { "mDataProp": "Nombre" },
-                    { "mDataProp": "Rif" },
+                    { "mDataProp": "Identificador" },
                     { "mDataProp": "Telefono" },
-                    { "mDataProp": "Direccion" }
+                    { "mDataProp": "Email" }
             ]
         });
 
@@ -663,11 +665,11 @@ function save() {
                             return false;
                         }
 
-                        if (json.idcliente) {
+                        if (json.idclienteE) {
                             var id = ""
 
                             try {
-                                id = json.idcliente;
+                                id = json.idclienteE;
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -675,8 +677,8 @@ function save() {
                                 return false;
                             }
 
-                            $("#Cliente").val(id)
-                            CargarCliente()
+                            $("#ClienteE").val(id)
+                            CargarClienteE()
                             return false;
                         }
                     } catch (e) { }
@@ -711,13 +713,13 @@ function save() {
     }
 
     function CargarClienteE() {
-        var id = $("#Cliente").val();
+        var id = $("#ClienteE").val();
 
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
             type: "POST",
-            url: "frm_envios.aspx?fn=cargarcliente",
+            url: "frm_envios.aspx?fn=cargarclienteE",
             data: '{"id":"' + id + '"}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -732,7 +734,7 @@ function save() {
                 if (response.rslt == 'exito') {
                     $('#IdClienteEmisor').val(response.IdClienteEmisor);
                     $('#NombreE').val(response.NombreE);
-                    $("#IdClienteReceptor").focus();
+                    $("#IdClienteEmisor").focus();
                 }
                 else {
                     $("#dv_error").html(response.msj);

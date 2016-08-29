@@ -121,8 +121,8 @@ function CargarListados() {
             { "mDataProp": "Fecha" },
             { "mDataProp": "Emisor" },
             { "mDataProp": "Receptor" },
-            { "mDataProp": "" },
-            { "mDataProp": "" },
+            { "mDataProp": "Pais" },
+            { "mDataProp": "Ciudad" },
             { "mDataProp": "Costo" },
             { "mDataProp": "Estatus" }
         ]
@@ -199,7 +199,7 @@ function Editar() {
 //}
 
 
-function Confirmar() {
+function ConfirmarEliminar() {
     var id = '';
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {

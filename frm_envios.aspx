@@ -53,9 +53,8 @@
                                     <div style="display: none" id="dvloader"><img src="img/loading.gif" width="32px" /></div>
                                 </div>
                             </div>
-                            <input type="hidden" id="Cliente" name="Cliente" />
-                            <%--<input type="text" id="IdClienteEmisor" name="IdClienteEmisor" class="form-control" maxlength="15" onchange="BuscarCliente()"/>--%>
-                        </div>
+                            <input type="hidden" id="ClienteE" name="ClienteE" />
+                          </div>
                     </div>
                 </div>
                 <div class="span6">
@@ -276,36 +275,6 @@
                             </div>
                         </div>
                     </div>
-                    <%--<div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_paqueteCharge">Codigo</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_paqueteCharge" name="txt_paqueteCharge" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_paquetePhone">Telefono</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_paquetePhone" name="txt_paquetePhone" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_Email">Email</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_Email" name="txt_Email" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>--%>
                 </form>
             </div>
             <div class="modal-footer">

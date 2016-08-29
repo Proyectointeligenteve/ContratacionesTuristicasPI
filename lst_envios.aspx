@@ -32,7 +32,7 @@
             </div>
             <hr />
         <div class="izq">
-            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListados()"><option value ="1">Por Entregar</option><option value ="2">En Transito</option><option value ="3">Extraviados</option></select></div>
+            <select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListados()"><option value ="0">Por Entregar</option><option value ="1">En Transito</option><option value ="2">Entregados</option><option value ="3">Extraviados</option><option value ="4">Todos</option></select></div>
         <div class="hr">
             <br />
         </div>
@@ -92,7 +92,7 @@
         <div class="modal-footer">
             <img src='img/loading2.gif' class="loading" />
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deletemodal.close()">Cerrar</button>
-            <button type="button" class="btn btn-danger" onclick="eliminar()">Aceptar</button>
+            <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
         </div>
     </div>
         <div class="remodal" data-remodal-id="anularmodal">
