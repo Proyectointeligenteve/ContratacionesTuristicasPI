@@ -431,8 +431,8 @@ function save() {
         //coloca el nombre en blanco
         $("#NombreE").val('');
         //prueba
-        $('#btn_cargar').hide();
-        $('#dvloader').show();
+        $('#btn_cargarE').hide();
+        $('#dvloaderE').show();
         var var_identificador = $('#IdClienteEmisor').val();
         //anotacion: se borra la lista del modal 
         $('#tbClientesE').dataTable().fnDestroy();
@@ -471,11 +471,10 @@ function save() {
                 $.getJSON(sSource, aoData, function (json) {
                     $('.loading').hide()
                     $('.btn').show();
-                    $('#btn_cargar').show()
-                    $('#dvloader').hide()
+                    $('#btn_cargarE').show()
+                    $('#dvloaderE').hide()
                     try {
                         if (json.error == '-1') {
-                            alert("no se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").html("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").show();
                             $("#IdClienteEmisor").focus();
@@ -483,8 +482,7 @@ function save() {
                             return false;
                         }
 
-                        if (json.error == '-2') {
-                            alert("error en el sistema");
+                        if (json.error == '-2') {                            
                             $("#dv_error").html("Se ha producido un error en el sistema. Intente de nuevo. Si el problema persiste comuniquese con el administrador del sistema");
                             $("#dv_error").show();
                             setTimeout(function () { $('#dv_error').hide(); }, 10000);
@@ -497,7 +495,6 @@ function save() {
 
                             try {
                                 id = json.idclienteEmisor;
-                                alert("entrega correcta de idclienteEmisor");
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -505,13 +502,13 @@ function save() {
                                 return false;
                             }
 
-                            $("#ClienteE").val(id)
-                            CargarClienteE()
+                            $("#ClienteE").val(id);
+                            CargarClienteE();
                             return false;
                         }
                     } catch (e) { }
 
-                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalcliente]').data('remodal')];
+                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalclienteE]').data('remodal')];
                     modalcliente.open();
                     fnCallback(json);
                 });
@@ -541,13 +538,13 @@ function save() {
     }
 
     function CargarClienteE() {
-        var id = $("#Cliente").val();
+        var id = $("#ClienteE").val();
 
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
             type: "POST",
-            url: "frm_envios.aspx?fn=cargarcliente",
+            url: "frm_envios.aspx?fn=cargarclienteE",
             data: '{"id":"' + id + '"}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -562,13 +559,13 @@ function save() {
                 if (response.rslt == 'exito') {
                     $('#IdClienteEmisor').val(response.IdClienteEmisor);
                     $('#NombreE').val(response.NombreE);
-                    $("#IdClienteReceptor").focus();
+                    $("#IdClienteEmisor").focus();
                 }
                 else {
                     $("#dv_error").html(response.msj);
                     $("#dv_error").show();
                     setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                    $("#rif").focus();
+                    $("#NombreE").focus();
                 }
             },
             error: function () {
@@ -606,11 +603,11 @@ function save() {
     function BuscarClientesR() {
         $("#NombreR").val('');
 
-        $('#btn_cargar').hide();
-        $('#dvloader').show();
-        var var_rif = $('#IdClienteReceptor').val();
+        $('#btn_cargarR').hide();
+        $('#dvloaderR').show();
+        var var_identificador = $('#IdClienteReceptor').val();
 
-        $('#tbClientes').dataTable().fnDestroy();
+        $('#tbClientesR').dataTable().fnDestroy();
         var giRedraw = false;
         var responsiveHelper;
         var breakpointDefinition = {
@@ -620,11 +617,11 @@ function save() {
 
         $('.loading').show()
         $('.btn').hide();
-        tableElement = $('#tbClientes')
+        tableElement = $('#tbClientesR')
         tableElement.dataTable({
             "bProcessing": true,
             "bServerSide": false,
-            "sAjaxSource": "frm_envios.aspx?fn=buscarclientes&rif=" + var_rif,
+            "sAjaxSource": "frm_envios.aspx?fn=buscarclientesR&identificador=" + var_identificador,
             "bAutoWidth": false,
             "bFilter": false,
             "bSort": false,
@@ -646,13 +643,13 @@ function save() {
                 $.getJSON(sSource, aoData, function (json) {
                     $('.loading').hide()
                     $('.btn').show();
-                    $('#btn_cargar').show()
-                    $('#dvloader').hide()
+                    $('#btn_cargarR').show()
+                    $('#dvloaderR').hide()
                     try {
                         if (json.error == '-1') {
                             $("#dv_advertencia").html("No se encontraron clientes con el identificador indicado");
                             $("#dv_advertencia").show();
-                            $("#IdClienteEmisor").focus();
+                            $("#IdClienteReceptor").focus();
                             setTimeout(function () { $('#dv_advertencia').hide(); }, 10000);
                             return false;
                         }
@@ -661,15 +658,15 @@ function save() {
                             $("#dv_error").html("Se ha producido un error en el sistema. Intente de nuevo. Si el problema persiste comuniquese con el administrador del sistema");
                             $("#dv_error").show();
                             setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                            $("#IdClienteEmisor").focus();
+                            $("#IdClienteReceptor").focus();
                             return false;
                         }
 
-                        if (json.idclienteE) {
+                        if (json.idclienteReceptor) {
                             var id = ""
 
                             try {
-                                id = json.idclienteE;
+                                id = json.idclienteReceptor;
                             } catch (e) {
                                 $("#dv_error").html("Error. " + e);
                                 $("#dv_error").show();
@@ -677,13 +674,13 @@ function save() {
                                 return false;
                             }
 
-                            $("#ClienteE").val(id)
-                            CargarClienteE()
+                            $("#ClienteR").val(id);
+                            CargarClienteR();
                             return false;
                         }
                     } catch (e) { }
 
-                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalcliente]').data('remodal')];
+                    modalcliente = $.remodal.lookup[$('[data-remodal-id=modalclienteR]').data('remodal')];
                     modalcliente.open();
                     fnCallback(json);
                 });
@@ -701,9 +698,9 @@ function save() {
             },
             "aoColumns": [
                     { "mDataProp": "Nombre" },
-                    { "mDataProp": "Rif" },
+                    { "mDataProp": "Identificador" },
                     { "mDataProp": "Telefono" },
-                    { "mDataProp": "Direccion" }
+                    { "mDataProp": "Email" }
             ]
         });
 
@@ -712,14 +709,14 @@ function save() {
         search_input.attr('placeholder', "Buscar");
     }
 
-    function CargarClienteE() {
-        var id = $("#ClienteE").val();
+    function CargarClienteR() {
+        var id = $("#ClienteR").val();
 
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
             type: "POST",
-            url: "frm_envios.aspx?fn=cargarclienteE",
+            url: "frm_envios.aspx?fn=cargarclienteR",
             data: '{"id":"' + id + '"}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -732,15 +729,15 @@ function save() {
                     return false;
                 }
                 if (response.rslt == 'exito') {
-                    $('#IdClienteEmisor').val(response.IdClienteEmisor);
-                    $('#NombreE').val(response.NombreE);
-                    $("#IdClienteEmisor").focus();
+                    $('#IdClienteReceptor').val(response.IdClienteReceptor);
+                    $('#NombreR').val(response.NombreR);
+                    $("#IdClienteReceptor").focus();
                 }
                 else {
                     $("#dv_error").html(response.msj);
                     $("#dv_error").show();
                     setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                    $("#rif").focus();
+                    $("#NombreR").focus();
                 }
             },
             error: function () {
@@ -749,7 +746,7 @@ function save() {
                 $("#dv_error").html('Error de comunicación con el servidor. Función Cargarcliente().');
                 $("#dv_error").show();
                 setTimeout(function () { $('#dv_error').hide(); }, 10000);
-                $("#IdClienteEmisor").focus();
+                $("#IdClienteReceptor").focus();
             }
         });
 

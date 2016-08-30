@@ -49,8 +49,8 @@
                             <div class="input-group">
                                 <div class="input-group-btn">
                                 <input type="text" class="form-control" placeholder="" name="IdClienteEmisor" id="IdClienteEmisor" onchange="BuscarClientesE()" />
-                                    <button id="btn_cargar" class="btn btn-default" type="button" onclick="BuscarClientesE();return false;"><i class="glyphicon glyphicon-search"></i></button>
-                                    <div style="display: none" id="dvloader"><img src="img/loading.gif" width="32px" /></div>
+                                    <button id="btn_cargarE" class="btn btn-default" type="button" onclick="BuscarClientesE();return false;"><i class="glyphicon glyphicon-search"></i></button>
+                                    <div style="display: none" id="dvloaderE"><img src="img/loading.gif" width="32px" /></div>
                                 </div>
                             </div>
                             <input type="hidden" id="ClienteE" name="ClienteE" />
@@ -104,8 +104,15 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label" for="IdClienteReceptor">Id</label>
                             <div class="col-sm-10">
-                                <input type="text" id="IdClienteReceptor" name="IdClienteReceptor" class="form-control" maxlength="15" />
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                <input type="text" class="form-control" placeholder="" name="IdClienteReceptor" id="IdClienteReceptor" onchange="BuscarClientesR()" />
+                                    <button id="btn_cargarR" class="btn btn-default" type="button" onclick="BuscarClientesR();return false;"><i class="glyphicon glyphicon-search"></i></button>
+                                    <div style="display: none" id="dvloaderR"><img src="img/loading.gif" width="32px" /></div>
+                                </div>
                             </div>
+                            <input type="hidden" id="ClienteR" name="ClienteR" />
+                          </div>
                         </div>
                     </div>
                     <div class="span6">

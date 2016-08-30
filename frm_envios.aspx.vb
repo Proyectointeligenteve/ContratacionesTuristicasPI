@@ -292,9 +292,9 @@ Partial Class frm_envios
             Dim obj_cliente = New cls_envios_clientes(var_id)
             If var_id > 0 Then
                 obj_sb.Append("," & Chr(34) & "IdClienteReceptor" & Chr(34) & ":" & Chr(34) & obj_cliente.identificador & Chr(34) & "")
-                obj_sb.Append("," & Chr(34) & "NombreE" & Chr(34) & ":" & Chr(34) & obj_cliente.nombre & Chr(34) & "")
-                obj_sb.Append("," & Chr(34) & "TelefonoE" & Chr(34) & ":" & Chr(34) & obj_cliente.telefono & Chr(34) & "")
-                obj_sb.Append("," & Chr(34) & "EmailE" & Chr(34) & ":" & Chr(34) & obj_cliente.email & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "NombreR" & Chr(34) & ":" & Chr(34) & obj_cliente.nombre & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "TelefonoR" & Chr(34) & ":" & Chr(34) & obj_cliente.telefono & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "EmailR" & Chr(34) & ":" & Chr(34) & obj_cliente.email & Chr(34) & "")
             End If
         Catch ex As Exception
             var_error = ex.Message
