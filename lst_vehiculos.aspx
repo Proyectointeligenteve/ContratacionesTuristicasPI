@@ -12,19 +12,23 @@
 
             .form-control {
                 margin-left: 25px !important;
-                width: 240px !important;
+                width: 200px !important;
             }
         }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container">
-            <br />
+        <div class="container">
+            <div class="alert alert-danger" id="dv_error" name="dv_error">
+            </div>
+            <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
+            </div>
+        </div>
         <div style ="width :100%">
-            <div style ="width :100%">
             <span style="font-size: 14px;color:white">LISTADO DE VEHICULOS</span><hr />            
         </div>
-        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListados()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
         <div class="hr">
             <hr />
         </div>
@@ -47,22 +51,15 @@
                 }
             }
         </style>
-        
-        </div>
-    <div class="container">
-        <div class="alert alert-danger" id="dv_error" name="dv_error">
-        </div>
-        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
-        </div>
     </div>
     <div class="container" style="margin-top: 10px">
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important;">
             <thead>
                 <tr>
                     <td data-hide="phone,tablet">CODIGO</td>
+                    <td data-hide="phone,tablet">AGENCIA</td>
                     <td data-class="expand">NOMBRE</td>
-                    <td data-hide="phone,tablet">CATEGORIA/td>
-                    <td data-hide="phone,tablet">DESCRIPCION</td>
+                    <td data-hide="phone,tablet">CATEGORIA</td>
                     <td data-hide="phone,tablet">ESTATUS</td>
                     <td data-hide="phone,tablet">IMAGEN</td>
                 </tr>
@@ -79,6 +76,7 @@
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
                 <input type="hidden" id="id" name="id" />
+
                 <div class="row-fluid">
                     <div class="span6">
                         <div class="control-group">
@@ -92,17 +90,18 @@
                         <div class="control-group">
                             <label class="col-sm-3 control-label" for="Nombre">Nombre</label>
                             <div class="col-sm-9">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
+                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="150" />
                             </div>
                         </div>
                     </div>
-                </div>            
+                </div> 
+                <br />           
                 <div class="row-fluid">
                     <div class="span6">
                         <div class="control-group">
                             <label class="col-sm-3 control-label" for="Categoria">Categoria</label>
                             <div class="col-sm-9">
-                                <input type="text" id="Categoria" name="Categoria" class="form-control" maxlength="10" />
+                                <input type="text" id="Categoria" name="Categoria" class="form-control" maxlength="150" />
                             </div>
                         </div>
                     </div>  
@@ -115,7 +114,8 @@
                             </div>
                         </div>
                     </div>      
-                </div>     
+                </div> 
+                <br />      
                 <div class="row-fluid">
                     <div class="span12">
                         <%--<div class="control-group">--%>
@@ -132,7 +132,7 @@
                         <h4>Imagen</h4>
                         </div>
                 </div>
-                <hr style="border-color:#E5E5E5!important" />
+                <%--<hr style="border-color:#E5E5E5!important" />--%>
                 <br />
                 <div class="row-fluid" id="dv_adjuntar">
                     <div class="span12">

@@ -19,6 +19,12 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container">
+    <div class="container">       
+        <div class="alert alert-danger" id="dv_error" name="dv_error">
+        </div>
+        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
+        </div>
+    </div>
         <div style="width: 100%">
             <span style="font-size: 14px; color: white">LISTADO DE AEROLINEAS</span><hr />
         </div>
@@ -47,12 +53,6 @@
                 }
             }
         </style>
-    </div>
-    <div class="container">       
-        <div class="alert alert-danger" id="dv_error" name="dv_error">
-        </div>
-        <div class="alert alert-success" id="dv_mensaje" name="dv_mensaje">
-        </div>
     </div>
     <div class="container" style="margin-top: 10px">
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">

@@ -41,6 +41,9 @@ Partial Class lst_vehiculos
                     EliminarArchivo()
                 Case "actualizar_posiciones"
                     ActualizarPosiciones()
+
+                Case "cargar_agencias"
+                    Agencias()
             End Select
         End If
     End Sub
@@ -137,6 +140,7 @@ Partial Class lst_vehiculos
         obj_vehiculos.categoria = var_data("Categoria")
         obj_vehiculos.Descripcion = var_data("Descripcion")
         obj_vehiculos.Nombre = var_data("Nombre")
+        obj_vehiculos.Agencia = var_data("Agencia")
 
         Response.ContentType = "application/json"
         Response.Clear()
@@ -190,7 +194,8 @@ Partial Class lst_vehiculos
         obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_vehiculos.Codigo & Chr(34) & "")
         obj_sb.Append("," & Chr(34) & "Categoria" & Chr(34) & ":" & Chr(34) & obj_vehiculos.categoria & Chr(34) & "")
         obj_sb.Append("," & Chr(34) & "Descripcion" & Chr(34) & ":" & Chr(34) & obj_vehiculos.descripcion & Chr(34) & "")
-        obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_vehiculos.nombre & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_vehiculos.Nombre & Chr(34) & "")
+        obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & obj_vehiculos.Agencia & Chr(34) & "")
         Response.ContentType = "application/json"
         Response.Clear()
         Response.ClearHeaders()
@@ -379,6 +384,17 @@ Partial Class lst_vehiculos
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")
         End If
+        Response.End()
+    End Sub
+
+    Sub Agencias()
+        Dim var_error As String = ""
+        Dim obj_dt_int As System.Data.DataTable = cls_vehiculos_agencias.Lista
+        Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
         Response.End()
     End Sub
 End Class

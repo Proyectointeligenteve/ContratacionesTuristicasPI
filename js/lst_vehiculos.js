@@ -2,6 +2,7 @@
     Permisos()
     CargarListado()
     EventosListado()
+    CargarAgencias()
     
     
     $('.decimal').keypress(function (evt) {
@@ -118,9 +119,9 @@ function CargarListado() {
         },
         "aoColumns": [
             { "mDataProp": "Codigo" },
+            { "mDataProp": "Agencia" },
             { "mDataProp": "Nombre" },
             { "mDataProp": "Categoria" },
-            { "mDataProp": "Descripcion" },
             { "mDataProp": "Estatus" },
             {
                 "mDataProp": "Imagen",
@@ -214,9 +215,10 @@ function Nuevo() {
 
     $('#id').val(0);
     $('#Codigo').val('');
-    $('#Categoria').val(0);
+    $('#Categoria').val('');
     $('#Nombre').val('');
     $('#Descripcion').val('');
+    $('#Agencia').val(0);
 
     $.ajax({
         success: function (response) {
@@ -259,6 +261,7 @@ function Editar() {
                 $('#Nombre').val(response.Nombre);
                 $('#Descripcion').val(response.Descripcion);
                 $('#Categoria').val(response.Categoria);
+                $('#Agencia').val(response.Agencia);
 
                 CargarArchivos();
                 modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
@@ -288,6 +291,7 @@ function Guardar() {
         registro.Nombre = $('#Nombre').val();
         registro.Descripcion = $('#Descripcion').val();
         registro.Categoria = $('#Categoria').val();
+        registro.Agencia = $('#Agencia').val();
         
             $.ajax({
             type: "POST",
@@ -620,6 +624,33 @@ function ActualizarPosiciones(posiciones) {
             $("#dv_error").html('Error de comunicación con el servidor. Función ActualizarPosiciones().');
             $("#dv_error").show();
             setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        }
+    });
+}
+
+function CargarAgencias() {
+    $("#Agencia").empty();
+    $.ajax({
+        type: "POST",
+        url: "lst_vehiculos.aspx?fn=cargar_agencias",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $.each(response.aaData, function (i, item) {
+                if (item.id == 0) {
+                    $("#Agencia").append("<option value=" + item.id + " selected='selected'>" + item.des + "</option>");
+                }
+                else {
+                    $("#Agencia").append("<option value=" + item.id + ">" + item.des + "</option>");
+                }
+            });
+            //$("#Pais").val($("#hfPais").val());
+        },
+        error: function () {
+            $("#dv_mensaje").hide();
+            $("#dv_Error").html('Error de comunicación con el servidor al intentar cargar la funcion Agencias.');
+            $("#dv_Error").show();
+            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
         }
     });
 }

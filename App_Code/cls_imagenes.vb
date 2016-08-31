@@ -6,9 +6,9 @@ Imports ac_Funciones
 Public Class cls_imagenes
 
 #Region "VARIABLES"
-    Dim var_Nombre_Tabla As String = "tbl_imagenes"
+    Dim var_Nombre_Tabla As String = "tbl_imagenes_vehiculos"
     Dim var_Campo_Id As String = "id"
-    Dim var_Campos As String = "id_vehiculo,descripcion,ruta,id_usuario,fecha,posicion,sessionid,rutaBig,id_pubicidad"
+    Dim var_Campos As String = "id_vehiculo,descripcion,ruta,id_usuario,fecha,posicion,sessionid,rutaBig,id_publicidad"
     Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
@@ -27,7 +27,7 @@ Public Class cls_imagenes
 
     Public Shared ReadOnly Property Nombre_Tabla() As String
         Get
-            Return "tbl_imagenes"
+            Return "tbl_imagenes_vehiculos"
         End Get
     End Property
 
@@ -227,7 +227,7 @@ Public Class cls_imagenes
 
     Public Shared Function NuevaPosicion(ByVal var_id As Integer, ByVal var_sesion As String) As Integer
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Return Val(ac_Funciones.Valor_De(obj_Conex_int, "select isnull(max(posicion),0) as pos from tbl_imagenes where id=" & Sql_Texto(var_id) & " or sessionid=" & Sql_Texto(var_sesion)).ToString)
+        Return Val(ac_Funciones.Valor_De(obj_Conex_int, "select isnull(max(posicion),0) as pos from tbl_imagenes_vehiculos where id=" & Sql_Texto(var_id) & " or sessionid=" & Sql_Texto(var_sesion)).ToString)
     End Function
 
 #End Region

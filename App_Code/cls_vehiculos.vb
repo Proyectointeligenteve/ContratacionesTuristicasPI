@@ -8,7 +8,7 @@ Public Class cls_vehiculos
     Dim var_Nombre_Tabla As String = "tbl_vehiculos"
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "codigo"
-    Dim var_Campos As String = "codigo,nombre,categoria,descripcion,precio,id_usuario_reg,fecha_reg,agencia"
+    Dim var_Campos As String = "codigo,nombre,categoria,descripcion,id_usuario_reg,fecha_reg,agencia"
     Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
@@ -16,7 +16,6 @@ Public Class cls_vehiculos
     Dim var_nombre As String = ""
     Dim var_categoria As String = ""
     Dim var_descripcion As String = ""
-    Dim var_precio As Double = 0
     Dim var_id_usuario_reg As Integer
     Dim var_fecha_reg As Date = Now
     Dim var_imagen As String = ""
@@ -110,15 +109,6 @@ Public Class cls_vehiculos
         End Set
     End Property
 
-    Public Property Precio() As Double
-        Get
-            Return Me.var_precio
-        End Get
-        Set(ByVal value As Double)
-            Me.var_precio = value
-        End Set
-    End Property
-
     Public Property id_usuario_reg() As Integer
         Get
             Return Me.var_id_usuario_reg
@@ -167,10 +157,9 @@ Public Class cls_vehiculos
             Me.var_nombre = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("nombre").ToString)
             Me.var_categoria = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("categoria").ToString)
             Me.var_descripcion = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("descripcion").ToString)
-            Me.var_precio = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("precio").ToString, True)
             Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
             Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
-            Me.var_id_agencia = formato_Numero(obj_dt_int.Rows(0).Item("id_agencia").ToString)
+            Me.var_id_agencia = formato_Numero(obj_dt_int.Rows(0).Item("agencia").ToString)
 
             Me.var_imagen = Valor_De(obj_Conex_int, "select top 1 ruta from tbl_imagenes where id_vehiculo=" & Me.Id)
         Else
@@ -189,7 +178,7 @@ Public Class cls_vehiculos
 
         Dim var_error As String = ""
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_categoria) & "," & Sql_Texto(Me.var_descripcion) & "," & Sql_Texto(Me.var_precio) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_id_agencia), var_error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_categoria) & "," & Sql_Texto(Me.var_descripcion) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_id_agencia), var_error) Then
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Error agregando vehiculo '" & Me.var_nombre & "': " & var_error
                 obj_log.FechaLog = Now
@@ -215,7 +204,7 @@ Public Class cls_vehiculos
                 Return True
             End If
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "codigo=" & Sql_Texto(Me.var_codigo) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",categoria=" & Sql_Texto(Me.var_categoria) & ",descripcion=" & Sql_Texto(Me.var_descripcion) & ",precio=" & Sql_Texto(Me.var_precio) & ",id_agencia=" & Sql_Texto(Me.var_id_agencia), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "codigo=" & Sql_Texto(Me.var_codigo) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",categoria=" & Sql_Texto(Me.var_categoria) & ",descripcion=" & Sql_Texto(Me.var_descripcion) & ",id_agencia=" & Sql_Texto(Me.var_id_agencia), Me.var_Campo_Id & "=" & Me.var_id) Then
                 var_msj = var_error
 
                 Dim obj_log As New cls_logs
