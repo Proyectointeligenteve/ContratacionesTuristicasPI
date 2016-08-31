@@ -87,20 +87,25 @@ function CargarListados() {
         tableElement = $('#tbDetails')
         tableElement.dataTable({
         "bProcessing": true,
-        "bServerSide": true,
+        "bServerSide": false,
         "sAjaxSource": "lst_envios.aspx?fn=cargar&v=" + v,
+        "sPaginationType": "full_numbers",
+        "bAutoWidth": false,
+        "bLengthChange": false,
         "oLanguage": {
-            "sInfo": "_TOTAL_ Registro(s) encontrado(s)",
+            "sInfo": "<span style='color:#fff'>_TOTAL_ Registro(s)</pan>",
             "sInfoFiltered": " - de _MAX_ registros",
             "sInfoThousands": ",",
             "sLengthMenu": "Mostrar _MENU_ Registros",
-            "sLoadingRecords": "Por favor espere  - CARGANDO...",
+            "sLoadingRecords": "<img src='img/loading2.gif' />",
             "sProcessing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROCESANDO...",
-            "sSearch": "Buscar:",
+            "sSearch": "",
             "sZeroRecords": "No se encontraron registros",
             "oPaginate": {
-                "sNext": " SIGUIENTE",
-                "sPrevious": "ANTERIOR "
+                "sNext": " > ",
+                "sPrevious": " < ",
+                "sFirst": " << ",
+                "sLast": " >> "
             }
         },
         "sDom": 'frt<"izq"i><"der"p>',
@@ -114,19 +119,60 @@ function CargarListados() {
         },
         fnDrawCallback: function (oSettings) {
             responsiveHelper.respond();
+        }, "fnInit": function (oSettings, nPaging, fnDraw) {
+            var oLang = oSettings.oLanguage.oPaginate;
+            var fnClickHandler = function (e) {
+                e.preventDefault();
+                if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) { fnDraw(oSettings); }
+            };
+
+            $(nPaging).addClass('pagination').append("<ul></ul>");
+            $('<li class="prev disabled"><a href="#">&laquo;</a></li>').appendTo($("ul", nPaging)).find("a").bind('click.DT', { action: "previous" }, fnClickHandler);
+            $('<li class="next disabled"><a href="#">&raquo;</a></li>').appendTo($("ul", nPaging)).find("a").bind('click.DT', { action: "next" }, fnClickHandler);
         },
             //informacion de la funcion de envios de la base de datos
         "aoColumns": [
             { "mDataProp": "Codigo" },
-            { "mDataProp": "Fecha" },
+            {
+                "mDataProp": "Fecha",
+                "stype": "date",
+                "fnRender": function (oObj) {
+                    var d = new Date(oObj.aData.Fecha);
+                    var m = d.getMonth() + 1;
+                    var i = d.getDate();
+
+                    if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+
+                        if (i == '31') {
+                            i = '1';
+                            m = m + 1;
+                        } else {
+                            i = d.getDate() + 1;
+                        }
+
+                    }
+
+                    d = ((i < 10 ? '0' : '') + i) + "/" + ((m < 10 ? '0' : '') + m) + "/" + d.getFullYear();
+                    return d;
+                }
+            },
             { "mDataProp": "Emisor" },
             { "mDataProp": "Receptor" },
-            { "mDataProp": "" },
-            { "mDataProp": "" },
+            { "mDataProp": "Pais" },
+            { "mDataProp": "Ciudad" },
             { "mDataProp": "Costo" },
             { "mDataProp": "Estatus" }
         ]
         });
+
+        $(".first.paginate_button, .last.paginate_button ").hide();
+        var $ul = $("<ul>");
+        $("#tbDetails_paginate").children().each(function () {
+            var $li = $("<li>").append($(this));
+            $ul.append($li);
+        });
+        $("#tbDetails_paginate").append($ul);
+        $("#tbDetails_paginate ul").addClass('pagination');
 
         $(".first.paginate_button, .last.paginate_button").hide();
         var search_input = tableElement.closest('.dataTables_wrapper').find('div[id$=_filter] input');

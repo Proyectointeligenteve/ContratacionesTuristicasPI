@@ -423,8 +423,8 @@ Public Class cls_agencias
                 Return True
             End If
         Else
-                var_error = "No se encontro el Registro"
-                Return False
+            var_error = "No se encontro el Registro"
+            Return False
         End If
     End Function
 

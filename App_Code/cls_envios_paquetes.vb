@@ -7,15 +7,15 @@ Public Class cls_envios_paquetes
 #Region "VARIABLES"
     Dim var_Nombre_Tabla As String = "tbl_envios_paquetes"
     Dim var_Campo_Id As String = "id"
-    Dim var_Campo_Validacion As String = "descripcion"
-    Dim var_Campos As String = "id_envio,descripcion,peso,volumen,costo"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim var_Campo_Validacion As String = "numero"
+    Dim var_Campos As String = "id_envio,numero,peso,volumen,costo,descripcion"
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_id_envio As Integer = 0
     Dim var_numero As String = ""
-    Dim var_peso As String = ""
-    Dim var_volumen As String = ""
+    Dim var_peso As Double = 0
+    Dim var_volumen As Double = 0
     Dim var_costo As Double = 0
     Dim var_descripcion As String = ""
 #End Region
@@ -69,19 +69,19 @@ Public Class cls_envios_paquetes
             Me.var_numero = value
         End Set
     End Property
-    Public Property peso() As String
+    Public Property peso() As Double
         Get
             Return Me.var_peso
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Double)
             Me.var_peso = value
         End Set
     End Property
-    Public Property volumen() As String
+    Public Property volumen() As Double
         Get
             Return Me.var_volumen
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Double)
             Me.var_volumen = value
         End Set
     End Property
@@ -123,30 +123,30 @@ Public Class cls_envios_paquetes
         obj_dt_int = Abrir_Tabla(Me.obj_Conex_int, "Select * from " & Me.var_Nombre_Tabla & " WHERE " & Me.var_Campo_Id & "=" & var_id_int)
         If obj_dt_int.Rows.Count > 0 Then
             Me.var_id = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id").ToString)
-            Me.var_id_envio = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("nombre").ToString)
-            Me.var_numero = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("descripcion").ToString)
-            Me.var_peso = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("peso").ToString)
-            Me.var_volumen = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("volumen").ToString)
-            Me.var_costo = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("costo").ToString)
-            Me.var_descripcion = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("descripcion").ToString)
+            Me.var_id_envio = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id_envio").ToString)
+            Me.var_numero = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("numero").ToString)
+            Me.var_peso = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("peso").ToString, True)
+            Me.var_volumen = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("volumen").ToString, True)
+            Me.var_costo = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("costo").ToString, True)
+            Me.var_descripcion = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("descripcion").ToString)
         Else
             Me.var_id = -1
         End If
     End Sub
     Public Function Actualizar(ByRef var_Error As String) As Boolean
-        'If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
-        '    If var_Error = "" Then
-        '        var_Error = "El cliente '" & Me.var_nombre & "' ya existe en la base de datos"
-        '    End If
-        '    Return False
-        '    Exit Function
-        'End If
+        If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_numero, Me.var_Campo_Id, Me.var_id) Then
+            If var_Error = "" Then
+                var_Error = "El oaquete '" & Me.var_numero & "' ya existe en la base de datos"
+            End If
+            Return False
+            Exit Function
+        End If
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_id_envio) & "," & Sql_Texto(Me.var_numero) & "," & Sql_Texto(Me.var_peso) & "," & Sql_Texto(Me.var_volumen) & "," & Sql_Texto(Me.var_costo) & "," & Sql_Texto(Me.var_descripcion), var_Error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_id_envio) & "," & Sql_Texto(New cls_envios(Me.var_id_envio).codigo & "-" & Me.var_numero) & "," & Sql_Texto(Me.var_peso) & "," & Sql_Texto(Me.var_volumen) & "," & Sql_Texto(Me.var_costo) & "," & Sql_Texto(Me.var_descripcion), var_Error) Then
                 Return False
                 Exit Function
             End If
-            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " where id_envio=" & Sql_Texto(Me.var_id_envio))
+            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
             Return True
         ElseIf Me.var_id > 0 Then 'EDICION
             If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "id_envio=" & Sql_Texto(Me.var_id_envio) & ",numero=" & Sql_Texto(Me.var_numero) & ",peso=" & Sql_Texto(Me.var_peso) & ",volumen=" & Sql_Texto(Me.var_volumen) & ",costo=" & Sql_Texto(Me.var_costo) & ",descripcion=" & Sql_Texto(Me.var_descripcion), Me.var_Campo_Id & "=" & Me.var_id) Then
@@ -184,9 +184,13 @@ Public Class cls_envios_paquetes
         Return obj_dt
     End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_envios_paquetes.Nombre_Tabla, cls_envios_paquetes.Campo_Id & "=" & var_id)
         Return True
+    End Function
+    Public Shared Function SiguienteNumero() As Integer
+        Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(numero)=1 then cast(numero as int) else 0 end as num from tbl_envios_paquetes) as c").ToString)
     End Function
 #End Region
 

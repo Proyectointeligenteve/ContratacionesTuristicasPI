@@ -5,6 +5,8 @@
         @import "css/jquery.dataTables.css";
         @import "css/frm_envios.css";
     </style>
+    <script type="text/javascript" src="jquery-1.3.2.min.js"></script>    
+    <script type="text/javascript" src="jquery-barcode.js"></script>  
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <!-- Wrap all page content here -->
@@ -35,39 +37,45 @@
              <div class="row-fluid">
                     <div class="span6">
                         <div class="control-group">
-                            <label class="span2 control-label" for="Codigo">Codigo</label>
-                            <div class="span10">
-                                <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="200" />
+                            <label class="span3 control-label" for="Codigo">Codigo</label>
+                            <div class="span9">
+                                <input type="text" id="Codigo" name="Codigo" class="form-control" disabled="disabled" />
                             </div>
                         </div>
                     </div>
-            </div>
-            <br />
-            <div class="row-fluid">
-                <div class="span2">
+                <div class="span6">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Codigo" style ="font-size :14px !important"><b>Emisor:</b></label>
-                        <div class="span10">
+                        <label class="span3 control-label" for="TotalR">Total Envio&nbsp;</label>
+                        <div class="span9">
+                            <input type="text" id="TotalR" name="TotalR" class="form-control" value="0" />
                         </div>
                     </div>
                 </div>
-                <div class="span5">
+            </div>
+            <hr />
+            <div class="row-fluid">
+                <div class="span12">
                     <div class="control-group">
-                        <label class="span3 control-label" for="IdClienteEmisor">Identificador</label>
+                        <label class="span12 control-label" for="Codigo" style ="font-size :14px !important; text-align :left !important"><b>EMISOR</b></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                        <label class="span3 control-label" for="IdentificadorEmisor">Identificador</label>
                         <div class="span9">
                             <div class="input-group">
                                 <div class="input-group-btn">
-                                <input type="text" class="form-control" placeholder="" name="IdClienteEmisor" id="IdClienteEmisor" onchange="BuscarClientesE()" />
+                                <input type="text" class="form-control" placeholder="" name="IdentificadorEmisor" id="IdentificadorEmisor" onchange="BuscarClientesE()" />
                                     <button id="btn_cargarE" class="btn btn-default" type="button" onclick="BuscarClientesE();return false;"><i class="glyphicon glyphicon-search"></i></button>
                                     <div style="display: none" id="dvloaderE"><img src="img/loading.gif" width="32px" /></div>
                                 </div>
                             </div>
                             <input type="hidden" id="ClienteE" name="ClienteE" />
                         </div>
-                    </div>
                 </div>
-                <div class="span5">
-                    <div class="control-group">
+                <div class="span6">
+                    <div class="input-group">
                         <label class="span3 control-label" for="NombreE">Nombre</label>
                         <div class="span9">
                             <input type="text" id="NombreE" name="NombreE" class="form-control" />
@@ -81,7 +89,7 @@
                     <div class="control-group">
                     <label class="span3 control-label" for="PaisE">Pais</label>
                         <div class="span9">
-                            <select id="PaisE" name="PaisE" class="form-control" onchange="CargarEstados()"></select>
+                            <select id="PaisE" name="PaisE" class="form-control" onchange="CargarEstadosE()"></select>
                             <input type="hidden" id="HfPaisE" name="HfPaisE" value="0" />
                             <ul class="error"></ul>
                         </div>
@@ -91,7 +99,7 @@
                     <div class="control-group">
                         <label class="span3 control-label" for="EstadoE">Estado</label>
                         <div class="span9">
-                            <select id="EstadoE" name="EstadoE" class="form-control" onchange="CargarCiudades()"></select>
+                            <select id="EstadoE" name="EstadoE" class="form-control" onchange="CargarCiudadesE()"></select>
                             <input type="hidden" id="HfEstadoE" name="HfEstadoE" value="0" />
                             <ul class="error"></ul>
                         </div>
@@ -108,34 +116,32 @@
                     </div>
                 </div>
             </div>
-            <br />
+            <hr />
             <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="span2 control-label" for="Codigo" style ="font-size :14px !important"><b>Receptor:</b></label>
-                        <div class="span10">
-                        </div>
+                <div class="span12">
+                    <div class="input-group">
+                        <label class="span12 control-label" for="Codigo" style ="font-size :14px !important; text-align :left !important"><b>RECEPTOR</b></label>
                     </div>
                 </div>
-                <div class="span5">
-                    <div class="control-group">
-                        <label class="span2 control-label" for="IdClienteReceptor">Identificador</label>
-                        <div class="span10">
-                            <div class="input-group">
-                                <div class="input-group-btn">
-                                <input type="text" class="form-control" placeholder="" name="IdClienteReceptor" id="IdClienteReceptor" onchange="BuscarClientesR()" />
-                                    <button id="btn_cargarR" class="btn btn-default" type="button" onclick="BuscarClientesR();return false;"><i class="glyphicon glyphicon-search"></i></button>
-                                    <div style="display: none" id="dvloaderR"><img src="img/loading.gif" width="32px" /></div>
-                                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <label class="span3 control-label" for="IdentificadorReceptor">Identificador</label>
+                    <div class="span9">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                            <input type="text" class="form-control" placeholder="" name="IdentificadorReceptor" id="IdentificadorReceptor" onchange="BuscarClientesR()" />
+                                <button id="btn_cargarR" class="btn btn-default" type="button" onclick="BuscarClientesR();return false;"><i class="glyphicon glyphicon-search"></i></button>
+                                <div style="display: none" id="dvloaderR"><img src="img/loading.gif" width="32px" /></div>
                             </div>
-                            <input type="hidden" id="ClienteR" name="ClienteR" />
                         </div>
+                        <input type="hidden" id="ClienteR" name="ClienteR" />
                     </div>
                 </div>
-                <div class="span5">
-                    <div class="control-group">
-                        <label class="span2 control-label" for="NombreR">Nombre</label>
-                        <div class="span10">
+                <div class="span6">
+                    <div class="input-group">
+                        <label class="span3 control-label" for="NombreR">Nombre</label>
+                        <div class="span9">
                             <input type="text" id="NombreR" name="NombreR" class="form-control" />
                         </div>
                     </div>
@@ -147,7 +153,7 @@
                     <div class="control-group">
                     <label class="span3 control-label" for="PaisR">Pais</label>
                         <div class="span9">
-                            <select id="PaisR" name="PaisR" class="form-control" onchange="CargarEstados()"></select>
+                            <select id="PaisR" name="PaisR" class="form-control" onchange="CargarEstadosR()"></select>
                             <input type="hidden" id="HfPaisR" name="hfPaisR" value="0" />
                             <ul class="error"></ul>
                         </div>
@@ -157,8 +163,8 @@
                     <div class="control-group">
                         <label class="span3 control-label" for="EstadoR">Estado</label>
                         <div class="span9">
-                            <select id="EstadoR" name="EstadoR" class="form-control" onchange="CargarCiudades()"></select>
-                            <input type="hidden" id="hfEstado" name="hfEstado" value="0" />
+                            <select id="EstadoR" name="EstadoR" class="form-control" onchange="CargarCiudadesR()"></select>
+                            <input type="hidden" id="hfEstadoR" name="hfEstadoR" value="0" />
                             <ul class="error"></ul>
                         </div>
                     </div>
@@ -175,44 +181,52 @@
                 </div>
             </div>
             <hr />
-            <div class="row-fluid">
-                <div class="span6">
-                    <div class="control-group">
-                        <label class="span6 control-label" for="DireccionEnvio">Direccion</label>
-                        <div class="span6">
-                        <textarea id="DireccionEnvio" rows="3" name="DireccionEnvio" maxlength="250" style="width :100%"></textarea>
-                        </div>
+            <div class="row-fluid hide">
+                <div class="span12">
+                    <label class="span1 control-label" for="DireccionEnvio">Direccion</label>
+                    <div class="span11" align="left">
+                    <textarea rows="2" id="DireccionEnvio" name="DireccionEnvio" class="form-control" style="width:100% !important" ></textarea>
                     </div>
                 </div>
-                <div class="span6"></div>
             </div>
             </form>
             <br />
-            <hr />
+            <%--<hr />--%>
                                    
-            <%--<style type="text/css" title="currentStyle">
+            <style type="text/css" title="currentStyle">
                 @import "css/jquery.dataTables.css";
                 @media (min-width:400px) 
                 {
                     .control-label {
                     white-space: nowrap !important;
                     text-align: left !important;
-                }
+                    }
 
                     .form-control {
                     margin-left: 25px !important;
                     width: 250px !important;
-            }
+                    }
+                    .control-group {
+                    margin-left: 25px !important;
+                    width: 200px !important;
+                    }
                 }
-            </style>--%>
+            </style>
         <script type="text/javascript">
             $(function () {
                 $('#form1').validate({
                     rules: {
                         Codigo: {
-                        required: true  }
+                            required: true
+                        },                    
+                        IdentificadorEmisor: {
+                            required: true
+                        },
+                        IdentificadorReceptor: {
+                            required: true
+                        }
                     }
-                });
+                 });
                 jQuery.validator.addMethod('select', function (value) {
                     return (value != '0');
                 }, "seleccione una opción");
@@ -227,21 +241,23 @@
         <div class="der">
             <div class="btn-group">
             <img src='img/loading2.gif' class="loading" />
-                <button class="btn" id="btn_paqueteAdd" onclick="paqueteAdd(); return (false);"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
-                <button class="btn" id="btn_paqueteEdit" onclick="paqueteEdit(); return (false);"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
-                <button class="btn" id="btn_paqueteDelete" onclick="paqueteConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
+                <button class="btn btn-default" id="btn_paqueteAdd" onclick="paqueteAdd(); return (false);"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn btn-default" id="btn_paqueteEdit" onclick="paqueteEdit(); return (false);"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
+                <button class="btn btn-default" id="btn_paqueteDelete" onclick="paqueteConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         <div>
             <div>
-                <table style="font-size: 12px" id="tbl_paquete" cellpadding="0" cellspacing="0" border="0" class="table table-responsive table-striped table-bordered">
+                <table style="font-size: 12px;background-color:#12abb8;padding-top:10px" id="tbl_paquetes" cellpadding="0" cellspacing="0" border="0" class="table table-responsive table-striped table-bordered">
                     <thead>
                         <tr>
+                            <td  class="hide">Envio</td>
                             <td  data-class="expand">Numero</td>
-                            <td  data-hide="phone,tablet">Descripcion</td>
                             <td  data-hide="phone,tablet">Peso</td>
                             <td  data-hide="phone,tablet">Volumen</td>
+                            <td  data-hide="phone,tablet">Descripcion</td>
                             <td  data-hide="phone,tablet">Costo</td>
+                            <td  data-hide="phone,tablet">Codigo</td>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -249,13 +265,14 @@
                 <input type="hidden" id="hdn_TotalpaqueteRecords" name="hdn_TotalpaqueteRecords" value="0" />
             </div>
         </div>
+        <br />
+        <br />     
 
-     
-        <div class="remodal" data-remodal-id="basicModal2">
+        <div class="remodal" data-remodal-id="basicModal2" style="background-color:#013b63;">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Formulario de paquetes</h4>
+                <h4 class="modal-title" id="myModalLabel"><span style="color :white;">Formulario de Paquetes</span></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color:#013b63;color:white;">
                 <form id="form2">
                     <input type="hidden" id="hdn_paqueteId" name="hdn_paqueteId" value="0" />
                     <div class="espacio"></div>
@@ -263,86 +280,65 @@
                         <div class="span12">
                             <div class="control-group">
                                 <div class="row-fluid">
-                                    <label class="span2 control-label" for="Paquetes">Numero</label>
-                                    <div class="span10">
-                                        <select id="NumeroP" name="NumeroP" class="form-control"></select>
-                                        <input type="hidden" id="hfNumeroP" name="hfNumeroP" value="0" />
+                                    <div class="span12">
+                                        <label class="span3 control-label" for="Paquetes">Numero</label>
+                                        <div class="span9">
+                                            <input type="text" id="NumeroP" name="NumeroP" class="form-control" disabled="disabled" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <label class="span2 control-label" for="Peso">Peso</label>
-                                    <div class="span10">
-                                        <select id="PesoP" name="PesoP" class="form-control"></select>
-                                        <input type="hidden" id="HfPesoP" name="HfPesoP" value="0" />
+                                    <div class="span12">
+                                        <label class="span3 control-label" for="Peso">Peso</label>
+                                        <div class="span9">
+                                            <input type="text" id="PesoP" name="PesoP" class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <label class="span2 control-label" for="Volumen">Volumen</label>
-                                    <div class="span10">
-                                        <select id="VolumenP" name="VolumenP" class="form-control"></select>
-                                        <input type="hidden" id="HfVolumenP" name="HfVolumenP" value="0" />
+                                    <div class="span12">
+                                        <label class="span3 control-label" for="Volumen">Volumen</label>
+                                        <div class="span9">
+                                            <input type="text" id="VolumenP" name="VolumenP" class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <label class="span2 control-label" for="Costo">Costo</label>
-                                    <div class="span10">
-                                        <select id="CostoP" name="CostoP" class="form-control"></select>
-                                        <input type="hidden" id="HfCostoP" name="HfCostoP" value="0" />
+                                    <div class="span12">
+                                        <label class="span3 control-label" for="DescripcionP">Descripcion</label>
+                                        <div class="span9">
+                                            <textarea id="DescripcionP" rows="2" name="DescripcionP" maxlength="250" style ="width:100%" class="form-control"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <label class="span2 control-label" for="Descripcion">Descripcion</label>
-                                    <div class="span10">
-                                        <select id="DescripcionP" name="DescripcionP" class="form-control"></select>
-                                        <input type="hidden" id="HfDescripcionP" name="HfCostoP" value="0" />
+                                    <div class="span12">
+                                        <label class="span3 control-label" for="Costo">Costo</label>
+                                        <div class="span9">
+                                            <input type="text" id="CostoP" name="CostoP" class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <%--<div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_paqueteCharge">Codigo</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_paqueteCharge" name="txt_paqueteCharge" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_paquetePhone">Telefono</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_paquetePhone" name="txt_paquetePhone" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="span2 control-label" for="txt_Email">Email</label>
-                                <div class="span10">
-                                    <input type="text" id="txt_Email" name="txt_Email" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>--%>
+                    
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="alert alert-danger" id="dv_Error2"></div>
                 <div class="alert alert-success" id="dv_Message2"></div>    
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="basicModal2.close()">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="if(paqueteValidate()){paquetesave();}">Aceptar</button>
+                <button type="button" class="btn btn-primary" onclick="if(paqueteValidate()){paqueteSave();}">Aceptar</button>
             </div>
             <script type="text/javascript">
                 $(function () {
                     $('#form2').validate({
                         rules: {
-                            Paquetes: {
+                            PesoP: {
+                                required: true
+                            },
+                            CostoP: {
                                 required: true
                             }
                         }
@@ -356,9 +352,9 @@
         </div>
     </div>
        
-    <div class="remodal" data-remodal-id="modalclienteE">
+    <div class="remodal" data-remodal-id="modalclienteE" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
-            <h4 class="modal-title" id="H2">Seleccione el cliente Emisor</h4>
+            <h4 class="modal-title" id="H2">Seleccione el Emisor</h4>
         </div>
         <div class="modal-body">
             <!--Anotacion: Listado de clientes emisores basado en el identificador ingresado en el formulario de envio-->
@@ -383,9 +379,10 @@
             <button type="button" class="btn btn-success" onclick="SeleccionarClienteE()">Aceptar</button>
         </div>
     </div>
-    <div class="remodal" data-remodal-id="modalclienteR">
+         
+    <div class="remodal" data-remodal-id="modalclienteR" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
-            <h4 class="modal-title" id="H3">Seleccione el cliente Receptor</h4>
+            <h4 class="modal-title" id="H3">Seleccione el Receptor</h4>
         </div>
         <div class="modal-body">
             <!--Anotacion: Listado de clientes receptores basado en el identificador ingresado en el formulario de envio-->
@@ -411,46 +408,149 @@
         </div>
     </div>
 
-        <div class="remodal" data-remodal-id="deleteModal2">
-            <div class="modal-header">
-                <h4>Eliminar</h4>
-            </div>
-            <div class="modal-body">
-                <p>Estas seguro que deseas eliminar el registro?</p>
-            </div>
-            <div class="modal-footer">
-                <img src='img/loading2.gif' class="loading" />
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteModal2.close()">Cerrar</button>
-                <button type="button" class="btn btn-danger" onclick="paqueteDelete();">Aceptar</button>
-            </div>
+    <div class="remodal" data-remodal-id="nuevoCmodal" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Mensaje</h4>
         </div>
-        
-        <div class="remodal" data-remodal-id="msjModal">
-            <div class="modal-header">
-                <h4>Mensaje</h4>
-            </div>
-            <div class="modal-body">
-                <p>El registro ha sido guardado.</p>
-            </div>
-            <div class="modal-footer">
-                <img src='img/loading2.gif' class="loading" />
-                    <button type="button" class="btn btn-success" onclick="backToList();">Ok</button>
-            </div>
+        <div class="modal-body">
+            <p>No se encontraron clientes con el identificador indicado. Desea Registrarlo?</p>
         </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="nuevoCmodal.close()">Cerrar</button>
+            <button type="button" class="btn btn-danger" onclick="NuevoCliente()">Aceptar</button>
+        </div>
+    </div>
 
-        <div class="remodal" data-remodal-id="deletemodal">
-            <div class="modal-header">
-                <h4>Eliminar</h4>
+    <div class="remodal" data-remodal-id="modalClienteN" style="background-color:#013b63;color:white;font-size:14px !important">
+    <h4 class="modal-title" id="H6">Nuevo Cliente</h4>
+    <div class="modal-body">
+        <form id="form3" class="form-horizontal" role="form">
+            <input type="hidden" id="hf_cliente_n" name="hf_cliente_n"/>
+            <input type="hidden" id="tipo_cliente" name="tipo_cliente"/>
+
+            <!--/row-->
+            <div class="row-fluid">
+                <div class="span12">
+                    <label class="span3 control-label" for="IdentificadorC">Identificador</label>
+                    <div class="span9">
+                    <input type="text" id="IdentificadorC" name="IdentificadorC" class="form-control" />
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <p>Estas seguro que deseas eliminar el registro?</p>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <label class="span3 control-label" for="NombreC">Nombre</label>
+                    <div class="span9">
+                    <input type="text" id="NombreC" name="NombreC" class="form-control" />
+                    </div>
+                </div>
+                <!--/span-->
             </div>
-            <div class="modal-footer">
-                <img src='img/loading2.gif' class="loading" />
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deletemodal.close()">Cerrar</button>
-                <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <label class="span3 control-label" for="TelefonoC">Telefono</label>
+                    <div class="span9">
+                    <input type="text" id="TelefonoC" name="TelefonoC" class="form-control" />
+                    </div>
+                </div>   
             </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <label class="span3 control-label" for="EmailC">Email</label>
+                    <div class="span9">
+                        <input type="text" id="EmailC" name="EmailC" class="form-control" />
+                    </div>
+                </div>
+                <!--/span-->  
+            </div>                                    
+            </form>
+    </div>
+
+    <div class="modal-footer">
+            <div class="alert alert-danger" id="dv_errorClienteN" name="dv_errorClienteN">
+            </div>
+            <div class="alert alert-success" id="dv_mensajeClienteN" name="dv_mensajeClienteN">
+            </div>
+            <div class="alert alert-warning" id="dv_advertenciaClienteN" name="dv_advertenciaClienteN">
+            </div>
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modalClienteN.close()" id="btn_cerrarClientes">Cerrar</button>
+            <button type="button" class="btn btn-primary" onclick="if(ValidarClienteN()){GuardarClienteN()}">Aceptar</button>
+    </div>
+    </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#form3').validate({
+                    rules: {
+                        NombreC: {
+                            required: true
+                            //,
+                            //maximo: true
+                        },
+                        IdentificadorC: {
+                            required: true//,
+                            //date: true
+                        },
+                        TelefonoC: {
+                            required: true
+                        }
+                    }
+
+                });
+
+                jQuery.validator.addMethod('select', function (value) {
+                    return (value != '0');
+                }, "seleccione una opción");
+
+
+            });
+        </script>
+
+    <div class="remodal" data-remodal-id="deleteModal2" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Eliminar</h4>
         </div>
+        <div class="modal-body">
+            <p>Estas seguro que deseas eliminar el registro?</p>
+        </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteModal2.close()">Cerrar</button>
+            <button type="button" class="btn btn-danger" onclick="paqueteDelete();">Aceptar</button>
+        </div>
+    </div>
+        
+    <div class="remodal" data-remodal-id="msjModal" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Mensaje</h4>
+        </div>
+        <div class="modal-body">
+            <p>El registro ha sido guardado.</p>
+        </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+                <button type="button" class="btn btn-success" onclick="backToList();">Ok</button>
+        </div>
+    </div>
+        
+    <div class="remodal" data-remodal-id="deletemodal" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Eliminar</h4>
+        </div>
+        <div class="modal-body">
+            <p>Estas seguro que deseas eliminar el registro?</p>
+        </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deletemodal.close()">Cerrar</button>
+            <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
+        </div>
+    </div>
+    
     <%--</div>--%>
     
     <script type="text/javascript" src="js/frm_envios.js"></script>
@@ -462,14 +562,16 @@
             $("#dv_advertencia").hide();            
             $("#dv_Error2").hide();
             $("#dv_Message2").hide();
-            $("#dv_Error3").hide();
-            $("#dv_Message3").hide();
-            $("#dv_Error4").hide();
-            $("#dv_Message4").hide();
-            $("#dv_Error5").hide();
-            $("#dv_Message5").hide();
-            $("#dv_Error6").hide();
-            $("#dv_Message6").hide();
+            $("#dv_errorClienteN").hide();
+            $("#dv_mensajeClienteN").hide();
+            $("#dv_advertenciaClienteN").hide();
+            $("#dv_error_modalR").hide();
+            $("#dv_error_modalE").hide();
+            //$("#dv_Message4").hide();
+            //$("#dv_Error5").hide();
+            //$("#dv_Message5").hide();
+            //$("#dv_Error6").hide();
+            //$("#dv_Message6").hide();
             load()
         });
 </script>

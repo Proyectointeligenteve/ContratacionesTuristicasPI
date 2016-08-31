@@ -9,7 +9,7 @@ Public Class cls_envios_clientes
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "identificador"
     Dim var_Campos As String = "nombre,identificador,telefono,email"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
     Dim var_nombre As String = ""
@@ -75,7 +75,7 @@ Public Class cls_envios_clientes
             Me.var_email = value
         End Set
     End Property
-    
+
 #End Region
 #Region "FUNCIONES"
     Sub New(Optional ByVal var_Id_int As Integer = 0)
@@ -99,19 +99,19 @@ Public Class cls_envios_clientes
         End If
     End Sub
     Public Function Actualizar(ByRef var_Error As String) As Boolean
-        'If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
-        '    If var_Error = "" Then
-        '        var_Error = "El cliente '" & Me.var_nombre & "' ya existe en la base de datos"
-        '    End If
-        '    Return False
-        '    Exit Function
-        'End If
+        If Validar_Existe(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campo_Validacion, Me.var_nombre, Me.var_Campo_Id, Me.var_id) Then
+            If var_Error = "" Then
+                var_Error = "El cliente '" & Me.var_nombre & "' ya existe en la base de datos"
+            End If
+            Return False
+            Exit Function
+        End If
         If Me.var_id = 0 Then   'NUEVO
             If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_identificador) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email), var_Error) Then
                 Return False
                 Exit Function
             End If
-            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " where nombre=" & Sql_Texto(Me.var_nombre))
+            Me.var_id = Valor_De(Me.obj_Conex_int, "select " & Me.var_Campo_Id & " from " & Me.var_Nombre_Tabla & " order by id desc")
             Return True
         ElseIf Me.var_id > 0 Then 'EDICION
             If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",identificador=" & Sql_Texto(Me.identificador) & ",telefono=" & Sql_Texto(Me.var_telefono) & ",email=" & Sql_Texto(Me.var_email), Me.var_Campo_Id & "=" & Me.var_id) Then
@@ -134,13 +134,13 @@ Public Class cls_envios_clientes
         Return obj_dt
     End Function
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_envios_clientes.Nombre_Tabla, cls_envios_clientes.Campo_Id & "=" & var_id)
         Return True
     End Function
 
     Public Shared Function Consulta(ByRef var_identificador As String, ByRef var_error As String) As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim var_consulta As String = "Select * from lst_envios_clientes(" & Sql_Texto(var_identificador) & ")"
         Dim var_msj As String = ""
 

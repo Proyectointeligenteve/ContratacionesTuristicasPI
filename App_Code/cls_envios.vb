@@ -8,7 +8,7 @@ Public Class cls_envios
     Dim var_Nombre_Tabla As String = "tbl_envios"
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "codigo"
-    Dim var_Campos As String = "codigo,id_cliente_emisor,id_cliente_receptor,id_pais_origen,id_estado_origen,id_ciudad_origen,id_pais_destino,id_estado_destino,id_estado_destino,id_ciudad_destino,direccion_destino,costo_envio,estatus,id_usuario_reg,fecha_reg"
+    Dim var_Campos As String = "codigo,id_cliente_emisor,id_cliente_receptor,id_pais_origen,id_estado_origen,id_ciudad_origen,id_pais_destino,id_estado_destino,id_ciudad_destino,direccion_destino,costo_envio,estatus,id_usuario_reg,fecha_reg"
     Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
@@ -74,6 +74,11 @@ Public Class cls_envios
     Public Shared ReadOnly Property ListadoExtraviados() As String
         Get
             Return "lst_enviosExtraviados"
+        End Get
+    End Property
+    Public Shared ReadOnly Property ListadoAnulados() As String
+        Get
+            Return "lst_enviosAnulados"
         End Get
     End Property
     Public Shared ReadOnly Property Listado() As String
@@ -404,6 +409,15 @@ Public Class cls_envios
         var_error = var_msj
         Return obj_dt_int
     End Function
+    Public Shared Function ConsultaAnulados(ByRef var_error As String) As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim var_consulta As String = "Select * from " & cls_envios.ListadoAnulados & "()"
+        Dim var_msj As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
+        var_error = var_msj
+        Return obj_dt_int
+    End Function
 
     Public Shared Function Consulta(ByRef var_error As String) As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
@@ -413,6 +427,11 @@ Public Class cls_envios
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
         var_error = var_msj
         Return obj_dt_int
+    End Function
+
+    Public Shared Function SiguienteNumero() As Integer
+        Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(codigo)=1 then cast(codigo as int) else 0 end as num from tbl_envios) as c").ToString)
     End Function
 #End Region
 End Class

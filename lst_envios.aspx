@@ -28,7 +28,7 @@
             <div style ="width :100%">
             <span style="font-size: 14px;color:white">LISTADO DE ENVIOS</span><hr />            
         </div>
-        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:180px !important" onchange="CargarListado()"><option value ="0">Ver Por Entregar</option><option value ="1">Ver En Transito</option><option value ="2">Ver Entregados</option><option value ="3">Ver Extraviados</option><option value ="4">Ver Todos</option></select></div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:180px !important" onchange="CargarListados()"><option value ="0">Ver Por Entregar</option><option value ="1">Ver En Transito</option><option value ="2">Ver Entregados</option><option value ="3">Ver Extraviados</option><option value ="4">Ver Anulados</option><option value ="5">Ver Todos</option></select></div>
         <div class="hr">
             <hr />
         </div>
@@ -37,6 +37,7 @@
                 <img src='img/loading2.gif' class="loading" />
                 <button class="btn hide" id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
                 <button class="btn hide" id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
+                <button class="btn hide" id="btn_actualizar" onclick="Seguimiento();"><span class="glyphicon glyphicon-list"></span>&nbsp;Actualizar</button>
                 <button class="btn hide" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
                 <button class="btn hide" id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
@@ -61,8 +62,8 @@
                     <td data-class="phone,tablet">Fecha</td>
                     <td data-class="phone,tablet">Emisor</td>
                     <td data-class="phone,tablet">Receptor</td>
-                    <td data-class="phone,tablet">Pais</td>
-                    <td data-class="phone,tablet">Ciudad</td>
+                    <td data-class="phone,tablet">Pais Receptor</td>
+                    <td data-class="phone,tablet">Ciudad Receptor</td>
                     <td data-class="phone,tablet">Costo</td>
                     <td data-class="phone,tablet">Estatus</td>
                 </tr>
@@ -71,7 +72,47 @@
             </tbody>
         </table>
     </div>
-   
+   <div class="remodal" data-remodal-id="modalnuevoseg">
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Nuevo Seguimiento</h4>
+        </div>
+        <div class="modal-body">
+            <form id="form1" class="form-horizontal" role="form">
+                <input type="hidden" id="id" name="id" />
+
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="col-sm-1 control-label" for="Observacion">Observacion</label>
+                            <div class="col-sm-11">
+                                <textarea rows="4" id="Observacion" name="Observacion" class="form-control" style="width:100% !important" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+
+                </div>
+                 <script type="text/javascript">
+                     $(function () {
+                         $('#form1').validate({
+                             rules: {
+                                 Observacion: {
+                                     required: true
+                                 }
+                             }
+                         });
+                     });
+        </script>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="alert alert-danger" id="dv_error_nuevoseg" name="dv_error_nuevoseg"></div>
+             <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modalnuevoseg.close();Seguimiento();" id="btn_cerrarnuevoseg">Cerrar</button>
+            <button type="button" class="btn btn-primary" onclick="if(ValidarSeguimiento()){GuardarSeguimiento()}">Aceptar</button>
+        </div>
+    </div>
         <div class="remodal" data-remodal-id="deletemodal">
         <div class="modal-header">
             <h4>Eliminar</h4>
@@ -89,7 +130,7 @@
             <div class="modal-header">
             <h4>Anular</h4>
         </div>
-        <div class="modal-body">
+            <div class="modal-body">
             <p>Estas seguro que deseas anular el registro?</p>
         </div>
             <div class="modal-footer">

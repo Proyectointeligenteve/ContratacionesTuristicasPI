@@ -106,6 +106,8 @@ Partial Class lst_envios
             obj_dt_int = cls_envios.ConsultaEntregados(var_error)
         ElseIf var_estatus = 3 Then
             obj_dt_int = cls_envios.ConsultaExtraviados(var_error)
+        ElseIf var_estatus = 4 Then
+            obj_dt_int = cls_envios.ConsultaAnulados(var_error)
         Else 'Todos
             obj_dt_int = cls_envios.Consulta(var_error)
         End If
