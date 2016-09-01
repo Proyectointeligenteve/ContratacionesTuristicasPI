@@ -407,7 +407,7 @@ Public Class cls_vouchers
 
     Public Shared Function ConsultaActivos(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoActivos & "(" & Sql_Texto(var_filtro) & ")"
+        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoActivos & "()"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
@@ -417,12 +417,17 @@ Public Class cls_vouchers
 
     Public Shared Function ConsultaAnulados(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoAnulados & "(" & Sql_Texto(var_filtro) & ")"
+        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoAnulados & "()"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
         var_error = var_msj
         Return obj_dt_int
+    End Function
+
+    Public Shared Function SiguienteNumero() As Integer
+        Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0)from (select case when ISNUMERIC(cast(right(numero,4) as int))=1 then cast(right(numero,4) as int) else 0 end as num from tbl_vouchers) as c").ToString)
     End Function
 #End Region
 End Class
