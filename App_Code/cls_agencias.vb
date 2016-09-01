@@ -526,7 +526,7 @@ Public Class cls_agencias
 
     Public Shared Function SiguienteNumero() As Integer
         Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(codigo)=1 then cast(codigo as int) else 0 end as num from tbl_agencias) as c").ToString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when cast(right(codigo,4) as int)=1 then cast(right(codigo,4) as int) else 0 end as num from tbl_agencias) as c").ToString)
     End Function
 #End Region
 End Class
