@@ -55,6 +55,18 @@ Public Class cls_vouchers
         End Get
     End Property
 
+    Public Shared ReadOnly Property ListadoActivos() As String
+        Get
+            Return "lst_vouchersActivos"
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property ListadoAnulados() As String
+        Get
+            Return "lst_vouchersAnulados"
+        End Get
+    End Property
+
     Public ReadOnly Property Detalle() As Generic.List(Of cls_vouchers_detalles)
         Get
             Return Me.obj_detalles
@@ -393,6 +405,25 @@ Public Class cls_vouchers
         Return Abrir_Tabla(obj_Conex_int, var_consulta, var_error)
     End Function
 
+    Public Shared Function ConsultaActivos(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoActivos & "(" & Sql_Texto(var_filtro) & ")"
+        Dim var_msj As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
+        var_error = var_msj
+        Return obj_dt_int
+    End Function
+
+    Public Shared Function ConsultaAnulados(Optional ByVal var_filtro As String = "", Optional ByVal var_orden As String = "", Optional ByRef var_error As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim var_consulta As String = "Select * from " & cls_vouchers.ListadoAnulados & "(" & Sql_Texto(var_filtro) & ")"
+        Dim var_msj As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
+        var_error = var_msj
+        Return obj_dt_int
+    End Function
 #End Region
 End Class
 
