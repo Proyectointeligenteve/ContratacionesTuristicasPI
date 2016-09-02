@@ -342,7 +342,7 @@ function Anular() {
                 $("#dv_mensaje").show();
                 setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
                 $('#tbDetails').dataTable().fnDestroy();
-                CargarListado();
+                CargarListados();
             }
             else {
                 $("#dv_error").html(response.msj);

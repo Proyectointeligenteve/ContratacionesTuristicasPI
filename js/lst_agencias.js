@@ -307,8 +307,8 @@ function ConfirmarAnular() {
     anularmodal = $.remodal.lookup[$('[data-remodal-id=anularmodal]').data('remodal')];
     anularmodal.open();
 }
-function anular() {
-    var id
+function Anular() {
+    var id;  
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {
             id = this.id;
@@ -340,7 +340,7 @@ function anular() {
                 $("#dv_mensaje").show();
                 setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
                 $('#tbDetails').dataTable().fnDestroy();
-                CargarListado();
+                CargarListados();
             }
             else {
                 $("#dv_error").html(response.msj);

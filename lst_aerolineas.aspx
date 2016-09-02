@@ -85,6 +85,19 @@
             <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
         </div>
     </div>
+            <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Anular</h4>
+        </div>
+        <div class="modal-body">
+            <p>Estas seguro que deseas anular el registro?</p>
+        </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="anularmodal.close()">Cerrar</button>
+            <button type="button" class="btn btn-danger" onclick="Anular()">Aceptar</button>
+        </div>
+    </div>
     <script type="text/javascript" language="javascript" src="js/lst_aerolineas.js"></script>
     <script>
 

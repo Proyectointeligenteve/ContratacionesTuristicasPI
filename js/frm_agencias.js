@@ -236,8 +236,8 @@ function save() {
             "backdrop": "static",
             "keyboard": "true"
         }
-        deletemodal = $.remodal.lookup[$('[data-remodal-id=deletemodal]').data('remodal')];
-        deletemodal.open();
+        deleteModal2 = $.remodal.lookup[$('[data-remodal-id=deleteModal2]').data('remodal')];
+        deleteModal2.open();
     };
 
     function contactoDelete() {

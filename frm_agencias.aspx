@@ -261,7 +261,7 @@
             <img src='img/loading2.gif' class="loading" />
                 <button class="btn btn-default" id="btn_contactoAdd" onclick="contactoAdd(); return (false);"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>&nbsp;&nbsp
                 <button class="btn btn-default" id="btn_contactoEdit" onclick="contactoEdit(); return (false);"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>&nbsp;&nbsp
-                <button class="btn btn-default" id="btn_contactoDelete" onclick="contactoConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
+                <button class="btn btn-default" id="btn_contactoDelete" onclick="alert(3);contactoConfirm(); return (false);"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         <div>
@@ -460,7 +460,7 @@
             <div class="modal-footer">
                 <img src='img/loading2.gif' class="loading" />
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteModal2.close()">Cerrar</button>
-                <button type="button" class="btn btn-danger" onclick="contactoDelete();">Aceptar</button>
+                <button type="button" class="btn btn-danger" onclick="alert(5);contactoDelete();">Aceptar</button>
             </div>
         </div>
 
