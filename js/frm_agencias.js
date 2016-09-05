@@ -232,12 +232,24 @@ function save() {
     var deletemodal;
 
     function contactoConfirm() {
+        var id = '';
+        $('#tbl_contacto tr').each(function () {
+            if ($(this).hasClass('row_selected')) {
+                id += ',' + this.id;
+            }
+        });
+        if (id == '') {
+            $("#dv_Error").html('Seleccione un registro');
+            $("#dv_Error").show();
+            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            return false;
+        }
         var options = {
             "backdrop": "static",
             "keyboard": "true"
         }
-        deleteModal2 = $.remodal.lookup[$('[data-remodal-id=deleteModal2]').data('remodal')];
-        deleteModal2.open();
+        deleteModalCliente = $.remodal.lookup[$('[data-remodal-id=deleteModalCliente]').data('remodal')];
+        deleteModalCliente.open();
     };
 
     function contactoDelete() {

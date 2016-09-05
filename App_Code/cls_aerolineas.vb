@@ -329,6 +329,21 @@ Public Class cls_aerolineas
                 obj_log.ResultadoLog = True
                 obj_log.InsertarLog()
             End If
+            Dim var_ids As String = ""
+            For i As Integer = 0 To Me.obj_contacto.Count - 1
+                Me.obj_contacto.Item(i).id_aerolinea = Me.Id
+                Dim var_msj2 As String = ""
+                Me.obj_contacto.Item(i).Actualizar(var_msj2)
+                var_msj &= " - " & var_msj2
+                var_ids &= "," & Me.obj_contacto.Item(i).Id
+
+            Next
+            If var_ids.Trim.Length > 1 Then
+                ac_Funciones.Eliminar(Me.obj_Conex_int, cls_aerolineas_contactos.Nombre_Tabla, "id_aerolinea=" & Me.var_id & " and id not in(" & var_ids.Substring(1) & ")")
+            Else
+                ac_Funciones.Eliminar(Me.obj_Conex_int, cls_aerolineas_contactos.Nombre_Tabla, "id_aerolinea=" & Me.var_id)
+            End If
+
             Return True
         Else
             var_Error = "No se encontro el Registro"
