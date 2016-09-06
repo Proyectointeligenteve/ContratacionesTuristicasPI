@@ -22,7 +22,7 @@
             <div style ="width :100%">
             <span style="font-size: 14px;color:white">LISTADO DE HOTELES</span><hr />            
         </div>
-        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListados()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
         <div class="hr">
             <hr />
         </div>
@@ -85,10 +85,10 @@
     </div>
            <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
-            <h4>Anular</h4>
+            <h4>Activar/Inactivar</h4>
         </div>
         <div class="modal-body">
-            <p>Estas seguro que deseas anular el registro?</p>
+            <p>Estas seguro que deseas Activar/Inactivar el registro?</p>
         </div>
         <div class="modal-footer">
             <img src='img/loading2.gif' class="loading" />

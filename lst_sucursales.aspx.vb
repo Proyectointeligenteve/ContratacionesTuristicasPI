@@ -130,7 +130,7 @@ Partial Class lst_sucursales
             obj_sucursales.fecha_reg = Now.Date
         End If
         obj_sucursales.nombre = var_data("Nombre")
-        obj_sucursales.codigo = Right("AE" & Right("0000" & (cls_sucursales.SiguienteNumero() + 1).ToString, 4).ToString, 6)
+        obj_sucursales.codigo = Right("SC" & Right("0000" & (cls_sucursales.SiguienteNumero() + 1).ToString, 4).ToString, 6)
         obj_sucursales.rif = var_data("Rif").ToString.ToUpper
         Response.ContentType = "application/json"
         Response.Clear()

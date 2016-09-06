@@ -194,6 +194,7 @@ Partial Class frm_agencias
             Else
                 var_User = obj_Session.Usuario.nombre
             End If
+            obj_sb.Append("," & Chr(34) & "hdn_id" & Chr(34) & ":" & Chr(34) & obj_Agencia.Id & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Rif" & Chr(34) & ":" & Chr(34) & obj_Agencia.Rif & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_Agencia.Nombre & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "RazonSocial" & Chr(34) & ":" & Chr(34) & obj_Agencia.RazonSocial & Chr(34) & "")

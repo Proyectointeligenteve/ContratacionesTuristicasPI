@@ -387,9 +387,9 @@ Public Class cls_hoteles
         Return obj_dt_int
     End Function
 
-    Public Shared Function ConsultaActivos(ByRef var_error As String) As DataTable
+    Public Shared Function ConsultaActivos(ByRef var_error As String, Optional ByVal var_filtro As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_hoteles.ListadoActivos & "()"
+        Dim var_consulta As String = "Select * from " & cls_hoteles.ListadoActivos & "(" & Sql_Texto(var_filtro) & ")"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
@@ -397,9 +397,9 @@ Public Class cls_hoteles
         Return obj_dt_int
     End Function
 
-    Public Shared Function ConsultaAnulados(ByRef var_error As String) As DataTable
+    Public Shared Function ConsultaAnulados(ByRef var_error As String, Optional ByVal var_filtro As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_hoteles.ListadoAnulados & "()"
+        Dim var_consulta As String = "Select * from " & cls_hoteles.ListadoAnulados & "(" & Sql_Texto(var_filtro) & ")"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
@@ -407,9 +407,9 @@ Public Class cls_hoteles
         Return obj_dt_int
     End Function
 
-    Public Shared Function Consulta(ByRef var_error As String) As DataTable
+    Public Shared Function Consulta(ByRef var_error As String, Optional ByVal var_filtro As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_hoteles.Listado & "()"
+        Dim var_consulta As String = "Select * from " & cls_hoteles.Listado & "(" & Sql_Texto(var_filtro) & ")"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)

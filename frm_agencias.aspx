@@ -26,7 +26,7 @@
         </div>
 
         <form id="form1" style="margin-top: 10px">
-            <input type="hidden" id="hdn_id_cliente" name="hdn_id_cliente" value="0"/>
+            <input type="hidden" id="hdn_id" name="hdn_id" value="0"/>
             <div class="espacio"></div>
                  
             <div class="row-fluid">

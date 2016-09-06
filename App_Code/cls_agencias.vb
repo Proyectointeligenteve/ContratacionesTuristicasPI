@@ -348,7 +348,7 @@ Public Class cls_agencias
                 Return True
             End If
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",razon_socal=" & Sql_Texto(Me.var_razon_social) & ",rif=" & Sql_Texto(Me.var_rif) & ",direccion=" & Sql_Texto(Me.var_direccion) & ",telefono_fijo=" & Sql_Texto(Me.var_telefono_fijo) & ",telefono_movil=" & Sql_Texto(Me.var_telefono_movil) & ",email=" & Sql_Texto(Me.var_email) & ",web=" & Sql_Texto(Me.var_web) & ",codigo=" & Sql_Texto(Me.var_codigo) & ",limite_credito=" & Sql_Texto(Me.var_limite_credito) & ",id_pais=" & Sql_Texto(Me.var_pais) & ",id_estado=" & Sql_Texto(Me.var_estado) & ",id_ciudad=" & Sql_Texto(Me.var_ciudad), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",razon_social=" & Sql_Texto(Me.var_razon_social) & ",rif=" & Sql_Texto(Me.var_rif) & ",direccion=" & Sql_Texto(Me.var_direccion) & ",telefono_fijo=" & Sql_Texto(Me.var_telefono_fijo) & ",telefono_movil=" & Sql_Texto(Me.var_telefono_movil) & ",email=" & Sql_Texto(Me.var_email) & ",web=" & Sql_Texto(Me.var_web) & ",codigo=" & Sql_Texto(Me.var_codigo) & ",limite_credito=" & Sql_Texto(Me.var_limite_credito) & ",id_pais=" & Sql_Texto(Me.var_pais) & ",id_estado=" & Sql_Texto(Me.var_estado) & ",id_ciudad=" & Sql_Texto(Me.var_ciudad), Me.var_Campo_Id & "=" & Me.var_id) Then
                 var_msj = var_error
 
                 Dim obj_log As New cls_logs

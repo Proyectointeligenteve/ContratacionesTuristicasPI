@@ -161,13 +161,19 @@ function Nuevo() {
 }
 
 function Editar() {
-    var id
+    var id = '';
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {
             id = this.id;
-            $("#id").val(id);
         }
     });
+
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
 
     $.ajax({
         type: "POST",

@@ -55,6 +55,7 @@ function load() {
                 return false;
             }
             if (response.rslt == 'exito') {
+                $('#hdn_id').val(response.hdn_id);
                 $('#Rif').val(response.Rif);
                 $('#Nombre').val(response.Nombre);
                 $('#RazonSocial').val(response.RazonSocial);
@@ -142,7 +143,7 @@ function Permisos() {
     //var msjModal
 function save() {
         var record = {};
-        record.hdn_id_contacto = $('#hdn_id_contacto').val();
+        record.hdn_id = $('#hdn_id').val();
         record.Rif = $('#Rif').val();
         record.Nombre = $('#Nombre').val();
         record.RazonSocial = $('#RazonSocial').val();
@@ -180,7 +181,7 @@ function save() {
                         "keyboard": "true"
                     }
 
-                    $('#hdn_id_contacto').val(response.hdn_id_contacto);
+                    $('#hdn_id').val(response.hdn_id);
                     msjModal = $.remodal.lookup[$('[data-remodal-id=msjModal]').data('remodal')];
                     msjModal.open();
                     //$('#msjModal').modal(options);
@@ -189,7 +190,7 @@ function save() {
                         $("#msj").html("El record ha sido guardado con errores: " + response.msj);
                     }
                     else {
-                        $('#hdn_id_contacto').val(response.id)
+                        $('#hdn_id').val(response.id)
                         $("#msj").html("El record ha sido guardado con exito.");
                     }
                     //})
