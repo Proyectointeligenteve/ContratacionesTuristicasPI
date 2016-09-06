@@ -171,7 +171,7 @@ function Ver() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -191,7 +191,7 @@ function Editar() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -211,7 +211,7 @@ function Imprimir() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
     $('.loading').show()
@@ -231,7 +231,7 @@ function Confirmar() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -300,7 +300,7 @@ function ConfirmarAnular() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -342,7 +342,7 @@ function Anular() {
                 $("#dv_mensaje").show();
                 setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
                 $('#tbDetails').dataTable().fnDestroy();
-                CargarListado();
+                CargarListados();
             }
             else {
                 $("#dv_error").html(response.msj);

@@ -233,12 +233,24 @@ function save() {
     var deletemodal;
 
     function contactoConfirm() {
+        var id = '';
+        $('#tbl_contacto tr').each(function () {
+            if ($(this).hasClass('row_selected')) {
+                id += ',' + this.id;
+            }
+        });
+        if (id == '') {
+            $("#dv_Error").html('Seleccione un registro');
+            $("#dv_Error").show();
+            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            return false;
+        }
         var options = {
             "backdrop": "static",
             "keyboard": "true"
         }
-        deletemodal = $.remodal.lookup[$('[data-remodal-id=deletemodal]').data('remodal')];
-        deletemodal.open();
+        deleteModalCliente = $.remodal.lookup[$('[data-remodal-id=deleteModalCliente]').data('remodal')];
+        deleteModalCliente.open();
     };
 
     function contactoDelete() {

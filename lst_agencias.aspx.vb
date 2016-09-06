@@ -32,6 +32,8 @@ Partial Class lst_agencias
                     Cargar()
                 Case "eliminar"
                     Eliminar()
+                Case "anular"
+                    Anular()
             End Select
         End If
     End Sub
@@ -129,6 +131,23 @@ Partial Class lst_agencias
         Response.ClearHeaders()
         Response.ClearContent()
         If Not cls_agencias.Eliminar(CInt(var_data("id").ToString), obj_Session.Usuario, var_error) Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")
+        End If
+        Response.End()
+    End Sub
+
+    Sub Anular()
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+        Dim var_error As String = ""
+
+        Response.ContentType = "application/json"
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        If Not cls_agencias.Anular(CInt(var_data("id").ToString), obj_Session.Usuario.Id, var_error) Then
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")

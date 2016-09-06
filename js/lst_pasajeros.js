@@ -160,13 +160,23 @@ function Nuevo() {
 }
 
 function Editar() {
-    var id
+    var id = '';
     $('#tbDetails tr').each(function () {
         if ($(this).hasClass('row_selected')) {
             id = this.id;
             $("#id").val(id);
         }
     });
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+
+    $('.loading').show()
+    $('.btn').hide();
+    window.location.href = 'frm_pasajeros.aspx?id=' + id;
 
     $.ajax({
         type: "POST",
@@ -175,6 +185,8 @@ function Editar() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
+            $('.loading').hide()
+            $('.btn').show();
             if (response.rslt == 'exito') {
                 $('#Nombre').val(response.Nombre);
                 $('#Apellido').val(response.Apellido);

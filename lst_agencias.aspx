@@ -33,7 +33,7 @@
                 <button class="btn hide" id="btn_ver" onclick="Ver();"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver</button>
                 <button class="btn hide" id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
                 <button class="btn hide" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Activar/Inactivar</button>
-                <button class="btn hide" id="btn_eliminar" onclick="Confirmar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Anular</button>
+                <button class="btn hide" id="btn_eliminar" onclick="Confirmar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         <style>
@@ -83,6 +83,19 @@
             <img src='img/loading2.gif' class="loading" />
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deletemodal.close()">Cerrar</button>
             <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
+        </div>
+    </div>
+    <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
+        <div class="modal-header">
+            <h4>Anular</h4>
+        </div>
+        <div class="modal-body">
+            <p>Estas seguro que deseas anular el registro?</p>
+        </div>
+        <div class="modal-footer">
+            <img src='img/loading2.gif' class="loading" />
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="anularmodal.close()">Cerrar</button>
+            <button type="button" class="btn btn-danger" onclick="Anular()">Aceptar</button>
         </div>
     </div>
     <script type="text/javascript" language="javascript" src="js/lst_agencias.js"></script>

@@ -450,7 +450,7 @@
         
     </div>
        
-        <div class="remodal" data-remodal-id="deleteModal2">
+        <div class="remodal" data-remodal-id="deleteModalCliente" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Eliminar</h4>
             </div>
@@ -459,12 +459,12 @@
             </div>
             <div class="modal-footer">
                 <img src='img/loading2.gif' class="loading" />
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteModal2.close()">Cerrar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteModalCliente.close()">Cerrar</button>
                 <button type="button" class="btn btn-danger" onclick="contactoDelete();">Aceptar</button>
             </div>
         </div>
 
-        <div class="remodal" data-remodal-id="deleteModal3">
+        <div class="remodal" data-remodal-id="deleteModal3" style="background-color:#013b63;color:white;font-size:14px !important">
             <div class="modal-header">
                 <h4>Eliminar</h4>
             </div>

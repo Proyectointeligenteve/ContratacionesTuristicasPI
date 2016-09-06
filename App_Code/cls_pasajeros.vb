@@ -7,7 +7,7 @@ Public Class cls_pasajeros
     Dim var_Nombre_Tabla As String = "tbl_pasajeros"
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "rif"
-    Dim var_Campos As String = "nombre,apellido,rif,telefono,email,tipo,id_usuario_reg,fecha_reg"
+    Dim var_Campos As String = "nombre,apellido,rif,telefono,email,tipo,id_usuario_reg,fecha_reg,direccion"
     Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
@@ -19,6 +19,7 @@ Public Class cls_pasajeros
     Dim var_tipo As Integer = 0
     Dim var_id_usuario_reg As Integer
     Dim var_fecha_reg As Date = Now
+    Dim var_direccion As String = ""
 
     Public Shared ReadOnly Property Nombre_Tabla() As String
         Get
@@ -137,6 +138,15 @@ Public Class cls_pasajeros
             Me.var_fecha_reg = value
         End Set
     End Property
+    Public Property direccion() As String
+        Get
+            Return Me.var_direccion
+        End Get
+        Set(ByVal value As String)
+            Me.var_rif = direccion
+        End Set
+    End Property
+
     Sub New(Optional ByVal var_Id_int As Integer = 0)
 
         If var_Id_int > 0 Then
@@ -158,6 +168,7 @@ Public Class cls_pasajeros
             Me.var_tipo = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("tipo").ToString)
             Me.var_id_usuario_reg = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
             Me.var_fecha_reg = ac_Funciones.formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
+            Me.var_direccion = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("direccion").ToString)
         Else
             Me.var_id = 0
         End If
@@ -174,7 +185,7 @@ Public Class cls_pasajeros
 
         Dim var_error As String = ""
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_apellido) & "," & Sql_Texto(Me.var_rif) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_tipo) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg), var_Error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_apellido) & "," & Sql_Texto(Me.var_rif) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_tipo) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_direccion), var_error) Then
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Error agregando pasajero '" & Me.var_rif & " - " & Me.var_nombre & " - " & Me.var_apellido & "': " & var_error
                 obj_log.FechaLog = Now
@@ -210,7 +221,7 @@ Public Class cls_pasajeros
                 Return True
             End If
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",apellido=" & Sql_Texto(Me.var_apellido) & ",rif=" & Sql_Texto(Me.var_rif), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",apellido=" & Sql_Texto(Me.var_apellido) & ",rif=" & Sql_Texto(Me.var_rif) & ",direccion=" & Sql_Texto(Me.var_direccion), Me.var_Campo_Id & "=" & Me.var_id) Then
                 var_msj = var_error
 
                 Dim obj_log As New cls_logs

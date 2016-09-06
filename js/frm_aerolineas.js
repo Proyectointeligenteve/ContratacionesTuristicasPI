@@ -193,7 +193,7 @@ function save() {
      */
     function contactoAdd() {
         $('#hdn_contactoId').val(0);
-        $('#contacto').val(0);
+        $('#NombreC').val();
         
         var options = {
             "backdrop": "static",
