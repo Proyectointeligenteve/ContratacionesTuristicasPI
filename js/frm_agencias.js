@@ -55,6 +55,7 @@ function load() {
                 return false;
             }
             if (response.rslt == 'exito') {
+                $('#hdn_id').val(response.hdn_id);
                 $('#Rif').val(response.Rif);
                 $('#Nombre').val(response.Nombre);
                 $('#RazonSocial').val(response.RazonSocial);
@@ -142,7 +143,7 @@ function Permisos() {
     //var msjModal
 function save() {
         var record = {};
-        record.id = $('#hdn_id').val();
+        record.hdn_id = $('#hdn_id').val();
         record.Rif = $('#Rif').val();
         record.Nombre = $('#Nombre').val();
         record.RazonSocial = $('#RazonSocial').val();
