@@ -37,7 +37,7 @@ function Permisos() {
 
             if (response.rslt == 'exito') {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
-                //if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
+                if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
                 if (response.Anular == 1) { $("#btn_anular").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
@@ -159,6 +159,57 @@ function EventosListado()
 
 }
 
+function Ver() {
+
+    var id = "";
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+            $("#id").val(id);
+        }
+    });
+    if (id == "") {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "lst_vehiculos.aspx?fn=editar",
+        data: '{"id":"' + id + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.rslt == 'exito') {
+                $('#Codigo').val(response.Codigo);
+                $('#Nombre').val(response.Nombre);
+                $('#Descripcion').val(response.Descripcion);
+                $('#Categoria').val(response.Categoria);
+                $('#Agencia').val(response.Agencia);
+                $('#btn_aceptar').addClass('hide');
+                CargarArchivos();
+                modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
+                modal.open();
+
+            }
+            else {
+                $("#dv_mensaje").hide()
+                $("#dv_error").html(response.msj);
+                $("#dv_error").show();
+                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            }
+        },
+        error: function () {
+            $('#btn_cerrar').click();
+            $("#dv_mensaje").hide();
+            $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
+            $("#dv_error").show();
+        }
+    });
+
+}
+
 function CargarProducto() {
     var id = $("#provedor").val();
 
@@ -222,7 +273,8 @@ function Nuevo() {
 
     $.ajax({
         success: function (response) {
-	    $("#tbHijos").empty();
+            alert("donde conchales esta el tbHijos");
+	    $("#tbDetails").empty();
             modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
             modal.open();
         },
