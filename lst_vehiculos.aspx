@@ -164,7 +164,7 @@
             </form>        
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close()" id="btn_cerrar">Cerrar</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close();CargarListado()" id="btn_cerrar">Cerrar</button>
             <button type="button" class="btn btn-primary" id="btn_aceptar" onclick="if(Validar()){Guardar()}">Aceptar</button>
         </div>
     </div>
