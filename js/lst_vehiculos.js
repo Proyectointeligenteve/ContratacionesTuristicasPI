@@ -273,7 +273,6 @@ function Nuevo() {
 
     $.ajax({
         success: function (response) {
-            alert("donde conchales esta el tbHijos");
 	    $("#tbDetails").empty();
             modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
             modal.open();
