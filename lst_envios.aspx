@@ -72,6 +72,36 @@
             </tbody>
         </table>
     </div>
+    <div class="remodal" data-remodal-id="modalseguimiento">
+       <div class="modal-header">
+           <h4 class="modal-title" id="H2">Seguimiento del Envio</h4>
+            <div class="text-right"><button class="btn hide" id="Agregar_Seguimiento" onclick="NuevoSeguimiento();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Agregar</button></div>
+       </div>
+       <div class="modal-body">
+
+           <table style="width: 100% !important" id="tbSeguimiento" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped">
+               <thead>
+                   <tr>
+                       <td  data-class="expand">Fecha</td>
+                       <td  data-class="expand">Estatus</td>
+                       <td  data-hide="phone,tablet">Observacion</td>
+                       <td  data-hide="phone,tablet">Usuario</td>
+                   </tr>
+               </thead>
+               <tbody>
+               </tbody>
+           </table>
+       </div>
+       <div class="modal-footer">
+           <div class="alert alert-danger" id="dv_error_seg" name="dv_error_seg">
+               </div>
+           <div class="alert alert-success" id="dv_mensaje_seg" name="dv_mensaje_seg">
+           </div>
+           <img src='img/loading2.gif' class="loading" />
+           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modalseguimiento.close()" id="btn_cerrarseguimiento">Cerrar</button>
+       </div>
+   </div>
+
    <div class="remodal" data-remodal-id="modalnuevoseg">
 
         <div class="modal-header">
@@ -80,6 +110,37 @@
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
                 <input type="hidden" id="id" name="id" />
+
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="col-sm-1 control-label" for="Fecha">Fecha</label>
+                            <div class="col-sm-11">
+                                <input type="text" id="Fecha" name="Fecha" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="col-sm-1 control-label" for="Estatus">Estatus</label>
+                            <div class="col-sm-11">
+                                <select id="Estatus" name="Estatus" class="form-control">
+                                    <option value="0">Por Entregar</option>
+                                    <option value="1">En transito</option>
+                                    <option value="2">Entregados</option>
+                                    <option value="3">Extraviados</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+
+                </div>
 
                 <div class="row-fluid">
                     <div class="span12">
@@ -93,6 +154,7 @@
                     <!--/span-->
 
                 </div>
+
                  <script type="text/javascript">
                      $(function () {
                          $('#form1').validate({

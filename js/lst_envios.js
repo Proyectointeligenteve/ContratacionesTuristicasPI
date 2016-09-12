@@ -314,3 +314,164 @@ function Eliminar() {
     });
 
 }
+function GuardarSeguimiento() {
+    var registro = {};
+    registro.idenvio = $("#id").val();
+    registro.Observacion = $('#Observacion').val();
+    registro.Estatus = $('#Estatus').val();
+
+    $('.loading').show()
+    $('.btn').hide();
+    $.ajax({
+        type: "POST",
+        url: "lst_envios.aspx?fn=GuardarSeguimiento",
+        data: JSON.stringify(registro),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $('.loading').hide()
+            $('.btn').show();
+            $("#btn_cerrarnuevoseg").click();
+
+
+            if (response.rslt == 'exito') {
+                $("#dv_mensaje_seg").html('El registro ha sido procesado con exito.');
+                $("#dv_mensaje_seg").show();
+                setTimeout(function () { $('#dv_mensaje_seg').hide(); }, 10000);
+            }
+            else {
+                $("#dv_error_seg").html(response.msj);
+                $("#dv_error_seg").show();
+                setTimeout(function () { $('#dv_error_seg').hide(); }, 10000);
+            }
+        },
+        error: function () {
+            $('.loading').hide()
+            $('.btn').show();
+            $("#dv_error_nuevoseg").html('Error de comunicación con el servidor. Funcion GuardarSeguimiento().');
+            $("#dv_error_nuevoseg").show();
+            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        }
+    });
+}
+var modalseguimiento;
+var tableElementSeguimiento;
+function Seguimiento() {
+    var id = '';
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+            $("#id").val(id);
+        }
+    });
+
+    if (id == '') {
+        $("#dv_error").html("Seleccione un registro");
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        return false;
+    }
+
+    $('#btn_cargar').hide()
+    $('#dvloader').show()
+
+    $('#tbSeguimiento').dataTable().fnDestroy();
+    var giRedraw = false;
+    var responsiveHelper;
+    var breakpointDefinition = {
+        tablet: 1024,
+        phone: 480
+    };
+
+    $('.loading').show()
+    $('.btn').hide();
+    tableElementSeguimiento = $('#tbSeguimiento')
+    tableElementSeguimiento.dataTable({
+        "bProcessing": true,
+        "bServerSide": false,
+        "sAjaxSource": "lst_envios.aspx?fn=Seguimiento&id=" + id,
+        "bAutoWidth": false,
+        "bFilter": false,
+        "bSort": false,
+        "bLengthChange": false,
+        "bPaginate": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sInfo": "_TOTAL_ Registro(s)",
+            "sInfoFiltered": " - de _MAX_ registros",
+            "sInfoThousands": ",",
+            "sLengthMenu": "Mostrar _MENU_ Registros",
+            "sLoadingRecords": "<img src='img/loading2.gif' />",
+            "sProcessing": "",
+            "sSearch": "",
+            "sZeroRecords": "No se encontraron registros"
+        },
+        "sDom": 'frt<"izq"i><"der"p>',
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            $.getJSON(sSource, aoData, function (json) {
+                $('.loading').hide()
+                $('.btn').show();
+                $('#btn_cargar').show()
+                $('#dvloader').hide()
+
+                modalseguimiento = $.remodal.lookup[$('[data-remodal-id=modalseguimiento]').data('remodal')];
+                modalseguimiento.open();
+                fnCallback(json);
+            });
+        },
+        fnPreDrawCallback: function () {
+            if (!responsiveHelper) {
+                responsiveHelper = new ResponsiveDatatablesHelper(tableElementSeguimiento, breakpointDefinition);
+            }
+        },
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            responsiveHelper.createExpandIcon(nRow);
+        },
+        fnDrawCallback: function (oSettings) {
+            responsiveHelper.respond();
+        },
+        "aoColumns": [
+                 {
+                     "mDataProp": "Fecha",
+                     "stype": "date",
+                     "fnRender": function (oObj) {
+                         var d = new Date(oObj.aData.Fecha);
+                         var m = d.getMonth() + 1;
+                         var i = d.getDate();
+                         if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+
+                             if (i == '31') {
+                                 i = '1';
+                                 m = m + 1;
+                             } else {
+                                 i = d.getDate() + 1;
+                             }
+
+                         }
+                         d = ((i < 10 ? '0' : '') + i) + "/" + ((m < 10 ? '0' : '') + m) + "/" + d.getFullYear();
+                         return "<div class='date'>" + d + "<div>";
+                               }
+                            },
+                      { "mDataProp": "Estatus" },
+                     { "mDataProp": "Observacion" },
+                     { "mDataProp": "Usuario" }
+                    ]
+});
+
+//$(".first.paginate_button, .last.paginate_button").hide();
+var search_input = tableElementSeguimiento.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+search_input.attr('placeholder', "Buscar");
+}
+
+var modalnuevoseg;
+function NuevoSeguimiento() {
+    $('#btn_cerrarseguimiento').click()
+    $('#Observacion').val('');
+    modalnuevoseg = $.remodal.lookup[$('[data-remodal-id=modalnuevoseg]').data('remodal')];
+    modalnuevoseg.open();
+}
+
+function ValidarSeguimiento() {
+    var valido = $("#form1").valid();
+    return valido;
+}

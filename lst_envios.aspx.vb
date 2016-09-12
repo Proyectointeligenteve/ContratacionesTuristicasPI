@@ -32,6 +32,10 @@ Partial Class lst_envios
                     Cargar()
                 Case "eliminar"
                     Eliminar()
+                Case "GuardarSeguimiento"
+                    GuardarSeguimiento()
+                Case "Seguimiento"
+                    Seguimiento()
             End Select
         End If
     End Sub
@@ -137,6 +141,50 @@ Partial Class lst_envios
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
         Else
             Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & Chr(34) & "}")
+        End If
+        Response.End()
+    End Sub
+
+    Private Sub Seguimiento()
+        Dim var_id As String = Request.QueryString("id").ToString
+        Dim var_error As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = cls_envios_seguimientos.Consulta(var_id, var_error)
+
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+
+        Dim var_json As String = ""
+        var_json = JsonConvert.SerializeObject(obj_dt_int)
+        If var_error.Trim.Length > 0 Then
+            Response.Write("{ " & Chr(34) & "error" & Chr(34) & ":" & Chr(34) & "-2" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        Else
+            Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
+        End If
+        Response.End()
+    End Sub
+
+    Sub GuardarSeguimiento()
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+
+        Dim obj_seguimiento As New cls_envios_seguimientos()
+        obj_seguimiento.Idenvio = var_data("Idenvio")
+        obj_seguimiento.observacion = var_data("Observacion")
+        obj_seguimiento.fecha = Now
+        obj_seguimiento.fecha_reg = Now
+        obj_seguimiento.id_usuario_reg = obj_Session.Usuario
+        obj_seguimiento.estatus = var_data("Estatus")
+        Response.ContentType = "application/json"
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        Dim var_error As String = ""
+        If Not obj_seguimiento.Actualizar(var_error) Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "}")
         End If
         Response.End()
     End Sub
