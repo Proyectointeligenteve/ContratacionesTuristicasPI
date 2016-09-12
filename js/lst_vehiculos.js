@@ -37,7 +37,7 @@ function Permisos() {
 
             if (response.rslt == 'exito') {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
-                //if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
+                if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
                 if (response.Anular == 1) { $("#btn_anular").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
@@ -45,7 +45,7 @@ function Permisos() {
             else {
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -53,7 +53,7 @@ function Permisos() {
             $('.btn').show();
             $("#dv_error").html('Error de comunicación con el servidor. Función Permisos().');
             $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error').hide(); }, 3000);
         }
     });
 
@@ -159,6 +159,57 @@ function EventosListado()
 
 }
 
+function Ver() {
+
+    var id = "";
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+            $("#id").val(id);
+        }
+    });
+    if (id == "") {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "lst_vehiculos.aspx?fn=editar",
+        data: '{"id":"' + id + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.rslt == 'exito') {
+                $('#Codigo').val(response.Codigo);
+                $('#Nombre').val(response.Nombre);
+                $('#Descripcion').val(response.Descripcion);
+                $('#Categoria').val(response.Categoria);
+                $('#Agencia').val(response.Agencia);
+                $('#btn_aceptar').addClass('hide');
+                CargarArchivos();
+                modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
+                modal.open();
+
+            }
+            else {
+                $("#dv_mensaje").hide()
+                $("#dv_error").html(response.msj);
+                $("#dv_error").show();
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
+            }
+        },
+        error: function () {
+            $('#btn_cerrar').click();
+            $("#dv_mensaje").hide();
+            $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido actualizado.');
+            $("#dv_error").show();
+        }
+    });
+
+}
+
 function CargarProducto() {
     var id = $("#provedor").val();
 
@@ -190,7 +241,7 @@ function CargarProducto() {
                 $("#dv_mensaje").hide()
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
                 $("#rif").focus();
             }
         },
@@ -199,7 +250,7 @@ function CargarProducto() {
             $('.btn').show();
             $("#dv_error").html('Error de comunicación con el servidor. El registro no ha sido cargado.');
             $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error').hide(); }, 3000);
             $("#rif").focus();
         }
     });
@@ -218,11 +269,11 @@ function Nuevo() {
     $('#Categoria').val('');
     $('#Nombre').val('');
     $('#Descripcion').val('');
-    $('#Agencia').val(0);
+    $('#Agencia').val('');
 
     $.ajax({
         success: function (response) {
-	    $("#tbHijos").empty();
+	    $("#tbDetails").empty();
             modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
             modal.open();
         },
@@ -246,7 +297,7 @@ function Editar() {
     if (id == "") {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
     $.ajax({
@@ -261,7 +312,7 @@ function Editar() {
                 $('#Nombre').val(response.Nombre);
                 $('#Descripcion').val(response.Descripcion);
                 $('#Categoria').val(response.Categoria);
-                $('#Agencia').val(response.Agencia);
+                $('#hfAgencia').val(response.Agencia);
 
                 CargarArchivos();
                 modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
@@ -272,7 +323,7 @@ function Editar() {
                 $("#dv_mensaje").hide()
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -306,7 +357,7 @@ function Guardar() {
                     $("#dv_error").hide()
                     $("#dv_mensaje").html('El registro ha sido procesado con exito.');
                     $("#dv_mensaje").show();
-                    setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+                    setTimeout(function () { $('#dv_mensaje').hide(); }, 3000);
                 }
                 else {
                     $("#dv_mensaje").hide()
@@ -351,7 +402,7 @@ function Eliminar() {
                 $("#dv_error").hide()
                 $("#dv_mensaje").html('El registro ha sido eliminado.');
                 $("#dv_mensaje").show();
-                setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+                setTimeout(function () { $('#dv_mensaje').hide(); }, 3000);
                 $('#tbDetails').dataTable().fnDestroy();
                 CargarListado();
             }
@@ -359,7 +410,7 @@ function Eliminar() {
                 $("#dv_mensaje").hide()
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -403,14 +454,14 @@ function Anular() {
                 $("#dv_error").hide()
                 $("#dv_mensaje").html('El registro ha sido anulado.');
                 $("#dv_mensaje").show();
-                setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+                setTimeout(function () { $('#dv_mensaje').hide(); }, 3000);
                 $('#tbDetails').dataTable().fnDestroy();
                 CargarListado();
             }
             else {
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -419,7 +470,7 @@ function Anular() {
             $('.btn').show();
             $("#dv_error").html('Error de comunicación con el servidor. Función Anular().');
             $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error').hide(); }, 3000);
         }
     });
 
@@ -437,7 +488,7 @@ function ConfirmarAnular() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -459,7 +510,7 @@ function ConfirmarEliminar() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
@@ -495,7 +546,7 @@ function Subir() {
             $('.dvloader').hide();
             $("#dv_error_modal").html('Error de comunicación con el servidor. Función SubirArchivo().');
             $("#dv_error_modal").show();
-            setTimeout(function () { $('#dv_error_modal').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error_modal').hide(); }, 3000);
         }
     });
 }
@@ -543,7 +594,7 @@ function CargarArchivos() {
             else {
                 $("#dv_error_modal").html(result.msj);
                 $("#dv_error_modal").show();
-                setTimeout(function () { $('#dv_error_modal').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error_modal').hide(); }, 3000);
             }
         },
         error: function () {
@@ -551,7 +602,7 @@ function CargarArchivos() {
             $('.dvloader').hide();
             $("#dv_error_modal").html('Error de comunicación con el servidor. Función CargarArchivos().');
             $("#dv_error_modal").show();
-            setTimeout(function () { $('#dv_error_modal').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error_modal').hide(); }, 3000);
         }
     });
     //}   
@@ -576,13 +627,13 @@ function EliminarArchivo(archivo) {
             if (response.rslt == 'exito') {
                 $("#dv_mensaje").html('El archivo ha sido eliminado.');
                 $("#dv_mensaje").show();
-                setTimeout(function () { $('#dv_mensaje').hide(); }, 10000);
+                setTimeout(function () { $('#dv_mensaje').hide(); }, 3000);
                 CargarArchivos();
             }
             else {
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -590,7 +641,7 @@ function EliminarArchivo(archivo) {
             $('.dvloader').hide();
             $("#dv_error").html('Error de comunicación con el servidor. Función EliminarArchivo().');
             $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error').hide(); }, 3000);
         }
     });
 }
@@ -615,7 +666,7 @@ function ActualizarPosiciones(posiciones) {
             else {
                 $("#dv_error").html(response.msj);
                 $("#dv_error").show();
-                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                setTimeout(function () { $('#dv_error').hide(); }, 3000);
             }
         },
         error: function () {
@@ -623,7 +674,7 @@ function ActualizarPosiciones(posiciones) {
             $('.dvloader').hide();
             $("#dv_error").html('Error de comunicación con el servidor. Función ActualizarPosiciones().');
             $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_error').hide(); }, 3000);
         }
     });
 }
@@ -644,13 +695,13 @@ function CargarAgencias() {
                     $("#Agencia").append("<option value=" + item.id + ">" + item.des + "</option>");
                 }
             });
-            //$("#Pais").val($("#hfPais").val());
+            $("#Agencia").val($("#hfAgencia").val());
         },
         error: function () {
             $("#dv_mensaje").hide();
             $("#dv_Error").html('Error de comunicación con el servidor al intentar cargar la funcion Agencias.');
             $("#dv_Error").show();
-            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            setTimeout(function () { $('#dv_Error').hide(); }, 3000);
         }
     });
 }

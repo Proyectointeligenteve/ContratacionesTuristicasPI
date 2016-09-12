@@ -19,7 +19,7 @@ Public Class cls_vehiculos
     Dim var_id_usuario_reg As Integer
     Dim var_fecha_reg As Date = Now
     Dim var_imagen As String = ""
-    Dim var_id_agencia As Integer = 0
+    Dim var_agencia As Integer = 0
 
     Public Shared ReadOnly Property Nombre_Tabla() As String
         Get
@@ -133,10 +133,10 @@ Public Class cls_vehiculos
     End Property
     Public Property Agencia() As Integer
         Get
-            Return Me.var_id_agencia
+            Return Me.var_agencia
         End Get
         Set(ByVal value As Integer)
-            Me.var_id_agencia = value
+            Me.var_agencia = value
         End Set
     End Property
 
@@ -159,7 +159,7 @@ Public Class cls_vehiculos
             Me.var_descripcion = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("descripcion").ToString)
             Me.var_id_usuario_reg = formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
             Me.var_fecha_reg = formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
-            Me.var_id_agencia = formato_Numero(obj_dt_int.Rows(0).Item("agencia").ToString)
+            Me.var_agencia = formato_Numero(obj_dt_int.Rows(0).Item("agencia").ToString)
 
             Me.var_imagen = Valor_De(obj_Conex_int, "select top 1 ruta from tbl_imagenes where id_vehiculo=" & Me.Id)
         Else
@@ -178,7 +178,7 @@ Public Class cls_vehiculos
 
         Dim var_error As String = ""
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_categoria) & "," & Sql_Texto(Me.var_descripcion) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_id_agencia), var_error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_codigo) & "," & Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_categoria) & "," & Sql_Texto(Me.var_descripcion) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_agencia), var_error) Then
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Error agregando vehiculo '" & Me.var_nombre & "': " & var_error
                 obj_log.FechaLog = Now
@@ -198,13 +198,13 @@ Public Class cls_vehiculos
                 obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & Me.Nombre & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Categoria" & Chr(34) & ":" & Chr(34) & Me.Categoria & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & Me.Codigo & Chr(34) & "")
-                obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & Me.var_id_agencia & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & Me.var_agencia & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Descripcion" & Chr(34) & ":" & Chr(34) & Me.Descripcion & Chr(34) & "")
 
                 Return True
             End If
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "codigo=" & Sql_Texto(Me.var_codigo) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",categoria=" & Sql_Texto(Me.var_categoria) & ",descripcion=" & Sql_Texto(Me.var_descripcion) & ",id_agencia=" & Sql_Texto(Me.var_id_agencia), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "codigo=" & Sql_Texto(Me.var_codigo) & ",nombre=" & Sql_Texto(Me.var_nombre) & ",categoria=" & Sql_Texto(Me.var_categoria) & ",descripcion=" & Sql_Texto(Me.var_descripcion) & ",agencia=" & Sql_Texto(Me.var_agencia), Me.var_Campo_Id & "=" & Me.var_id) Then
                 var_msj = var_error
 
                 Dim obj_log As New cls_logs
@@ -226,7 +226,7 @@ Public Class cls_vehiculos
                 obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & Me.Nombre & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Categoria" & Chr(34) & ":" & Chr(34) & Me.Categoria & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & Me.Codigo & Chr(34) & "")
-                obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & Me.var_id_agencia & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & Me.var_agencia & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "Descripcion" & Chr(34) & ":" & Chr(34) & Me.Descripcion & Chr(34) & "")
 
                 Dim obj_log As New cls_logs
@@ -329,7 +329,7 @@ Public Class cls_vehiculos
 
     Public Shared Function SiguienteNumero() As Integer
         Dim obj_Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(codigo)=1 then cast(codigo as int) else 0 end as num from tbl_vehiculos) as c").ToString)
+        Return ac_Funciones.formato_Numero(ac_Funciones.Valor_De(obj_Connection, "select isnull(max(right(num,4)),0) from (select case when ISNUMERIC(cast(right(codigo,4) as int))=1 then cast(right(codigo,4) as int) else 0 end as num from tbl_vehiculos) as c").ToString)
     End Function
 
     Public Shared Function Imagenes(ByVal var_id_producto As Integer, ByRef var_error As String, Optional ByVal var_idsesion As String = "") As DataTable

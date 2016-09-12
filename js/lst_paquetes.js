@@ -200,6 +200,27 @@ function EventosListado() {
     });
 
 }
+function Ver() {
+    var id = '';
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+        }
+    });
+
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
+        return false;
+    }
+
+    $('.loading').show()
+    $('.btn').hide();
+    //$("#tbDetails").empty();
+    modal = $.remodal.lookup[$('[data-remodal-id=modal]').data('remodal')];
+    modal.open();
+}
 
 function Validar() {
     var valido = $("#form1").valid();

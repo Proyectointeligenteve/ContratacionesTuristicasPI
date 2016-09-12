@@ -30,6 +30,7 @@
             <div class="btn-group">
                 <img src='img/loading2.gif' class="loading" />
                 <button class="btn hide" id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn hide" id="btn_ver" onclick="Ver();"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver</button>
                 <button class="btn hide" id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
                 <button class="btn hide" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
                 <button class="btn hide" id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>

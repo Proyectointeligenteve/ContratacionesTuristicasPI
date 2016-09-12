@@ -35,6 +35,7 @@
         <div class="der">
             <div class="btn-group">
                 <button class="btn" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn hide" id="btn_ver" onclick="Ver();"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Ver</button>
                 <button class="btn" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
                 <button class="btn" id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Activar/Inactivar</button>
                 <button class="btn" id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Eliminar</button>
@@ -82,7 +83,7 @@
                         <div class="control-group">
                             <label class="col-sm-3 control-label" for="Codigo">C&oacute;digo</label>
                             <div class="col-sm-9">
-                                <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="10" />
+                                <input type="text" id="Codigo" name="Codigo" class="form-control" maxlength="10" disabled="disabled" />
                             </div>
                         </div>
                     </div>                  
@@ -163,8 +164,8 @@
             </form>        
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close()" id="btn_cerrar">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="if(Validar()){Guardar()}">Aceptar</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close();CargarListado()" id="btn_cerrar">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btn_aceptar" onclick="if(Validar()){Guardar()}">Aceptar</button>
         </div>
     </div>
     <script type="text/javascript">

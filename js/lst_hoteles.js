@@ -21,6 +21,7 @@ function Permisos() {
 
             if (response.rslt == 'exito') {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
+                if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
                 if (response.Anular == 1) { $("#btn_anular").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
@@ -189,6 +190,26 @@ function Nuevo() {
 //    });
         
 //}
+
+function Ver() {
+    var id = '';
+    $('#tbDetails tr').each(function () {
+        if ($(this).hasClass('row_selected')) {
+            id = this.id;
+        }
+    });
+
+    if (id == '') {
+        $("#dv_error").html('Seleccione un registro');
+        $("#dv_error").show();
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
+        return false;
+    }
+
+    $('.loading').show()
+    $('.btn').hide();
+    window.location.href = 'frm_hoteles.aspx?id=' + id + '&v=1';
+}
 
 function Editar() {
     var id = '';
