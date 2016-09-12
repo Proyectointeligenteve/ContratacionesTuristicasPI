@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
         @import "css/jquery.dataTables.css";
-        @import "css/frm_freelances.css";
+        @import "css/frm_ventas.css";
     </style>
 </asp:Content>
 
@@ -26,7 +26,7 @@
         </div>
 
         <form id="form1" style="margin-top: 10px">
-            <input type="hidden" id="hdn_id_pasajero" name="hdn_id_pasajero" value="0"/>
+            <input type="hidden" id="hdn_id_venta" name="hdn_id_venta" value="0"/>
             <div class="espacio"></div>
                  
             <div class="row-fluid">
@@ -48,15 +48,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
             <br />
+            </div>
             <div class="row-fluid">
                 <!--/span-->
                 <div class="span6">
                     <div class="control-group">
                         <label class="span2 control-label" for="TipoViaje">Tipo Viaje</label>
                         <div class="span10">
-                            <select id="TipoViaje" name="TipoViaje" class="form-control" onchange ="CargarFee()">
+                            <select id="TipoViaje" name="TipoViaje" class="form-control" onchange ="CargarViajesTipos()">
                                 <option value="-1">Seleccione</option>
                                 <option value="0">Nacional</option>
                                 <option value="1">Internacional</option>
@@ -69,14 +69,14 @@
                     <div class="control-group">
                         <label class="span2 control-label" for="TipoVenta">Tipo Venta</label>
                         <div class="span10">
-                            <select id="TipoVenta" name="TipoVenta" class="form-control" onchange ="CargarTipo()"></select>
+                            <select id="TipoVenta" name="TipoVenta" class="form-control" onchange ="CargarTipoVenta()"></select>
                             <input type="hidden" id="hfTipoVenta" name="hfTipoVenta" value="0" /> 
                             <ul class="error"></ul>
                         </div>
                     </div>
                 </div>
-            </div>
             <br />
+            </div>
             <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
@@ -113,8 +113,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="span6 hide">
-                    <div class="control-group" id="div_freelance">
+                <div class="span6 hide" id="div_freelance">
+                    <div class="control-group">
                         <label class="span2 control-label" for="Freelance">Freelance</label>
                         <div class="span10">
                             <select id="Freelance" name="Freelance" class="form-control" onchange ="CargarComisiones()"></select>
@@ -124,62 +124,81 @@
                     </div>
                 </div>
                 <!--/span-->
-            </div>
             <br />
-            <div class="row-fluid paquete">
-                <div class="span10">
+            </div>
+            <div class="row-fluid paquete hide">
+                <div class="span12">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Paquete">Paquete</label>
-                        <div class="span10">
-                            <select id="Paquete" name="Paquete" class="form-control"></select>
-                            <input type="hidden" id="hfPaquete" name="hfPaquete" value="0" /> 
+                        <label class="span1 control-label" for="Paquete">Paquete</label>
+                        <div class="span11">
+                            <select id="Paquetes" name="Paquetes" class="form-control" style="width:500px !important"></select>
+                            <input type="hidden" id="hfPaquetes" name="hfPaquetes" value="0" /> 
                             <ul class="error"></ul>
                         </div>
                     </div>
                 </div>
-                <%--<div class="span6">
-                    <div class="control-group">
-                        <label class="span2 control-label" for="Habitacion">Habitacion</label>
-                        <div class="span10">
-                            <select id="Select2" name="Habitacion" class="form-control"></select>
-                            <input type="hidden" id="Hidden2" name="hfHabitacion" value="0" /> 
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div>--%>
-            </div>
             <br />
-            <div class="row-fluid hotel1">
+            </div>              
+            <div class="row-fluid vehiculo hide">
                 <div class="span6">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Hotel">Hotel</label>
+                        <label class="span2 control-label" for="Arrendadora">Arrendadora </label>
                         <div class="span10">
-                            <select id="Hotel" name="Hotel" class="form-control"></select>
-                            <input type="hidden" id="hfHotel" name="hfHotel" value="0" /> 
+                            <select id="Arrendadora" name="Arrendadora" class="form-control"></select>
+                            <input type="hidden" id="hfArrendadora" name="hfArrendadora" value="0" /> 
                             <ul class="error"></ul>
                         </div>
                     </div>
                 </div>
                 <div class="span6">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Habitacion">Habitacion</label>
+                        <label class="span2 control-label" for="Vehiculo">Vehiculo</label>
                         <div class="span10">
-                            <select id="Habitacion" name="Habitacion" class="form-control"></select>
-                            <input type="hidden" id="hfHabitacion" name="hfHabitacion" value="0" /> 
+                            <select id="Vehiculos" name="Vehiculos" class="form-control"></select>
+                            <input type="hidden" id="hfVehiculos" name="hfVehiculos" value="0" /> 
                             <ul class="error"></ul>
                         </div>
                     </div>
                 <!--/span-->
                 </div>
-            </div>
             <br />
-            <div class="row-fluid boleto">
+            </div>
+            <div class="row-fluid hotel hide">
                 <div class="span6">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Aerolinea">Aerolinea</label>
+                        <label class="span2 control-label" for="Hoteles">Hotel</label>
                         <div class="span10">
-                            <select id="Aerolinea" name="Aerolinea" class="form-control"></select>
-                            <input type="hidden" id="hfAerolinea" name="hfAerolinea" value="0" /> 
+                            <select id="Hoteles" name="Hoteles" class="form-control"></select>
+                            <input type="hidden" id="hfHoteles" name="hfHoteles" value="0" /> 
+                            <ul class="error"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="Habitacion">Habitacion</label>
+                        <div class="span10">
+                            <select id="Habitacion" name="Habitacion" class="form-control">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Doble</option>
+                                <option value="2">Triple</option>
+                                <option value="3">Cuadruple</option>
+                                <option value="4">Niños</option>
+                            </select>
+                            <%--<input type="hidden" id="hfHabitacion" name="hfHabitacion" value="0" /> --%>
+                            <ul class="error"></ul>
+                        </div>
+                    </div>
+                </div>
+            <br />
+            </div>
+            <div class="row-fluid boleto hide">
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="Aerolineas">Aerolinea</label>
+                        <div class="span10">
+                            <select id="Aerolineas" name="Aerolineas" class="form-control"></select>
+                            <input type="hidden" id="hfAerolineas" name="hfAerolineas" value="0" /> 
                             <ul class="error"></ul>
                         </div>
                     </div>
@@ -194,9 +213,9 @@
                     </div>
                 <!--/span-->
                 </div>
-            </div>
             <br />
-            <div class="row-fluid boleto">
+            </div>
+            <div class="row-fluid boleto hide">
                 <div class="span6">
                     <div class="control-group">
                         <label class="span2 control-label" for="Sistema">Sistema</label>
@@ -217,9 +236,9 @@
                     </div>
                 <!--/span-->
                 </div>
-            </div>
             <br />
-            <div class="row-fluid hotel">
+            </div>
+            <div class="row-fluid persona hide">
                 <div class="span6">
                     <div class="control-group">
                         <label class="span2 control-label" for="Dias">Cantidad Dias</label>
@@ -249,17 +268,38 @@
             <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
-                        <label class="span2 control-label" for="Rif">Rif/Pasaporte</label>
+                        <label class="span2 control-label" for="Rif">Rif</label>
                         <div class="span10">
                             <input type="text" id="Rif" name="Rif" class="form-control" onchange="buscarPasajero()" style="text-transform: uppercase;" maxlength="10"/>
+                            <input type="hidden" id="hdn_id_pasajero" name="hdn_id_pasajero" value="0" /> 
+                            <ul class="error"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid pasaporte hide">
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="Pasaporte">Pasaporte</label>
+                        <div class="span10">
+                            <input type="text" id="Pasaporte" name="Pasaporte" class="form-control" style="text-transform: uppercase;" maxlength="10"/>
+                            <ul class="error"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="FechaVencimiento">Vencimiento<br /> Pasaporte</label>
+                        <div class="span10">
+                            <input type="text" id="FechaVencimiento" name="FechaVencimiento" class="form-control"/>
                             <ul class="error"></ul>
                         </div>
                     </div>
                 </div>
             <!--/row-->
-            </div>
-            <br />            
-            <div class="row-fluid hotel">
+            <br /> 
+            </div>           
+            <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
                         <label class="span2 control-label" for="Nombre">Nombre</label>
@@ -280,18 +320,9 @@
                     </div>
                 </div>
                 <!--/span-->
-            </div>
             <br />
-            <div class="row-fluid hotel">
-                <div class="span6">
-                    <div class="control-group">
-                        <label class="span2 control-label" for="Direccion">Direccion</label>
-                        <div class="span10" align="left">
-                            <textarea id="Direccion" name="Direccion" rows="3" class="form-control "></textarea>
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div> 
+            </div>
+            <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
                         <label class="span2 control-label" for="Edad">Edad</label>
@@ -316,6 +347,15 @@
                     </div>
                 <!--/span-->
                 </div>  
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="span2 control-label" for="Direccion">Direccion</label>
+                        <div class="span10" align="left">
+                            <textarea id="Direccion" name="Direccion" rows="4" class="form-control "></textarea>
+                            <ul class="error"></ul>
+                        </div>
+                    </div>
+                </div> 
             </div>
             <div class="row-fluid">
                 <div class="span6">
@@ -337,8 +377,8 @@
                     </div>
                 <!--/span-->
                 </div>
-            </div>
             <br />
+            </div>
             <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
@@ -371,10 +411,9 @@
                             <ul class="error"></ul>
                         </div>
                     </div>
-                </div>
-            </div>
-                    
+                </div>                  
             <br />
+            </div>  
             <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
@@ -421,7 +460,7 @@
                         Nombre: {
                             required: true
                         },
-                        RazonSocial: {
+                        TelefonoM: {
                             required: true
                         },
                         Direccion: {
@@ -430,17 +469,27 @@
                         Email: {
                             required: true
                         },
-                        LimiteCredito: {
-                            required: true
-                        },
-                        Pais: {
+                        TipoVendedor: {
                             select: true
                         },
-                        Ciudad: {
+                        TipoVenta: {
+                            select: true
+                        },
+                        TipoViaje: {
+                            seleccionar: true
+                        },
+                        Tarifa: {
+                            required: true
+                        },
+                        Moneda: {
                             select: true
                         }
                     }
                 });
+                jQuery.validator.addMethod('seleccionar', function (value) {
+                    return (value != '-1');
+                }, "seleccione una opción");
+
                 jQuery.validator.addMethod('select', function (value) {
                     return (value != '0');
                 }, "seleccione una opción");

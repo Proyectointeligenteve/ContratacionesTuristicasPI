@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_ventas.aspx.vb" Inherits="lst_destinos" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="principal.master" AutoEventWireup="false" CodeFile="lst_ventas.aspx.vb" Inherits="lst_ventas" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css" title="currentStyle">
@@ -26,7 +26,7 @@
     </div>
         <div class="container">
             <div style ="width :100%">
-            <span style="font-size: 14px;color:white">LISTADO DE DESTINOS</span><hr />            
+            <span style="font-size: 14px;color:white">LISTADO DE VENTAS</span><hr />            
         </div>
         <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:150px !important" onchange="CargarListado()"><option value ="1">Ver Activos</option><option value ="2">Ver Inactivos</option><option value ="3">Ver Todos</option></select></div>
         <div class="hr">
@@ -36,9 +36,9 @@
             <div class="btn-group">
                 <img src='img/loading2.gif' class="loading" />
                 <button class="btn hide"  id="btn_agregar" onclick="Nuevo();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nuevo</button>
+                <button class="btn hide"  id="btn_ver" onclick="Ver();"><span class="glyphicon glyphicon-eye-ope"></span>&nbsp;Ver</button>
                 <button class="btn hide"  id="btn_editar" onclick="Editar();"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar</button>
                 <button class="btn hide"  id="btn_anular" onclick="ConfirmarAnular();"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Activar/Inactivar</button>
-                <button class="btn hide"  id="btn_eliminar" onclick="ConfirmarEliminar();"><span class="glyphicon glyphicon-remove"></span>&nbsp;Eliminar</button>
             </div>
         </div>
         
@@ -58,7 +58,15 @@
         <table id="tbDetails" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" style ="background-color :white !important">
             <thead>
                 <tr>
-                    <td data-class="expand">Nombre</td>
+                    <td data-class="expand">Numero</td>
+                    <td data-class="phone,tablet">Fecha</td>
+                    <td data-class="phone,tablet">Cliente</td>
+                    <td data-class="phone,tablet">Identificación</td>
+                    <td data-class="phone,tablet">Destino</td>
+                    <td data-class="phone,tablet">Fecha Inicio</td>
+                    <td data-class="phone,tablet">Fecha Fin</td>
+                    <td data-class="phone,tablet">Vendedor</td>
+                    <td data-class="phone,tablet">Total</td>
                     <td data-class="phone,tablet">Estatus</td>
                 </tr>
             </thead>
@@ -66,66 +74,7 @@
             </tbody>
         </table>
     </div>
-    <div class="remodal" data-remodal-id="modal" style="background-color:#013b63;color:white;font-size:14px !important">
-
-        <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Formulario de Destinos</h4>
-        </div>
-        <div class="modal-body">
-            <form id="form1" class="form-horizontal" role="form">
-                <input type="hidden" id="id" name="id" />
-
-                <div class="row-fluid">
-                    <div class="span6">
-                        <div class="control-group">
-                            <label class="col-sm-2 control-label" for="Nombre">Nombre</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="50" />
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-
-                    <div class="span6">
-                        <div class="control-group">
-                            <label class="col-sm-2 control-label" for="Numero"></label>
-                            <div class="col-sm-10">
-                                <%--<input type="text" id="Numero" name="Numero" class="form-control" />--%>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-                </div>
-                <!--/row-->
-
-            </form>
-            <br />
-           
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close()">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="if(Validar()){Guardar()}">Aceptar</button>
-        </div>
-        <%--            </div>
-        </div>
-    </div>--%>
-    </div>
-    <script type="text/javascript">
-        $(function () {
-            $('#form1').validate({
-                rules: {
-                    Nombre: {
-                        required: true
-                    }
-
-                }
-            });
-
-            jQuery.validator.addMethod('select', function (value) {
-                return (value != '0');
-            }, "seleccione una opción");
-        });
-    </script>
+       
 
     <div class="remodal" data-remodal-id="anularmodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
@@ -154,19 +103,8 @@
             <button type="button" class="btn btn-danger" onclick="Eliminar()">Aceptar</button>
         </div>
     </div>
-
-   <div class="remodal" data-remodal-id="msjModal" style="background-color:#013b63;color:white;font-size:14px !important">
-            <div class="modal-header">
-                <h4>Mensaje</h4>
-            </div>
-            <div class="modal-body">
-                <p><span id="Span1" name="msj">El registro ha sido guardado.</span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="destinosLista()">Ok</button>
-            </div>
-        </div> 
-    <script type="text/javascript" language="javascript" src="js/lst_destinos.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
+        
+    <script type="text/javascript" language="javascript" src="js/lst_ventas.js?token=<% Response.Write(Replace(Format(Date.Now, "yyyyMMddHH:mm:ss"), ":", ""))%>"></script>
     <script>
 
         $(document).ready(function () {

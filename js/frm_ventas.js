@@ -18,8 +18,12 @@ function load() {
     CargarPaquetes()
     CargarSistemas()
     CargarMonedas()
+    CargarArrendadoras()
     //CargarHabitaciones()
 
+    $('#FechaInicio').datepicker({ dateFormat: 'dd/mm/yy' })
+    $('#FechaFin').datepicker({ dateFormat: 'dd/mm/yy' })
+    $('#FechaVencimiento').datepicker({ dateFormat: 'dd/mm/yy' })
     
     $("#dv_Message").hide();
     $("#dv_Error").hide();
@@ -32,6 +36,7 @@ function load() {
         number = number.replace(',', '.');
         number = $.formatNumber(number, { format: "#,##0.00", locale: "es" });
         $("#Tarifa").val(number);
+        CalcularTotal();
     });
 
     $("#Tax").blur(function () {
@@ -40,6 +45,7 @@ function load() {
         number = number.replace(',', '.');
         number = $.formatNumber(number, { format: "#,##0.00", locale: "es" });
         $("#Tax").val(number);
+        CalcularTotal();
     });
 
     var recordId = $.url().param('id');
@@ -65,22 +71,37 @@ function load() {
                 $('#Numero').val(response.Numero);
                 $('#hfSucursal').val(response.Sucursal);
                 $('#TipoViaje').val(response.TipoViaje);
+                alert(response.TipoVenta);
                 $('#TipoVenta').val(response.TipoVenta);
                 $('#Vendedor').val(response.Vendedor);
                 $('#Agencia').val(response.Agencia);
                 $('#Freelance').val(response.Freelance);
+                if (response.Agencia > 0) {
+                    $('#TipoVendedor').val(1);
+                    $("#div_agencia").removeClass('hide');
+                } else if (response.Freelance > 0) {
+                    $('#TipoVendedor').val(2);
+                    $("#div_freelance").removeClass('hide');
+                } else if (response.Freelance > 0) {
+                    $('#TipoVendedor').val(3);
+                    $("#div_vendedor").removeClass('hide');
+                } else {
+                    $('#TipoVendedor').val(0);
+                }
 
-                $('#hfAerolinea').val(response.Aerolinea);
-                $('#hfPaquete').val(response.Paquete);
-                $('#hfVehiculo').val(response.Vehiculo);
-                $('#hfHotel').val(response.Hotel);
+                $('#hfAerolineas').val(response.Aerolinea);
+                $('#hfPaquetes').val(response.Paquete);
+                $('#hfVehiculos').val(response.Vehiculo);
+                $('#hfHoteles').val(response.Hotel);
                 $('#Habitacion').val(response.Habitacion);
-                $('#hfAerolinea').val(response.Aerolinea);
                 $('#Boleto').val(response.Boleto);
                 $('#hfSistema').val(response.Sistema);
                 $('#Pantalla').val(response.Pantalla);
                 $('#Dias').val(response.Dias);
                 $('#TipoPersona').val(response.TipoPersona);
+                $('#hfArrendadora').val(response.Arrendadora);
+
+
                 $('#hdn_id_pasajero').val(response.IdPasajero);
                 $('#FechaInicio').val(response.FechaInicio);
                 $('#FechaFin').val(response.FechaFin);
@@ -89,7 +110,14 @@ function load() {
                 $('#Tarifa').val(response.Tarifa);
                 $('#Tax').val(response.Tax);
                 $('#Total').val(response.Total);
-                //CargarPaises()
+                $('#hfTipoVenta').val(response.TipoVenta);
+
+                if (response.hdn_id_venta == 0) {
+                    $('#TipoViaje').val(-1);
+                }
+                if (response.IdPasajero != 0) {
+                    CargarPasajero();
+                }
             }
             else {
                 $("#dv_Message").hide()
@@ -107,7 +135,112 @@ function load() {
         }
     });
 };
+function CargarPasajero() {
+    var id = $("#hdn_id_pasajero").val();
 
+    $('.loading').show()
+    $('.btn').hide();
+    $.ajax({
+        type: "POST",
+        url: "frm_ventas.aspx?fn=cargar_pasajero",
+        data: '{"id_pasajero":"' + id + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $('.loading').hide()
+            $('.btn').show();
+
+            if (response.error == '-1') {
+                window.location.href = 'info.aspx';
+                return false;
+            }
+            if (response.rslt == 'exito') {
+                $('#Tipo').val(response.Tipo);
+                $('#Rif').val(response.Rif);
+                $('#Pasaporte').val(response.Pasaporte);
+                $('#FechaVencimiento').val(response.FechaVencimiento);
+                $('#Nombre').val(response.Nombre);
+                $('#Apellido').val(response.Apellido);
+                $('#TelefonoM').val(response.Telefono);
+                $('#Direccion').val(response.Direccion);
+                $('#Email').val(response.Email);
+                $('#Edad').val(response.Edad);
+                $("#Rif").focus();
+            }
+            else {
+                $("#dv_error").html(response.msj);
+                $("#dv_error").show();
+                setTimeout(function () { $('#dv_error').hide(); }, 10000);
+                $("#Rif").focus();
+            }
+        },
+        error: function () {
+            $('.loading').hide()
+            $('.btn').show();
+            $("#dv_error").html('Error de comunicación con el servidor. Función Cargarpasajero().');
+            $("#dv_error").show();
+            setTimeout(function () { $('#dv_error').hide(); }, 10000);
+            $("#Rif").focus();
+        }
+    });
+
+}
+function buscarPasajero() {
+    var rif = $("#Rif").val();
+
+    $('.loading').show()
+    $('.btn').hide();
+    $.ajax({
+        type: "POST",
+        url: "frm_ventas.aspx?fn=buscar_pasajero",
+        data: '{"rif":"' + rif + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $('.loading').hide()
+            $('.btn').show();
+
+            if (response.error == '-1') {
+                window.location.href = 'info.aspx';
+                return false;
+            }
+            if (response.rslt == 'exito') {
+                $("#hdn_id_pasajero").val(response.id_pasajero);
+                CargarPasajero();
+                return false;
+            }
+            if (response.rslt == '') {
+                $("#dv_Error").show();
+                return false;
+            }
+            if (response.rslt == 'vacio') {
+                var t = $("#TipoViaje").val();
+                if(t==0){
+                    $("#Nombre").focus();
+                } else {
+                    $("#Pasaporte").focus();
+            }
+
+                return false;
+            }
+            else {
+                $("#dv_Error").html(response.msj);
+                $("#dv_Error").show();
+                setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+                $("#Rif").focus();
+            }
+        },
+        error: function () {
+            $('.loading').hide()
+            $('.btn').show();
+            $("#dv_Error").html('Error de comunicación con el servidor. Funcion CargarPasajero().');
+            $("#dv_Error").show();
+            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            $("#rif").focus();
+        }
+    });
+
+}
 function Permisos() {
     var v = $.url().param('v');
     $('.loading').show()
@@ -129,18 +262,7 @@ function Permisos() {
             if (response.rslt == 'exito') {
                 if (response.Ver == 1) {
                     $("#btn_guardar").addClass('hide');
-                    $("#Nombre").attr("disabled", "disabled");
-
-                    $('#btn_contactoAdd').attr("disabled", "disabled");
-                    $('#btn_contactoEdit').attr("disabled", "disabled");
-                    $('#btn_contactoDelete').attr("disabled", "disabled");
-
-                    $('#btn_comisionAdd').attr("disabled", "disabled");
-                    $('#btn_comisionEdit').attr("disabled", "disabled");
-                    $('#btn_comisionDelete').attr("disabled", "disabled");
-
-                    $("#Rif").focus();
-                }
+                                    }
             }
             else {
                 $("#dv_Error").html(response.msj);
@@ -169,18 +291,23 @@ function save() {
         record.Vendedor = $('#Vendedor').val();
         record.Agencia = $('#Agencia').val();
         record.Freelance = $('#Freelance').val();
-        record.Hotel = $('#Hotel').val();
+        record.Hotel = $('#Hoteles').val();
         record.Habitacion = $('#Habitacion').val();
-        record.Aerolinea = $('#Aerolinea').val();
+        record.Aerolinea = $('#Aerolineas').val();
         record.Boleto = $('#Boleto').val();
         record.Sistema = $('#Sistema').val();
         record.Pantalla = $('#Pantalla').val();
         record.Dias = $('#Dias').val();
         record.TipoPersona = $('#TipoPersona').val();
+        record.Vehiculos = $('#Vehiculos').val();
+        record.Arrendadora = $('#Arrendadora').val();
 
+        record.IdPasajero = $('#hdn_id_pasajero').val();
         record.Rif = $('#Rif').val();
+        record.Pasaporte = $('#Pasaporte').val();
+        record.PasaporteFecha = $('#FechaVencimiento').val();
         record.Nombre = $('#Nombre').val();
-        record.RazonSocial = $('#RazonSocial').val();
+        record.Apellido = $('#Apellido').val();
         record.Direccion = $('#Direccion').val();
         record.Edad = $('#Edad').val();
         record.TelefonoM = $('#TelefonoM').val();
@@ -188,7 +315,12 @@ function save() {
 
         record.FechaInicio = $('#FechaInicio').val();
         record.FechaFin = $('#FechaFin').val();
-
+        record.Destino = $('#Destino').val();
+        record.Moneda = $('#Moneda').val();
+        record.Tarifa = $('#Tarifa').val();
+        record.Tax = $('#Tax').val();
+        record.Total = $('#Total').val();
+    
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
@@ -212,19 +344,18 @@ function save() {
                         "keyboard": "true"
                     }
 
-                    $('#hdn_id_contacto').val(response.hdn_id_contacto);
+                    //$('#hdn_id_venta').val(response.id);
                     msjModal = $.remodal.lookup[$('[data-remodal-id=msjModal]').data('remodal')];
                     msjModal.open();
-                    //$('#msjModal').modal(options);
-                    //$('#msjModal').on('shown.bs.modal', function () {
                     if (response.msj != '') {
                         $("#msj").html("El record ha sido guardado con errores: " + response.msj);
                     }
                     else {
-                        $('#hdn_id_contacto').val(response.id)
+                        $('#hdn_id_venta').val(response.id)
                         $("#msj").html("El record ha sido guardado con exito.");
                     }
-                    //})
+                    
+
                 }
                 else {
                     $("#dv_Error").html(response.msj);
@@ -242,7 +373,7 @@ function save() {
             }
         });
     }
-//}
+
     function validate() {
         var result = $("#form1").valid();
         return result;
@@ -456,31 +587,80 @@ function save() {
             }
         });
     }
-    function TipoComision() {
-        var tipocomision = $("#Tipo").val();
+    
+    function CargarViajesTipos() {
+        var tipoviaje = $("#TipoViaje option:selected").text();
+        if (tipoviaje == 'Nacional') {
+            $(".pasaporte").addClass('hide');
+        }
+        else if (tipoviaje == 'Internacional') {
+            $(".pasaporte").removeClass('hide');
+        }        
+    }
 
-        if (tipocomision == 1) {
+    function CargarTipoVenta() {
+        var tipoventa = $("#TipoVenta option:selected").text();
+        if (tipoventa == 'Boletos') {
             CargarAerolineas()
-            $("#div_hotel").addClass('hide');
-            $("#div_vehiculo").addClass('hide');
-            $("#div_aerolinea").removeClass('hide');
+            $(".boleto").removeClass('hide');
+            $(".persona").removeClass('hide');
+            $(".hotel").addClass('hide');
+            $(".paquete").addClass('hide');
+            $(".vehiculo").addClass('hide');
         }
-        else if (tipocomision == 2) {
+        else if (tipoventa == 'Hoteles') {
             CargarHoteles()
-            $("#div_hotel").removeClass('hide');
-            $("#div_aerolinea").addClass('hide');
-            $("#div_vehiculo").addClass('hide');
+            $(".hotel").removeClass('hide');
+            $(".persona").removeClass('hide');
+            $(".boleto").addClass('hide');
+            $(".paquete").addClass('hide');
+            $(".vehiculo").addClass('hide');
         }
-        else if (tipocomision == 3) {
+        else if (tipoventa == 'Paquetes') {
+            CargarPaquetes()
+            $(".paquete").removeClass('hide');
+            $(".persona").removeClass('hide');
+            $(".boleto").removeClass('hide');
+            $(".hotel").removeClass('hide');
+            $(".vehiculo").addClass('hide');
+        }
+        else if (tipoventa == 'Vehiculos') {
             CargarVehiculos()
-            $("#div_vehiculo").removeClass('hide');
-            $("#div_aerolinea").addClass('hide');
-            $("#div_hotel").addClass('hide');
+            $(".vehiculo").removeClass('hide');
+            $(".persona").addClass('hide');
+            $(".boleto").addClass('hide');
+            $(".hotel").addClass('hide');
+            $(".paquete").addClass('hide');
         }
         else {
-            $("#div_aerolinea").addClass('hide');
-            $("#div_hotel").addClass('hide');
-            $("#div_vehiculo").addClass('hide');
+            $(".boleto").addClass('hide');
+            $(".persona").addClass('hide');
+            $(".hotel").addClass('hide');
+            $(".paquete").addClass('hide');
+            $(".vehiculo").addClass('hide');
+        }
+    }
+    function CargarTipoVendedor() {
+        var tipovendedor = $("#TipoVendedor option:selected").text();
+        if (tipovendedor == 'Agencia') {
+            $("#div_agencia").removeClass('hide');
+            $("#div_vendedor").addClass('hide');
+            $("#div_freelance").addClass('hide');
+        }
+        else if (tipovendedor == 'div_vendedor') {
+            $("#div_vendedor").removeClass('hide');
+            $("#div_agencia").addClass('hide');
+            $("#div_freelance").addClass('hide');
+        }
+        else if (tipovendedor == 'Freelance') {
+            $("#div_freelance").removeClass('hide');
+            $("#div_vendedor").addClass('hide');
+            $("#div_agencia").addClass('hide');
+        }
+        else {
+            $("#div_freelance").addClass('hide');
+            $("#div_agencia").addClass('hide');
+            $("#div_vendedor").addClass('hide');
         }
     }
 
@@ -500,6 +680,7 @@ function save() {
                         $("#Aerolineas").append("<option value=" + item.id + ">" + item.des + "</option>");
                     }
                 });
+                $("#Aerolineas").val($("#hfAerolineas").val());
             },
             error: function () {
                 $("#dv_mensaje").hide();
@@ -525,6 +706,7 @@ function save() {
                         $("#Hoteles").append("<option value=" + item.id + ">" + item.des + "</option>");
                     }
                 });
+                $("#Hoteles").val($("#hfHoteles").val());
             },
             error: function () {
                 $("#dv_mensaje").hide();
@@ -560,6 +742,32 @@ function save() {
             }
         });
     }
+    function CargarArrendadoras() {
+        $("#Arrendadora").empty();;
+        $.ajax({
+            type: "POST",
+            url: "frm_ventas.aspx?fn=cargar_arrendadoras",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $.each(response.aaData, function (i, item) {
+                    if (item.id == 0) {
+                        $("#Arrendadora").append("<option value=" + item.id + " selected='selected'>" + item.des + "</option>");
+                    }
+                    else {
+                        $("#Arrendadora").append("<option value=" + item.id + ">" + item.des + "</option>");
+                    }
+                });
+                $("#Arrendadora").val($("#hfArrendadora").val());
+            },
+            error: function () {
+                $("#dv_mensaje").hide();
+                $("#dv_Error").html('Error de comunicación con el servidor al intentar cargar la funcion Vehiculos.');
+                $("#dv_Error").show();
+                setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            }
+        });
+    }
     function CargarVehiculos() {
         $("#Vehiculos").empty();;
         $.ajax({
@@ -576,6 +784,7 @@ function save() {
                         $("#Vehiculos").append("<option value=" + item.id + ">" + item.des + "</option>");
                     }
                 });
+                $("#Vehiculos").val($("#hfVehiculos").val());
             },
             error: function () {
                 $("#dv_mensaje").hide();
@@ -610,4 +819,20 @@ function save() {
                 setTimeout(function () { $('#dv_Error').hide(); }, 10000);
             }
         });
+    }
+
+    function CalcularTotal() {
+        var tarifa = $("#Tarifa").val();
+        tarifa = $.parseNumber(tarifa, { format: "#,###.00", locale: "es" });
+
+        var tax = $("#Tax").val();
+        tax = $.parseNumber(tax, { format: "#,###.00", locale: "es" });
+        if (!isNaN(tarifa) && !isNaN(tax)) {
+            var total = parseFloat(tarifa) + parseFloat(tax)
+            total = $.formatNumber(total, { format: "#,###.00", locale: "es" });
+            $("#Total").val(total);
+        }
+        else {
+            $("#Total").val(0);
+        }
     }

@@ -7,7 +7,7 @@ Public Class cls_pasajeros
     Dim var_Nombre_Tabla As String = "tbl_pasajeros"
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "rif"
-    Dim var_Campos As String = "nombre,apellido,rif,telefono,email,tipo,id_usuario_reg,fecha_reg,direccion"
+    Dim var_Campos As String = "nombre,apellido,rif,telefono,email,tipo,id_usuario_reg,fecha_reg,direccion,edad,pasaporte,pasaporte_fecha"
     Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer = 0
@@ -20,6 +20,9 @@ Public Class cls_pasajeros
     Dim var_id_usuario_reg As Integer
     Dim var_fecha_reg As Date = Now
     Dim var_direccion As String = ""
+    Dim var_edad As Integer = 0
+    Dim var_pasaporte As String = 0
+    Dim var_pasaporte_fecha As Date = Now.Date
 
     Public Shared ReadOnly Property Nombre_Tabla() As String
         Get
@@ -68,6 +71,11 @@ Public Class cls_pasajeros
         End Get
     End Property
 
+    Public Shared ReadOnly Property Datos() As String
+        Get
+            Return "lst_pasajerosDatos"
+        End Get
+    End Property
     Public ReadOnly Property Id() As Integer
         Get
             Return Me.var_id
@@ -138,12 +146,38 @@ Public Class cls_pasajeros
             Me.var_fecha_reg = value
         End Set
     End Property
+
     Public Property direccion() As String
         Get
             Return Me.var_direccion
         End Get
         Set(ByVal value As String)
-            Me.var_rif = direccion
+            Me.var_direccion = value
+        End Set
+    End Property
+
+    Public Property edad() As Integer
+        Get
+            Return Me.var_edad
+        End Get
+        Set(ByVal value As Integer)
+            Me.var_edad = value
+        End Set
+    End Property
+    Public Property pasaporte() As String
+        Get
+            Return Me.var_pasaporte
+        End Get
+        Set(ByVal value As String)
+            Me.var_pasaporte = value
+        End Set
+    End Property
+    Public Property pasaporte_fecha() As Date
+        Get
+            Return Me.var_pasaporte_fecha
+        End Get
+        Set(ByVal value As Date)
+            Me.var_pasaporte_fecha = value
         End Set
     End Property
 
@@ -169,6 +203,9 @@ Public Class cls_pasajeros
             Me.var_id_usuario_reg = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("id_usuario_reg").ToString)
             Me.var_fecha_reg = ac_Funciones.formato_Fecha(obj_dt_int.Rows(0).Item("fecha_reg").ToString)
             Me.var_direccion = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("direccion").ToString)
+            Me.var_edad = ac_Funciones.formato_Numero(obj_dt_int.Rows(0).Item("edad").ToString)
+            Me.var_pasaporte = ac_Funciones.formato_Texto(obj_dt_int.Rows(0).Item("pasaporte").ToString)
+            Me.var_pasaporte_fecha = ac_Funciones.formato_Fecha(obj_dt_int.Rows(0).Item("pasaporte_fecha").ToString)
         Else
             Me.var_id = 0
         End If
@@ -185,7 +222,7 @@ Public Class cls_pasajeros
 
         Dim var_error As String = ""
         If Me.var_id = 0 Then   'NUEVO
-            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_apellido) & "," & Sql_Texto(Me.var_rif) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_tipo) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_direccion), var_error) Then
+            If Not Ingresar(Me.obj_Conex_int, Me.var_Nombre_Tabla, Me.var_Campos, Sql_Texto(Me.var_nombre) & "," & Sql_Texto(Me.var_apellido) & "," & Sql_Texto(Me.var_rif) & "," & Sql_Texto(Me.var_telefono) & "," & Sql_Texto(Me.var_email) & "," & Sql_Texto(Me.var_tipo) & "," & Sql_Texto(Me.var_id_usuario_reg) & "," & Sql_Texto(Me.var_fecha_reg) & "," & Sql_Texto(Me.var_direccion) & "," & Sql_Texto(Me.var_edad) & "," & Sql_Texto(Me.var_pasaporte) & "," & Sql_Texto(Me.var_pasaporte_fecha), var_error) Then
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Error agregando pasajero '" & Me.var_rif & " - " & Me.var_nombre & " - " & Me.var_apellido & "': " & var_error
                 obj_log.FechaLog = Now
@@ -208,6 +245,10 @@ Public Class cls_pasajeros
                 obj_sb.Append("," & Chr(34) & "telefono" & Chr(34) & ":" & Chr(34) & Me.telefono & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "email" & Chr(34) & ":" & Chr(34) & Me.email & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "tipo" & Chr(34) & ":" & Chr(34) & Me.tipo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.direccion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "edad" & Chr(34) & ":" & Chr(34) & Me.edad & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "pasaporte" & Chr(34) & ":" & Chr(34) & Me.pasaporte & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "pasaporte_fecha" & Chr(34) & ":" & Chr(34) & Me.pasaporte_fecha & Chr(34) & "")
 
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Pasajero agregado: {" & obj_sb.ToString & "}"
@@ -221,7 +262,7 @@ Public Class cls_pasajeros
                 Return True
             End If
         ElseIf Me.var_id > 0 Then 'EDICION
-            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",apellido=" & Sql_Texto(Me.var_apellido) & ",rif=" & Sql_Texto(Me.var_rif) & ",direccion=" & Sql_Texto(Me.var_direccion), Me.var_Campo_Id & "=" & Me.var_id) Then
+            If Not ac_Funciones.Actualizar(Me.obj_Conex_int, Me.var_Nombre_Tabla, "nombre=" & Sql_Texto(Me.var_nombre) & ",apellido=" & Sql_Texto(Me.var_apellido) & ",rif=" & Sql_Texto(Me.var_rif) & ",direccion=" & Sql_Texto(Me.var_direccion) & ",edad=" & Sql_Texto(Me.var_edad) & ",pasaporte=" & Sql_Texto(Me.var_pasaporte) & ",pasaporte_fecha=" & Sql_Texto(Me.var_pasaporte_fecha), Me.var_Campo_Id & "=" & Me.var_id) Then
                 var_msj = var_error
 
                 Dim obj_log As New cls_logs
@@ -246,6 +287,10 @@ Public Class cls_pasajeros
                 obj_sb.Append("," & Chr(34) & "telefono" & Chr(34) & ":" & Chr(34) & Me.telefono & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "email" & Chr(34) & ":" & Chr(34) & Me.email & Chr(34) & "")
                 obj_sb.Append("," & Chr(34) & "tipo" & Chr(34) & ":" & Chr(34) & Me.tipo & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "direccion" & Chr(34) & ":" & Chr(34) & Me.direccion & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "edad" & Chr(34) & ":" & Chr(34) & Me.edad & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "pasaporte" & Chr(34) & ":" & Chr(34) & Me.pasaporte & Chr(34) & "")
+                obj_sb.Append("," & Chr(34) & "pasaporte_fecha" & Chr(34) & ":" & Chr(34) & Me.pasaporte_fecha & Chr(34) & "")
 
                 Dim obj_log As New cls_logs
                 obj_log.ComentarioLog = "Pasajero editada: {" & obj_sb.ToString & "}"
@@ -334,9 +379,18 @@ Public Class cls_pasajeros
         Return obj_dt_int
     End Function
 
-    Public Shared Function Consulta(ByRef var_error As String) As DataTable
+    Public Shared Function Consulta(ByRef var_error As String, Optional ByVal var_filtro As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim var_consulta As String = "Select * from " & cls_pasajeros.Listado & "()"
+        Dim var_consulta As String = "Select * from " & cls_pasajeros.Listado & "(" & Sql_Texto(var_filtro) & ")"
+        Dim var_msj As String = ""
+
+        Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)
+        var_error = var_msj
+        Return obj_dt_int
+    End Function
+    Public Shared Function ConsultaDatos(ByRef var_error As String, Optional ByVal var_filtro As String = "") As DataTable
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
+        Dim var_consulta As String = "Select * from " & cls_pasajeros.Datos & "(" & Sql_Texto(var_filtro) & ")"
         Dim var_msj As String = ""
 
         Dim obj_dt_int As System.Data.DataTable = Abrir_Tabla(obj_Conex_int, var_consulta, var_msj)

@@ -9,7 +9,7 @@ Public Class cls_monedas
     Dim var_Campo_Id As String = "id"
     Dim var_Campo_Validacion As String = "nombre"
     Dim var_Campos As String = "nombre,simbolo,principal"
-    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+    Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
 
     Dim var_id As Integer
     Dim var_nombre As String
@@ -94,7 +94,7 @@ Public Class cls_monedas
         End If
     End Sub
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_monedas.Campo_Id & " as id, " & cls_monedas.Campo_Validacion & " as des, cast(principal as int) as principal from " & cls_monedas.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_monedas.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int
@@ -128,12 +128,12 @@ Public Class cls_monedas
     End Function
 
     Public Shared Function Eliminar(ByVal var_id As Integer, ByVal obj_usuario As cls_usuarios, ByRef var_mensaje As String) As Boolean
-        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         ac_Funciones.Eliminar(obj_Conex_int, cls_monedas.Nombre_Tabla, cls_monedas.Campo_Id & "=" & var_id)
         Return True
     End Function
     Public Shared Function Consulta(ByVal var_orderBy As String, ByVal var_where As String, ByVal var_displayStart As Integer, ByVal var_displayEnd As Integer) As DataTable
-        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("CCconexion").ConnectionString)
+        Dim obj_conex As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
         Return Abrir_Tabla(obj_conex, "SELECT * FROM ( SELECT ROW_NUMBER() OVER (" & var_orderBy & ") AS RowNumber,* FROM ( SELECT ( SELECT COUNT(*) FROM lst_monedas() " & var_where & " ) AS TotalDisplayRows, (SELECT COUNT(*) FROM lst_monedas()) AS TotalRows,* FROM lst_monedas() " & var_where & " ) RawResults ) Results WHERE RowNumber BETWEEN " & var_displayStart & " AND " & var_displayEnd & "")
     End Function
 #End Region
