@@ -11,7 +11,7 @@ function load() {
     CargarPaisesR()
     EventosListadoCliente()
     EventosListadoClienteR()
-    EventosListadoPaquetes()    
+    //EventosListadoPaquetes()    
 
     $("#dv_error_modalE").hide();
     $("#dv_error_modalR").hide();
@@ -55,19 +55,21 @@ function load() {
                     $('#HfEstadoR').val(response.HfEstadoR);
                     $('#HfCiudadR').val(response.HfCiudadR);
                     $('#DireccionEnvio').val(response.DireccionEnvio);
+
+                    $('#NumeroP').val(response.NumeroP);
+                    $('#PesoP').val(response.PesoP);
+                    $('#VolumenP').val(response.VolumenP);
+                    $('#CostoP').val(response.CostoP);
+                    $('#DescripcionP').val(response.DescripcionP);
+
                     $('#TotalR').val(response.TotalR);
                     if (response.ClienteE > 0) {
                         CargarClienteE()
                         CargarClienteR()
                         CargarPaisesE()
                         CargarPaisesR()
-                        //CargarEstadosE()
-                        //CargarEstadosR()
-                        //CargarCiudadesE()
-                        //CargarCiudadesR()
 
                     }
-                    paqueteLoad();
                 }
                 else {
                     $('#IdentificadorEmisor').focus();
@@ -151,6 +153,12 @@ function save() {
         record.DireccionEnvio = $('#DireccionEnvio').val();
         record.TotalR = $('#TotalR').val();
     
+        record.NumeroP = $('#NumeroP').val();
+        record.PesoP = $('#PesoP').val();
+        record.VolumenP = $('#VolumenP').val();
+        record.CostoP = $('#CostoP').val();
+        record.DescripcionP = $('#DescripcionP').val();
+
         $('.loading').show()
         $('.btn').hide();
         $.ajax({
@@ -211,396 +219,300 @@ function save() {
     };
     
 //PAQUETES
-    function paqueteAdd() {
-        $('#hdn_paqueteId').val(0);
-        $('#NumeroP').val('');
-        $('#PesoP').val('');
-        $('#VolumenP').val('');
-        $('#DescripcionP').val('');
-        $('#CostoP').val(0);
-        var options = {
-            "backdrop": "static",
-            "keyboard": "true"
-        }
-        basicModal2 = $.remodal.lookup[$('[data-remodal-id=basicModal2]').data('remodal')];
-        basicModal2.open();
-        $('#PesoP').focus();
-        //$('#basicModal2').modal(options);
-        //$('#basicModal2').on('shown.bs.modal', function () {
+    //function paqueteAdd() {
+    //    $('#hdn_paqueteId').val(0);
+    //    $('#NumeroP').val('');
+    //    $('#PesoP').val('');
+    //    $('#VolumenP').val('');
+    //    $('#DescripcionP').val('');
+    //    $('#CostoP').val(0);
+    //    var options = {
+    //        "backdrop": "static",
+    //        "keyboard": "true"
+    //    }
+    //    basicModal2 = $.remodal.lookup[$('[data-remodal-id=basicModal2]').data('remodal')];
+    //    basicModal2.open();
+    //    $('#PesoP').focus();
+    //};
 
-        //})
-    };
+    //var deletemodal;
+    //function paqueteConfirm() {
+    //    var options = {
+    //        "backdrop": "static",
+    //        "keyboard": "true"
+    //    }
+    //    deletemodal = $.remodal.lookup[$('[data-remodal-id=deleteModal2]').data('remodal')];
+    //    deletemodal.open();
+//};
 
-    var deletemodal;
-    function paqueteConfirm() {
-        var options = {
-            "backdrop": "static",
-            "keyboard": "true"
-        }
-        deletemodal = $.remodal.lookup[$('[data-remodal-id=deleteModal2]').data('remodal')];
-        deletemodal.open();
-    };
-    function paqueteDelete() {
-        var id = '';
-        $('#tbl_paquetes tr').each(function () {
-            if ($(this).hasClass('row_selected')) {
-                id += ',' + this.id;
-            }
-        });
-        if (id == '') {
-            $("#dv_error").html('Seleccione un registro');
-            $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
-            return false;
-        }
+    //function paqueteDelete() {
+    //    var id = '';
+    //    $('#tbl_paquetes tr').each(function () {
+    //        if ($(this).hasClass('row_selected')) {
+    //            id += ',' + this.id;
+    //        }
+    //    });
+    //    if (id == '') {
+    //        $("#dv_error").html('Seleccione un registro');
+    //        $("#dv_error").show();
+    //        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+    //        return false;
+    //    }
 
-        $('.loading').show()
-        $('.btn').hide();
-        $.ajax({
-            type: "POST",
-            url: "frm_envios.aspx?fn=paqueteDelete",
-            data: '{"hdn_paqueteId":"' + id + '"}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                $('.loading').hide()
-                $('.btn').show();
-                deletemodal.close()
-                //$('#deleteModal2').modal('hide');
-                if (response.rslt == 'exito') {
-                    $("#dv_Error2").hide()
-                    $("#dv_Message2").html('El record ha sido eliminado.');
-                    $("#dv_Message2").show();
-                    setTimeout(function () { $('#dv_Message2').hide(); }, 10000);
-                    $('#tbl_paquetes').dataTable().fnDestroy();
-                    paqueteLoad();
-                }
-                else {
-                    $("#dv_Error2").html(response.msj);
-                    $("#dv_Error2").show();
-                    setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
-                }
-            },
-            error: function () {
-                $('.loading').hide()
-                $('.btn').show();
-                //$('#deleteModal2').modal('hide');
-                deletemodal.close()
-                $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
-                $("#dv_Error2").show();
-                setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
-            }
-        });
-    };
-    function paqueteEdit() {
-        var id = '';
-        $('#tbl_paquetes tr').each(function () {
-            if ($(this).hasClass('row_selected')) {
-                id = this.id;
-                $("#hdn_paqueteId").val(id);
-            }
-        });
+    //    $('.loading').show()
+    //    $('.btn').hide();
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "frm_envios.aspx?fn=paqueteDelete",
+    //        data: '{"hdn_paqueteId":"' + id + '"}',
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            $('.loading').hide()
+    //            $('.btn').show();
+    //            deletemodal.close()
+    //            //$('#deleteModal2').modal('hide');
+    //            if (response.rslt == 'exito') {
+    //                $("#dv_Error2").hide()
+    //                $("#dv_Message2").html('El record ha sido eliminado.');
+    //                $("#dv_Message2").show();
+    //                setTimeout(function () { $('#dv_Message2').hide(); }, 10000);
+    //                $('#tbl_paquetes').dataTable().fnDestroy();
+    //                paqueteLoad();
+    //            }
+    //            else {
+    //                $("#dv_Error2").html(response.msj);
+    //                $("#dv_Error2").show();
+    //                setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
+    //            }
+    //        },
+    //        error: function () {
+    //            $('.loading').hide()
+    //            $('.btn').show();
+    //            deletemodal.close()
+    //            $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
+    //            $("#dv_Error2").show();
+    //            setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
+    //        }
+    //    });
+//};
 
-        if (id == '') {
-            $("#dv_error").html('Seleccione un registro');
-            $("#dv_error").show();
-            setTimeout(function () { $('#dv_error').hide(); }, 10000);
-            return false;
-        }
-        $('.loading').show()
-        $('.btn').hide();
-        $.ajax({
-            type: "POST",
-            url: "frm_envios.aspx?fn=paqueteEdit",
-            data: '{"hdn_paqueteId":"' + id + '"}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                $('.loading').hide()
-                $('.btn').show();
+    //function paqueteEdit() {
+    //    var id = '';
+    //    $('#tbl_paquetes tr').each(function () {
+    //        if ($(this).hasClass('row_selected')) {
+    //            id = this.id;
+    //            $("#hdn_paqueteId").val(id);
+    //        }
+    //    });
 
-                if (response.rslt == 'exito') {
-                    $('#hdn_paqueteId').val(response.Id_envio);
-                    $('#NumeroP').val(response.NumeroP);
-                    $('#PesoP').val(response.PesoP);
-                    $('#VolumenP').val(response.VolumenP);
-                    $('#CostoP').val(response.CostoP);
-                    $('#DescripcionP').val(response.DescripcionP);
-                    var options = {
-                        "backdrop": "static",
-                        "keyboard": "true"
-                    }
-                    basicModal2 = $.remodal.lookup[$('[data-remodal-id=basicModal2]').data('remodal')];
-                    basicModal2.open();
-                    //$('#basicModal2').modal(options);
-                    //$('#basicModal2').on('shown.bs.modal', function () {
-                    //})
-                }
-                else {
-                    $("#dv_Message2").hide()
-                    $("#dv_Error2").html(response.msj);
-                    $("#dv_Error2").show();
-                    setTimeout(function () { $('#dv_Error').hide(); }, 10000);
-                }
-            },
-            error: function () {
-                $('.loading').hide()
-                $('.btn').show();
-                basicModal2.close();
-                //$('#basicModal2').modal('hide');
-                $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
-                $("#dv_Error2").show();
-                setTimeout(function () { $('#dv_Error').hide(); }, 10000);
-            }
-        });
-    };
+    //    if (id == '') {
+    //        $("#dv_error").html('Seleccione un registro');
+    //        $("#dv_error").show();
+    //        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+    //        return false;
+    //    }
+    //    $('.loading').show()
+    //    $('.btn').hide();
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "frm_envios.aspx?fn=paqueteEdit",
+    //        data: '{"hdn_paqueteId":"' + id + '"}',
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            $('.loading').hide()
+    //            $('.btn').show();
+
+    //            if (response.rslt == 'exito') {
+    //                $('#hdn_paqueteId').val(response.Id_envio);
+    //                $('#NumeroP').val(response.NumeroP);
+    //                $('#PesoP').val(response.PesoP);
+    //                $('#VolumenP').val(response.VolumenP);
+    //                $('#CostoP').val(response.CostoP);
+    //                $('#DescripcionP').val(response.DescripcionP);
+    //                var options = {
+    //                    "backdrop": "static",
+    //                    "keyboard": "true"
+    //                }
+    //                basicModal2 = $.remodal.lookup[$('[data-remodal-id=basicModal2]').data('remodal')];
+    //                basicModal2.open();
+            //    }
+            //    else {
+            //        $("#dv_Message2").hide()
+            //        $("#dv_Error2").html(response.msj);
+            //        $("#dv_Error2").show();
+            //        setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+            //    }
+            //},
+            //error: function () {
+            //    $('.loading').hide()
+            //    $('.btn').show();
+            //    basicModal2.close();
+    //            $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
+    //            $("#dv_Error2").show();
+    //            setTimeout(function () { $('#dv_Error').hide(); }, 10000);
+    //        }
+    //    });
+    //};
 
     //var pTable;
-    var subtotales = new Array();
-    function paqueteLoad() {
-        subtotales.length = 0;
-        subtotales.push(0);
-        var giRedraw = false;
-        var responsiveHelper;
-        var breakpointDefinition = {
-            tablet: 1024,
-            phone: 480
-        };
-        $('#tbl_paquetes').dataTable().fnDestroy();
-        $("#tbl_paquetes tbody").click(function (event) {
-            $(pTable.fnSettings().aoData).each(function () {
-                $(this.nTr).removeClass('row_selected');
-            });
-            $(event.target.parentNode).addClass('row_selected');
-        });
-        $('#TotalR').val(0);
-
-        tableElement2 = $('#tbl_paquetes')
-        tableElement2.dataTable({
-        //pTable = $('#tbl_paquetes').dataTable({
-            "bProcessing": true,
-            "bServerSide": false,
-            "sAjaxSource": "frm_envios.aspx?fn=paqueteLoad",
-            "bFilter": false,
-            "bLengthChange": false,
-            "bPaginate": false,
-            "bInfo": false,
-            "oLanguage": {
-                "sInfo": "_TOTAL_ Registro(s) encontrado(s)",
-                "sInfoFiltered": " - de _MAX_ registros",
-                "sInfoThousands": ",",
-                "sLengthMenu": "Mostrar _MENU_ Registros",
-                "sLoadingRecords": "Por favor espere  - CARGANDO...",
-                "sProcessing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROCESANDO...",
-                "sSearch": "",
-                "sZeroRecords": "No se encontraron registros",
-                "oPaginate": {
-                    "sNext": " SIGUIENTE",
-                    "sPrevious": "ANTERIOR "
-                }
-            },
-            "fnCreatedRow": function (row, data, index) {
-
-                var subtotal = data.Costo;
-                //subtotal = $.parseNumber(subtotal, { format: "#,###.00", locale: "es" });
-
-                subtotales[0] += subtotal;
-
-                var sub = $.formatNumber(subtotales[0], { format: "#,###.00", locale: "es" });
-                $('#TotalR').val(sub);
-
-            },
-            fnPreDrawCallback: function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper) {
-                    responsiveHelper = new ResponsiveDatatablesHelper(tableElement2, breakpointDefinition);
-                }
-            },
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                responsiveHelper.createExpandIcon(nRow);
-            },
-            fnDrawCallback: function (oSettings) {
-                responsiveHelper.respond();
-            },
-            "aoColumns": [
-                {
-                  "mDataProp": "Id_envio",
-                  "bVisible": false },
-                { "mDataProp": "Numero" },
-                { "mDataProp": "Peso" },
-                { "mDataProp": "Volumen" },
-                { "mDataProp": "Descripcion" },
-                {
-                    "mDataProp": "Costo",
-                    "sType": 'numeric',
-                    "mRender": function (data) {
-                        return $.formatNumber(data, { format: "#,###.00", locale: "es" });
-                    }
-                }//,
-            //{
-            //    "mDataProp": "Codigo",
-            //    "mRender": function (data, type, full) {
-            //        var valor = "<div id='bcTarget" + full.Codigo + "'></div> "
-            //        return valor;
-            //    }
-            }
-            ]
-        });
-        var search_input = tableElement2.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-        search_input.attr('placeholder', "Buscar");
-    };
-
-    var pTable;
     //var subtotales = new Array();
-    function paqueteLoad3() {
+    //function paqueteLoad() {
+    //    subtotales.length = 0;
+    //    subtotales.push(0);
+    //    var giRedraw = false;
+    //    var responsiveHelper;
+    //    var breakpointDefinition = {
+    //        tablet: 1024,
+    //        phone: 480
+    //    };
+    //    $('#tbl_paquetes').dataTable().fnDestroy();
+    //    $("#tbl_paquetes tbody").click(function (event) {
+    //        $(pTable.fnSettings().aoData).each(function () {
+    //            $(this.nTr).removeClass('row_selected');
+    //        });
+    //        $(event.target.parentNode).addClass('row_selected');
+    //    });
+    //    $('#TotalR').val(0);
 
-        //subtotales.length = 0;
-        //subtotales.push(0);
+    //    tableElement2 = $('#tbl_paquetes')
+    //    tableElement2.dataTable({
+    //        "bProcessing": true,
+    //        "bServerSide": false,
+    //        "sAjaxSource": "frm_envios.aspx?fn=paqueteLoad",
+    //        "bFilter": false,
+    //        "bLengthChange": false,
+    //        "bPaginate": false,
+    //        "bInfo": false,
+    //        "oLanguage": {
+    //            "sInfo": "_TOTAL_ Registro(s) encontrado(s)",
+    //            "sInfoFiltered": " - de _MAX_ registros",
+    //            "sInfoThousands": ",",
+    //            "sLengthMenu": "Mostrar _MENU_ Registros",
+    //            "sLoadingRecords": "Por favor espere  - CARGANDO...",
+    //            "sProcessing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROCESANDO...",
+    //            "sSearch": "",
+    //            "sZeroRecords": "No se encontraron registros",
+    //            "oPaginate": {
+    //                "sNext": " SIGUIENTE",
+    //                "sPrevious": "ANTERIOR "
+    //            }
+    //        },
+    //        "fnCreatedRow": function (row, data, index) {
 
-        //$('#tbl_paquetes').dataTable().fnDestroy();
-        
-        //$("#tbl_paquetes tbody").click(function (event) {
-        //    $(pTable.fnSettings().aoData).each(function () {
-        //        $(this.nTr).removeClass('row_selected');
-        //    });
-        //    $(event.target.parentNode).addClass('row_selected');
-        //});
+    //            var subtotal = data.Costo;
 
-        //$('#TotalR').val(0);
-        
-        //tableElement = $('#tbl_paquetes')
+    //            subtotales[0] += subtotal;
 
-        //tableElement.dataTable({
-        pTable = $('#tbl_paquetes').dataTable({
-            "bProcessing": true,
-            "bServerSide": false,
-            "sAjaxSource": "frm_envios.aspx?fn=paqueteLoad",
-            "bFilter": false,
-            "bLengthChange": false,
-            "bPaginate": false,
-            "bInfo": false,
-            "oLanguage": {
-                "sInfo": "_TOTAL_ Registro(s) encontrado(s)",
-                "sInfoFiltered": " - de _MAX_ registros",
-                "sInfoThousands": ",",
-                "sLengthMenu": "Mostrar _MENU_ Registros",
-                "sLoadingRecords": "Por favor espere  - CARGANDO...",
-                "sProcessing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROCESANDO...",
-                "sSearch": "",
-                "sZeroRecords": "No se encontraron registros",
-                "oPaginate": {
-                    "sNext": " SIGUIENTE",
-                    "sPrevious": "ANTERIOR "
-                }
-            },
-            //"fnCreatedRow": function (row, data, index) {
+    //            var sub = $.formatNumber(subtotales[0], { format: "#,###.00", locale: "es" });
+    //            $('#TotalR').val(sub);
 
-            //    var subtotal = data.Costo;
-            //    //subtotal = $.parseNumber(subtotal, { format: "#,###.00", locale: "es" });
+    //        },
+    //        fnPreDrawCallback: function () {
+    //            if (!responsiveHelper) {
+    //                responsiveHelper = new ResponsiveDatatablesHelper(tableElement2, breakpointDefinition);
+    //            }
+    //        },
+    //        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+    //            responsiveHelper.createExpandIcon(nRow);
+    //        },
+    //        fnDrawCallback: function (oSettings) {
+    //            responsiveHelper.respond();
+    //        },
+    //        "aoColumns": [
+    //            {
+    //              "mDataProp": "Id_envio",
+    //              "bVisible": false },
+    //            { "mDataProp": "Numero" },
+    //            { "mDataProp": "Peso" },
+    //            { "mDataProp": "Volumen" },
+    //            { "mDataProp": "Descripcion" },
+    //            {
+    //                "mDataProp": "Costo",
+    //                "sType": 'numeric',
+    //                "mRender": function (data) {
+    //                    return $.formatNumber(data, { format: "#,###.00", locale: "es" });
+    //                }
+    //            }
+    //        }
+    //        ]
+    //    });
+    //    var search_input = tableElement2.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+    //    search_input.attr('placeholder', "Buscar");
+    //};
 
-            //    subtotales[0] += subtotal;
+    
+    //function paqueteSave() {
+    //    var record = {};
+    //    record.IdEnvio = $('#hdn_paqueteId').val();
+    //    record.PesoP = $('#PesoP').val();
+    //    record.VolumenP = $('#VolumenP').val();
+    //    record.CostoP = $('#CostoP').val();
+    //    record.DescripcionP = $('#DescripcionP').val();
 
-            //    var sub = $.formatNumber(subtotales[0], { format: "#,###.00", locale: "es" });
-            //    $('#TotalR').val(sub);
+    //    $('.loading').show()
+    //    $('.btn').hide();
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "frm_envios.aspx?fn=paqueteSave",
+    //        data: JSON.stringify(record),
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            $('.loading').hide()
+    //            $('.btn').show();
+    //            basicModal2.close();
+    //            if (response.rslt == 'exito') {
+    //                $("#dv_Error2").hide()
+    //                $("#dv_Message2").html('El record ha sido procesado con exito.');
+    //                $("#dv_Message2").show();
+    //                setTimeout(function () { $('#dv_Message2').hide(); }, 10000);
+    //                paqueteLoad()
+    //            }
+    //            else {
+    //                $("#dv_Error2").html(response.msj);
+    //                $("#dv_Error2").show();
+    //                setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
+    //            }
+    //        },
+    //        error: function () {
+    //            $('.loading').hide()
+    //            $('.btn').show();
+    //            //$('#basicModal2').modal('hide');
+    //            basicModal2.close();
+    //            $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
+    //            $("#dv_Error2").show();
+    //            setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
+    //        }
+    //    });
+//};
 
-            //},
-            //fnPreDrawCallback: function () {
-            //    // Initialize the responsive datatables helper once.
-            //    if (!responsiveHelper) {
-            //        responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition);
-            //    }
-            //},
-            //fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-            //    responsiveHelper.createExpandIcon(nRow);
-            //},
-            //fnDrawCallback: function (oSettings) {
-            //    responsiveHelper.respond();
-            //},
-            "aoColumns": [
-                { "mDataProp": "Numero" },
-                { "mDataProp": "Peso" },
-                { "mDataProp": "Volumen" },
-                {
-                    "mDataProp": "Costo",
-                    "sType": 'numeric',
-                    "mRender": function (data) {
-                        return $.formatNumber(data, { format: "#,###.00", locale: "es" });
-                    }
-                }, ,
-                { "mDataProp": "Descripcion" }
-            ]
-        });
+    //function paqueteValidate() {
+    //    var result = $("#form2").valid();
+    //    return result;
+    //};
 
-        var search_input = tableElement.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-        search_input.attr('placeholder', "Buscar");
-    };
-    function paqueteSave() {
-        var record = {};
-        record.IdEnvio = $('#hdn_paqueteId').val();
-        record.PesoP = $('#PesoP').val();
-        record.VolumenP = $('#VolumenP').val();
-        record.CostoP = $('#CostoP').val();
-        record.DescripcionP = $('#DescripcionP').val();
+    //function EventosListadoPaquetes() {
+    //    $("#tbl_paquetes tbody").click(function (event) {
 
-        $('.loading').show()
-        $('.btn').hide();
-        $.ajax({
-            type: "POST",
-            url: "frm_envios.aspx?fn=paqueteSave",
-            data: JSON.stringify(record),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                $('.loading').hide()
-                $('.btn').show();
-                basicModal2.close();
-                if (response.rslt == 'exito') {
-                    $("#dv_Error2").hide()
-                    $("#dv_Message2").html('El record ha sido procesado con exito.');
-                    $("#dv_Message2").show();
-                    setTimeout(function () { $('#dv_Message2').hide(); }, 10000);
-                    paqueteLoad()
-                }
-                else {
-                    $("#dv_Error2").html(response.msj);
-                    $("#dv_Error2").show();
-                    setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
-                }
-            },
-            error: function () {
-                $('.loading').hide()
-                $('.btn').show();
-                //$('#basicModal2').modal('hide');
-                basicModal2.close();
-                $("#dv_Error2").html('Error de comunicación con el servidor. El record no ha sido actualizado.');
-                $("#dv_Error2").show();
-                setTimeout(function () { $('#dv_Error2').hide(); }, 10000);
-            }
-        });
-    };
-    function paqueteValidate() {
-        var result = $("#form2").valid();
-        return result;
-    };
-    function EventosListadoPaquetes() {
-        $("#tbl_paquetes tbody").click(function (event) {
+    //        $(tableElement2.fnSettings().aoData).each(function () {
+    //            $(this.nTr).removeClass('row_selected');
+    //        });
+    //        $(event.target.parentNode).addClass('row_selected');
 
-            $(tableElement2.fnSettings().aoData).each(function () {
-                $(this.nTr).removeClass('row_selected');
-            });
-            $(event.target.parentNode).addClass('row_selected');
+    //    });
 
-        });
+    //    $("#tbl_paquetes tbody").dblclick(function (event) {
 
-        $("#tbl_paquetes tbody").dblclick(function (event) {
+    //        $(tableElement2.fnSettings().aoData).each(function () {
+    //            $(this.nTr).removeClass('row_selected');
+    //        });
+    //        $(event.target.parentNode).addClass('row_selected');
+    //        paqueteEdit()
+    //    });
+//}
 
-            $(tableElement2.fnSettings().aoData).each(function () {
-                $(this.nTr).removeClass('row_selected');
-            });
-            $(event.target.parentNode).addClass('row_selected');
-            paqueteEdit()
-        });
-    }
 //CLIENTES
     var modalclienteE;
     function BuscarClientesE() {

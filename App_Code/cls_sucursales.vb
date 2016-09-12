@@ -263,7 +263,7 @@ Public Class cls_sucursales
 
     Public Shared Function Lista(Optional ByVal var_filtro As String = "") As DataTable
         Dim obj_Conex_int As New SqlConnection(ConfigurationManager.ConnectionStrings("connection").ConnectionString)
-        Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_sucursales.Campo_Id & " as id, " & cls_sucursales.Campo_Validacion & " as des from " & cls_sucursales.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_sucursales.Campo_Validacion & "")
+        Dim obj_dt_int As DataTable = Abrir_Tabla(obj_Conex_int, "select " & cls_sucursales.Campo_Id & " as id, nombre as des from " & cls_sucursales.Nombre_Tabla & IIf(var_filtro <> "", " where " & var_filtro, "") & " order by " & cls_sucursales.Campo_Validacion & "")
         obj_dt_int.Rows.Add(0, "Seleccione una opción")
         Return obj_dt_int
     End Function

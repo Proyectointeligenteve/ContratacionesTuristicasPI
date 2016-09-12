@@ -46,8 +46,9 @@ Partial Class frm_ventas
                     loadAll()
                 Case "saveAll"
                     saveAll()
-                    'Case "validar_venta"
-                    '    validarventa()
+
+                Case "buscar_pasajero"
+                    validarPasajero()
 
                 Case "cargar_sucursales"
                     sucursales()
@@ -74,10 +75,15 @@ Partial Class frm_ventas
                     hoteles()
                 Case "cargar_destinos"
                     destinos()
+                Case "cargar_arrendadoras"
+                    arrendadoras()
                 Case "cargar_vehiculos"
                     vehiculos()
                 Case "cargar_paquetes"
                     paquetes()
+
+                Case "cargar_pasajero"
+                    CargarPasajero()
             End Select
         End If
     End Sub
@@ -188,19 +194,35 @@ Partial Class frm_ventas
             Else
                 var_User = obj_Session.Usuario.nombre
             End If
-            'obj_sb.Append("," & Chr(34) & "Rif" & Chr(34) & ":" & Chr(34) & obj_venta.Rif & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_venta.Nombre & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "RazonSocial" & Chr(34) & ":" & Chr(34) & obj_venta.RazonSocial & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Direccion" & Chr(34) & ":" & Chr(34) & obj_venta.Direccion & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "TelefonoF" & Chr(34) & ":" & Chr(34) & obj_venta.TelefonoFijo & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "TelefonoM" & Chr(34) & ":" & Chr(34) & obj_venta.TelefonoMovil & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Web" & Chr(34) & ":" & Chr(34) & obj_venta.Web & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Email" & Chr(34) & ":" & Chr(34) & obj_venta.Email & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Codigo" & Chr(34) & ":" & Chr(34) & obj_venta.codigo & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "LimiteCredito" & Chr(34) & ":" & Chr(34) & obj_venta.limite_credito & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Pais" & Chr(34) & ":" & Chr(34) & obj_venta.pais & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Estado" & Chr(34) & ":" & Chr(34) & obj_venta.estado & Chr(34) & "")
-            'obj_sb.Append("," & Chr(34) & "Ciudad" & Chr(34) & ":" & Chr(34) & obj_venta.ciudad & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "hdn_id_venta" & Chr(34) & ":" & Chr(34) & obj_venta.id & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Numero" & Chr(34) & ":" & Chr(34) & obj_venta.numero & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Sucursal" & Chr(34) & ":" & Chr(34) & obj_venta.id_sucursal & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "TipoViaje" & Chr(34) & ":" & Chr(34) & IIf(obj_venta.nacional, 1, 0) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "TipoVenta" & Chr(34) & ":" & Chr(34) & obj_venta.tipo & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Vendedor" & Chr(34) & ":" & Chr(34) & obj_venta.IdVendedor & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Agencia" & Chr(34) & ":" & Chr(34) & obj_venta.IdAgencia & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Freelance" & Chr(34) & ":" & Chr(34) & obj_venta.IdFreelance & Chr(34) & "")
+
+            obj_sb.Append("," & Chr(34) & "Aerolinea" & Chr(34) & ":" & Chr(34) & obj_venta.IdAerolinea & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Paquete" & Chr(34) & ":" & Chr(34) & obj_venta.id_paquete & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Vehiculo" & Chr(34) & ":" & Chr(34) & obj_venta.id_vehiculo & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Arrendadora" & Chr(34) & ":" & Chr(34) & obj_venta.id_arrendadora & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Hotel" & Chr(34) & ":" & Chr(34) & obj_venta.id_hotel & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Habitacion" & Chr(34) & ":" & Chr(34) & obj_venta.tipo_habitacion & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Boleto" & Chr(34) & ":" & Chr(34) & obj_venta.numero_boleto & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Sistema" & Chr(34) & ":" & Chr(34) & obj_venta.IdSistema & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Pantalla" & Chr(34) & ":" & Chr(34) & obj_venta.pantalla & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Dias" & Chr(34) & ":" & Chr(34) & obj_venta.dias & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "TipoPersona" & Chr(34) & ":" & Chr(34) & obj_venta.tipo_persona & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "IdPasajero" & Chr(34) & ":" & Chr(34) & obj_venta.id_cliente & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "FechaInicio" & Chr(34) & ":" & Chr(34) & obj_venta.fechaInicio & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "FechaFin" & Chr(34) & ":" & Chr(34) & obj_venta.fechaFin & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Destino" & Chr(34) & ":" & Chr(34) & obj_venta.destino & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Moneda" & Chr(34) & ":" & Chr(34) & obj_venta.id_moneda & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Tarifa" & Chr(34) & ":" & Chr(34) & obj_venta.tarifa & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Tax" & Chr(34) & ":" & Chr(34) & obj_venta.tax & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Total" & Chr(34) & ":" & Chr(34) & obj_venta.total & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "TipoVenta" & Chr(34) & ":" & Chr(34) & obj_venta.tipo_venta & Chr(34) & "")
 
         Catch ex As Exception
             var_error = ex.Message
@@ -222,33 +244,81 @@ Partial Class frm_ventas
         Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
         Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
 
+        Dim obj_pasajero As New cls_pasajeros(ac_Funciones.formato_Numero(var_JObject("IdPasajero").ToString))
+        If obj_pasajero.Id <= 0 Then
+            obj_pasajero.rif = ac_Funciones.formato_Texto(var_JObject("Rif").ToString)
+            obj_pasajero.pasaporte = ac_Funciones.formato_Texto(var_JObject("Pasaporte").ToString)
+            obj_pasajero.pasaporte_fecha = ac_Funciones.formato_Fecha(var_JObject("PasaporteFecha").ToString)
+            obj_pasajero.nombre = ac_Funciones.formato_Texto(var_JObject("Nombre").ToString)
+            obj_pasajero.apellido = ac_Funciones.formato_Texto(var_JObject("Apellido").ToString)
+            obj_pasajero.telefono = ac_Funciones.formato_Texto(var_JObject("TelefonoM").ToString)
+            obj_pasajero.email = ac_Funciones.formato_Texto(var_JObject("Email").ToString)
+            obj_pasajero.edad = ac_Funciones.formato_Numero(var_JObject("Edad").ToString)
+            obj_pasajero.direccion = ac_Funciones.formato_Texto(var_JObject("Direccion").ToString)
+            obj_pasajero.fecha_reg = Now
+            obj_pasajero.id_usuario_reg = obj_Session.Usuario.Id
+
+            Dim var_msj As String = ""
+            If Not obj_pasajero.Actualizar(var_msj) Then
+                Response.ContentType = "application/json"
+                Response.Clear()
+                Response.ClearHeaders()
+                Response.ClearContent()
+                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_msj & Chr(34) & "}")
+                Response.End()
+                Exit Sub
+            End If
+
+        End If
+
         If Not IsNothing(Session.Contents("obj_venta")) Then
             obj_venta = Session.Contents("obj_venta")
         Else
             obj_venta = New cls_ventas
         End If
 
-        If obj_venta.Id = 0 Then
+        If obj_venta.id = 0 Then
             obj_venta.id_usuario_reg = DirectCast(Session.Contents("obj_Session"), cls_Sesion).Usuario.Id
             obj_venta.fecha_reg = Now.Date
-            'obj_venta.codigo = Right("AG" & New cls_paises(ac_Funciones.formato_Numero(var_JObject("Pais").ToString)).nombre.Substring(0, 1) & New cls_ciudades(ac_Funciones.formato_Numero(var_JObject("Ciudad").ToString)).nombre.Substring(0, 3).ToUpper & Right("0000" & (cls_ventas.SiguienteNumero() + 1).ToString, 4).ToString, 10)
-            'Right("AE" & Right("0000" & (cls_aerolineas.SiguienteNumero() + 1).ToString, 4).ToString, 6)
+            obj_venta.numero = Right("V" & Right("000000000000" & (cls_ventas.SiguienteNumero() + 1).ToString, 12), 13)
+            obj_venta.fecha = Now.Date
+            obj_venta.id_cliente = obj_pasajero.Id
         Else
-            'obj_venta.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
+            obj_venta.id_cliente = ac_Funciones.formato_Numero(var_JObject("IdPasajero").ToString)
+            obj_venta.numero = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
         End If
 
-        'obj_venta.Rif = ac_Funciones.formato_Texto(var_JObject("Rif").ToString).ToUpper
-        'obj_venta.Nombre = ac_Funciones.formato_Texto(var_JObject("Nombre").ToString)
-        'obj_venta.RazonSocial = ac_Funciones.formato_Texto(var_JObject("RazonSocial").ToString)
-        'obj_venta.Direccion = ac_Funciones.formato_Texto(var_JObject("Direccion").ToString)
-        'obj_venta.TelefonoFijo = ac_Funciones.formato_Texto(var_JObject("TelefonoF").ToString)
-        'obj_venta.TelefonoMovil = ac_Funciones.formato_Texto(var_JObject("TelefonoM").ToString)
-        'obj_venta.Web = ac_Funciones.formato_Texto(var_JObject("Web").ToString)
-        'obj_venta.Email = ac_Funciones.formato_Texto(var_JObject("Email").ToString)
-        'obj_venta.limite_credito = ac_Funciones.formato_Numero(var_JObject("LimiteCredito").ToString, True)
-        'obj_venta.pais = ac_Funciones.formato_Numero(var_JObject("Pais").ToString)
-        'obj_venta.estado = ac_Funciones.formato_Numero(var_JObject("Estado").ToString)
-        'obj_venta.ciudad = ac_Funciones.formato_Numero(var_JObject("Ciudad").ToString)
+        'obj_venta.id = ac_Funciones.formato_Numero(var_JObject("hdn_id_venta").ToString).ToUpper
+        obj_venta.id_sucursal = ac_Funciones.formato_Texto(var_JObject("Sucursal").ToString)
+        obj_venta.nacional = ac_Funciones.formato_boolean(IIf(var_JObject("TipoViaje").ToString = 1, 1, 0).ToString)
+        obj_venta.tipo = ac_Funciones.formato_Numero(var_JObject("TipoVenta").ToString)
+        obj_venta.IdVendedor = ac_Funciones.formato_Numero(var_JObject("Vendedor").ToString)
+        obj_venta.IdAgencia = ac_Funciones.formato_Numero(var_JObject("Agencia").ToString)
+        obj_venta.IdFreelance = ac_Funciones.formato_Numero(var_JObject("Freelance").ToString)
+        obj_venta.id_hotel = ac_Funciones.formato_Numero(var_JObject("Hotel").ToString)
+        obj_venta.tipo_habitacion = ac_Funciones.formato_Numero(var_JObject("Habitacion").ToString)
+        obj_venta.IdAerolinea = ac_Funciones.formato_Numero(var_JObject("Aerolinea").ToString)
+        obj_venta.numero_boleto = ac_Funciones.formato_Texto(var_JObject("Boleto").ToString)
+        obj_venta.IdSistema = ac_Funciones.formato_Numero(var_JObject("Sistema").ToString)
+        obj_venta.pantalla = ac_Funciones.formato_Texto(var_JObject("Pantalla").ToString)
+        obj_venta.dias = ac_Funciones.formato_Numero(var_JObject("Dias").ToString)
+        obj_venta.tipo_persona = ac_Funciones.formato_Numero(var_JObject("TipoPersona").ToString)
+        obj_venta.id_vehiculo = ac_Funciones.formato_Numero(var_JObject("Vehiculos").ToString)
+        obj_venta.id_arrendadora = ac_Funciones.formato_Numero(var_JObject("Arrendadora").ToString)
+
+        obj_venta.identificacion_cliente = ac_Funciones.formato_Texto(var_JObject("Rif").ToString)
+        obj_venta.nombre_cliente = ac_Funciones.formato_Texto(var_JObject("Nombre").ToString)
+        'obj_venta.ciudad = ac_Funciones.formato_Numero(var_JObject("IdCliente").ToString)
+
+        obj_venta.fechaInicio = ac_Funciones.formato_Fecha(var_JObject("FechaInicio").ToString)
+        obj_venta.fechaFin = ac_Funciones.formato_Fecha(var_JObject("FechaFin").ToString)
+        obj_venta.destino = ac_Funciones.formato_Numero(var_JObject("Destino").ToString)
+        obj_venta.id_moneda = ac_Funciones.formato_Numero(var_JObject("Moneda").ToString)
+        obj_venta.tarifa = ac_Funciones.formato_Numero(var_JObject("Tarifa").ToString, True)
+        obj_venta.tax = ac_Funciones.formato_Numero(var_JObject("Tax").ToString, True)
+        obj_venta.total = ac_Funciones.formato_Numero(var_JObject("Total").ToString, True)
+        obj_venta.tipo_venta = ac_Funciones.formato_Numero(var_JObject("TipoVenta").ToString)
+        'obj_venta.ciudad = ac_Funciones.formato_Numero(var_JObject("Tarifa").ToString)
 
         Response.ContentType = "application/json"
         Response.Clear()
@@ -261,37 +331,79 @@ Partial Class frm_ventas
         End If
         Response.End()
     End Sub
-    'Private Sub validarventa()
-    '    Dim var_error As String = ""
-    '    Dim obj_sb As New StringBuilder
 
-    '    Dim var_sr = New System.IO.StreamReader(Request.InputStream)
-    '    Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
-    '    Dim var_rif As String = ac_Funciones.formato_Texto(var_data("rif").ToString)
+    Private Sub CargarPasajero()
+        Dim var_error As String = ""
+        Dim obj_sb As New StringBuilder
+
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+        Dim var_id_pasajero As String = ac_Funciones.formato_Texto(var_data("id_pasajero").ToString)
 
 
-    '    Dim obj_dt_int As System.Data.DataTable = cls_ventas.Consultaventa(var_rif, var_error)
-    '    If obj_dt_int.Rows.Count > 0 Then
-    '        obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Nombre").ToString() & Chr(34) & "")
-    '    Else
-    '        obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "")
-    '    End If
+        Dim obj_dt_int As System.Data.DataTable = cls_pasajeros.ConsultaDatos("", var_id_pasajero)
+        If obj_dt_int.Rows.Count > 0 Then
+            obj_sb.Append("," & Chr(34) & "Rif" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Rif").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Pasaporte" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Pasaporte").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "FechaVencimiento" & Chr(34) & ":" & Chr(34) & ac_Funciones.formato_Fecha(obj_dt_int.Rows(0).Item("FechaVencimiento").ToString()) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Nombre").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Apellido" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Apellido").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Telefono" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Telefono").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Direccion" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Direccion").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Email" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Email").ToString() & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Edad" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Edad").ToString() & Chr(34) & "")
+            'obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("Nombre").ToString() & Chr(34) & "")
+        Else
+            obj_sb.Append("," & Chr(34) & "Nombre" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "")
+        End If
 
-    '    Response.Clear()
-    '    Response.ClearHeaders()
-    '    Response.ClearContent()
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
 
-    '    Dim var_json As String = ""
-    '    If var_error.Trim.Length > 0 Then
-    '        Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
-    '    ElseIf obj_dt_int.Rows.Count > 0 Then
-    '        Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
-    '    Else
-    '        Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "vacio" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
-    '    End If
+        Dim var_json As String = ""
+        If var_error.Trim.Length > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        ElseIf obj_dt_int.Rows.Count > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "vacio" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        End If
 
-    '    Response.End()
-    'End Sub
+        Response.End()
+    End Sub
+
+    Private Sub validarPasajero()
+        Dim var_error As String = ""
+        Dim obj_sb As New StringBuilder
+
+        Dim var_sr = New System.IO.StreamReader(Request.InputStream)
+        Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
+        Dim var_rif As String = ac_Funciones.formato_Texto(var_data("rif").ToString)
+
+
+        Dim obj_dt_int As System.Data.DataTable = cls_pasajeros.Consulta(var_error, var_rif)
+        If obj_dt_int.Rows.Count > 0 Then
+            obj_sb.Append("," & Chr(34) & "id_pasajero" & Chr(34) & ":" & Chr(34) & obj_dt_int.Rows(0).Item("DT_RowId").ToString() & Chr(34) & "")
+        Else
+            obj_sb.Append("," & Chr(34) & "id_pasajero" & Chr(34) & ":" & Chr(34) & 0 & Chr(34) & "")
+        End If
+
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+
+        Dim var_json As String = ""
+        If var_error.Trim.Length > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & "}")
+        ElseIf obj_dt_int.Rows.Count > 0 Then
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        Else
+            Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "vacio" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_error & Chr(34) & obj_sb.ToString & "}")
+        End If
+
+        Response.End()
+    End Sub
 
     Sub sucursales()
         Dim var_error As String = ""
@@ -415,9 +527,20 @@ Partial Class frm_ventas
         Response.End()
     End Sub
 
+    Sub arrendadoras()
+        Dim var_error As String = ""
+        Dim obj_dt_int As System.Data.DataTable = cls_vehiculos_agencias.Lista
+        Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
+        Response.Clear()
+        Response.ClearHeaders()
+        Response.ClearContent()
+        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
+        Response.End()
+    End Sub
+
     Sub vehiculos()
         Dim var_error As String = ""
-        Dim obj_dt_int As System.Data.DataTable = cls_vehiculos.Lista
+        Dim obj_dt_int As System.Data.DataTable = cls_vehiculos.Lista()
         Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
         Response.Clear()
         Response.ClearHeaders()

@@ -36,17 +36,17 @@
            
              <div class="row-fluid">
                     <div class="span6">
-                        <div class="control-group">
-                            <label class="span3 control-label" for="Codigo">Codigo</label>
-                            <div class="span9">
+                        <label class="span3 control-label" for="Codigo">Codigo</label>
+                        <div class="span9">
+                            <div class="input-group">
                                 <input type="text" id="Codigo" name="Codigo" class="form-control" disabled="disabled" />
                             </div>
                         </div>
                     </div>
                 <div class="span6">
-                    <div class="control-group">
-                        <label class="span3 control-label" for="TotalR">Total Envio&nbsp;</label>
-                        <div class="span9">
+                    <label class="span3 control-label" for="TotalR">Total Envio&nbsp;</label>
+                    <div class="span9">
+                        <div class="input-group">
                             <input type="text" id="TotalR" name="TotalR" class="form-control" value="0" />
                         </div>
                     </div>
@@ -75,9 +75,9 @@
                         </div>
                 </div>
                 <div class="span6">
-                    <div class="input-group">
-                        <label class="span3 control-label" for="NombreE">Nombre</label>
-                        <div class="span9">
+                    <label class="span3 control-label" for="NombreE">Nombre</label>
+                    <div class="span9">
+                        <div class="input-group">
                             <input type="text" id="NombreE" name="NombreE" class="form-control" />
                         </div>
                     </div>
@@ -85,36 +85,16 @@
             </div>
             <br />
             <div class="row-fluid">   
-                <div class="span4">
-                    <div class="control-group">
+                <div class="span6">
                     <label class="span3 control-label" for="PaisE">Pais</label>
-                        <div class="span9">
-                            <select id="PaisE" name="PaisE" class="form-control" onchange="CargarEstadosE()"></select>
-                            <input type="hidden" id="HfPaisE" name="HfPaisE" value="0" />
-                            <ul class="error"></ul>
+                    <div class="span9">
+                        <div class="input-group">
+                        <select id="PaisE" name="PaisE" class="form-control" onchange="CargarEstadosE()"></select>
+                        <input type="hidden" id="HfPaisE" name="HfPaisE" value="0" />
+                        <ul class="error"></ul>
                         </div>
                     </div>
                  </div>
-                <div class="span4">
-                    <div class="control-group">
-                        <label class="span3 control-label" for="EstadoE">Estado</label>
-                        <div class="span9">
-                            <select id="EstadoE" name="EstadoE" class="form-control" onchange="CargarCiudadesE()"></select>
-                            <input type="hidden" id="HfEstadoE" name="HfEstadoE" value="0" />
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="span4">
-                    <div class="control-group">
-                        <label class="span3  control-label" for="CiudadE">Ciudad</label>
-                        <div class="span9">
-                            <select id="CiudadE" name="CiudadE" class="form-control"></select>
-                            <input type="hidden" id="HfCiudadE" name="hfCiudadE" value="0" />
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div>
             </div>
             <hr />
             <div class="row-fluid">
@@ -139,9 +119,9 @@
                     </div>
                 </div>
                 <div class="span6">
-                    <div class="input-group">
-                        <label class="span3 control-label" for="NombreR">Nombre</label>
-                        <div class="span9">
+                    <label class="span3 control-label" for="NombreR">Nombre</label>
+                    <div class="span9">
+                        <div class="input-group">
                             <input type="text" id="NombreR" name="NombreR" class="form-control" />
                         </div>
                     </div>
@@ -149,46 +129,65 @@
             </div>
             <br />
             <div class="row-fluid">   
-                <div class="span4">
-                    <div class="control-group">
+                <div class="span6">
                     <label class="span3 control-label" for="PaisR">Pais</label>
-                        <div class="span9">
+                    <div class="span9">
+                        <div class="input-group">
                             <select id="PaisR" name="PaisR" class="form-control" onchange="CargarEstadosR()"></select>
                             <input type="hidden" id="HfPaisR" name="hfPaisR" value="0" />
                             <ul class="error"></ul>
                         </div>
                     </div>
                  </div>
-                <div class="span4">
-                    <div class="control-group">
-                        <label class="span3 control-label" for="EstadoR">Estado</label>
-                        <div class="span9">
-                            <select id="EstadoR" name="EstadoR" class="form-control" onchange="CargarCiudadesR()"></select>
-                            <input type="hidden" id="hfEstadoR" name="hfEstadoR" value="0" />
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="span4">
-                    <div class="control-group">
-                        <label class="span3  control-label" for="CiudadR">Ciudad</label>
-                        <div class="span9">
-                            <select id="CiudadR" name="CiudadR" class="form-control"></select>
-                            <input type="hidden" id="hfCiudadR" name="hfCiudadR" value="0" />
-                            <ul class="error"></ul>
-                        </div>
-                    </div>
-                </div>
             </div>
             <hr />
             <div class="row-fluid hide">
                 <div class="span12">
-                    <label class="span1 control-label" for="DireccionEnvio">Direccion</label>
-                    <div class="span11" align="left">
-                    <textarea rows="2" id="DireccionEnvio" name="DireccionEnvio" class="form-control" style="width:100% !important" ></textarea>
+                    <div class="control-group">
+                        <label class="span1 control-label" for="DireccionEnvio">Direccion</label>
+                        <div class="span11" align="left">
+                        <textarea rows="2" id="DireccionEnvio" name="DireccionEnvio" class="form-control" style="width:100% !important" ></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <label class="span3 control-label" for="Peso">Peso</label>
+                    <div class="span9">
+                        <div class="input-group">
+                            <input type="text" id="PesoP" name="PesoP" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <label class="span3 control-label" for="Volumen">Volumen</label>
+                    <div class="span9">
+                        <div class="input-group">
+                            <input type="text" id="VolumenP" name="VolumenP" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <label class="span3 control-label" for="DescripcionP">Descripcion</label>
+                    <div class="span9">
+                        <div class="input-group">
+                            <textarea id="DescripcionP" rows="2" name="DescripcionP" maxlength="250" style ="width:100%" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <label class="span3 control-label" for="Costo">Costo</label>
+                    <div class="span9">
+                        <div class="input-group">
+                            <input type="text" id="CostoP" name="CostoP" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             </form>
             <br />
             <%--<hr />--%>
@@ -224,6 +223,12 @@
                         },
                         IdentificadorReceptor: {
                             required: true
+                        },
+                        PesoP: {
+                            required: true
+                        },
+                        CostoP: {
+                            required: true
                         }
                     }
                  });
@@ -234,7 +239,7 @@
             </script>
 
                 <%--paqueteOS--%>
-        <hr />
+        <%--<hr />
         <div style="width: 50%; float: left">
             <h4>Paquetes</h4>
         </div>
@@ -264,11 +269,11 @@
                 </table>
                 <input type="hidden" id="hdn_TotalpaqueteRecords" name="hdn_TotalpaqueteRecords" value="0" />
             </div>
-        </div>
+        </div>--%>
         <br />
         <br />     
 
-        <div class="remodal" data-remodal-id="basicModal2" style="background-color:#013b63;">
+        <%--<div class="remodal" data-remodal-id="basicModal2" style="background-color:#013b63;">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel"><span style="color :white;">Formulario de Paquetes</span></h4>
             </div>
@@ -349,7 +354,7 @@
                         return (value != '0');
                     }, "Seleccione");
             </script>
-        </div>
+        </div>--%>
     </div>
        
     <div class="remodal" data-remodal-id="modalclienteE" style="background-color:#013b63;color:white;font-size:14px !important">

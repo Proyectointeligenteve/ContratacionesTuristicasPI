@@ -58,16 +58,16 @@ Partial Class frm_envios
                 Case "guardarCliente"
                     guardarCliente()
 
-                Case "CargarPaquetes"
-                    CargarPaquetes()
-                Case "paqueteDelete"
-                    paqueteDelete()
-                Case "paqueteEdit"
-                    paqueteEdit()
-                Case "paqueteLoad"
-                    paqueteLoad()
-                Case "paqueteSave"
-                    paquetesave()
+                    'Case "CargarPaquetes"
+                    '    CargarPaquetes()
+                    'Case "paqueteDelete"
+                    '    paqueteDelete()
+                    'Case "paqueteEdit"
+                    '    paqueteEdit()
+                    'Case "paqueteLoad"
+                    '    paqueteLoad()
+                    'Case "paqueteSave"
+                    '    paquetesave()
 
                 Case "cargar_paises"
                     paises()
@@ -198,6 +198,13 @@ Partial Class frm_envios
             obj_sb.Append("," & Chr(34) & "DireccionEnvio" & Chr(34) & ":" & Chr(34) & obj_envio.direccion_destino & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "TotalR" & Chr(34) & ":" & Chr(34) & obj_envio.costo_envio & Chr(34) & "")
 
+
+            obj_sb.Append("," & Chr(34) & "NumeroP" & Chr(34) & ":" & Chr(34) & obj_envio.numero & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "PesoP" & Chr(34) & ":" & Chr(34) & obj_envio.peso & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "VolumenP" & Chr(34) & ":" & Chr(34) & obj_envio.volumen & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "CostoP" & Chr(34) & ":" & Chr(34) & obj_envio.costo & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "DescripcionP" & Chr(34) & ":" & Chr(34) & obj_envio.descripcion & Chr(34) & "")
+
         Catch ex As Exception
             var_error = ex.Message
         Finally
@@ -227,7 +234,7 @@ Partial Class frm_envios
             obj_envio.id_usuario_reg = DirectCast(Session.Contents("obj_Session"), cls_Sesion).Usuario.Id
             obj_envio.fecha_reg = Now.Date
             'obj_envio.codigo = Right("EN" & New cls_paises(ac_Funciones.formato_Numero(var_JObject("Id_pais_origen").ToString)).nombre.Substring(0, 1) & New cls_ciudades(ac_Funciones.formato_Numero(var_JObject("Id_ciudad_origen").ToString)).nombre.Substring(0, 3).ToUpper & Right("0000" & (cls_envios.SiguienteNumero() + 1).ToString, 4).ToString, 10)
-            obj_envio.codigo = Right("0000" & (cls_envios.SiguienteNumero() + 1).ToString, 4)
+            obj_envio.codigo = Right("EN" & Right("00000000" & (cls_envios.SiguienteNumero() + 1).ToString, 8), 9)
             obj_envio.estatus = 0
         Else
             obj_envio.codigo = ac_Funciones.formato_Texto(var_JObject("Codigo").ToString)
@@ -244,6 +251,12 @@ Partial Class frm_envios
         obj_envio.id_ciudad_destino = ac_Funciones.formato_Texto(var_JObject("CiudadR").ToString)
         obj_envio.direccion_destino = ac_Funciones.formato_Texto(var_JObject("DireccionEnvio").ToString)
         obj_envio.costo_envio = ac_Funciones.formato_Texto(var_JObject("TotalR").ToString)
+
+        obj_envio.numero = Right("000000000000" & (cls_envios.SiguienteNumeroPaquete() + 1).ToString, 12)
+        obj_envio.peso = var_JObject("PesoP").ToString
+        obj_envio.volumen = var_JObject("VolumenP").ToString
+        obj_envio.costo = var_JObject("CostoP").ToString
+        obj_envio.descripcion = var_JObject("DescripcionP").ToString
 
 
         Response.ContentType = "application/json"
@@ -429,158 +442,6 @@ Partial Class frm_envios
         Response.ClearContent()
         Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
         Response.End()
-    End Sub
-
-#End Region
-
-#Region "   >> paquete"
-
-    Sub CargarPaquetes()
-        Dim var_error As String = ""
-
-        Dim obj_dt_int As System.Data.DataTable = cls_envios_paquetes.Lista()
-        Dim var_json As String = JsonConvert.SerializeObject(obj_dt_int)
-        Response.Clear()
-        Response.ClearHeaders()
-        Response.ClearContent()
-        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_json & "}")
-        Response.End()
-    End Sub
-
-    Sub paqueteDelete()
-        Dim var_Error As String = ""
-        Try
-            Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
-            Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
-            Dim var_Ids As String = var_JObject("hdn_paqueteId")
-            If var_Ids.Trim.Length > 0 Then
-                var_Ids = var_Ids.Substring(1)
-            End If
-
-            If Not IsNothing(Session.Contents("obj_envio")) Then
-                obj_envio = Session.Contents("obj_envio")
-            Else
-                obj_envio = New cls_envios
-            End If
-
-            Dim var_Id() As String = var_Ids.Split(",")
-            For i As Integer = var_Id.Count - 1 To 0 Step -1
-                obj_envio.Paquete.RemoveAt(var_Id(i) - 1)
-            Next
-            Session.Contents("obj_envio") = obj_envio
-        Catch ex As Exception
-            var_Error = ex.Message
-        Finally
-            Response.ContentType = "application/json"
-            Response.Clear()
-            Response.ClearHeaders()
-            Response.ClearContent()
-            If var_Error.Trim.Length > 0 Then
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_Error & Chr(34) & "}")
-            Else
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "}")
-            End If
-            Response.End()
-        End Try
-    End Sub
-
-    Sub paqueteEdit()
-        Dim var_Error As String = ""
-        If Not IsNothing(Session.Contents("obj_envio")) Then
-            obj_envio = Session.Contents("obj_envio")
-        Else
-            obj_envio = New cls_envios
-        End If
-
-        Dim obj_StringBuilder As New StringBuilder
-        Try
-            Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
-            Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
-            Dim var_Position As Integer = ac_Funciones.formato_Numero(var_JObject("hdn_paqueteId").ToString) - 1
-            obj_StringBuilder.Append("," & Chr(34) & "Id_envio" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).id_envio & Chr(34) & "")
-            obj_StringBuilder.Append("," & Chr(34) & "NumeroP" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).numero & Chr(34) & "")
-            obj_StringBuilder.Append("," & Chr(34) & "PesoP" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).peso & Chr(34) & "")
-            obj_StringBuilder.Append("," & Chr(34) & "VolumenP" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).volumen & Chr(34) & "")
-            obj_StringBuilder.Append("," & Chr(34) & "CostoP" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).costo & Chr(34) & "")
-            obj_StringBuilder.Append("," & Chr(34) & "DescripcionP" & Chr(34) & ":" & Chr(34) & obj_envio.Paquete(var_Position).descripcion & Chr(34) & "")
-        Catch ex As Exception
-            var_Error = ex.Message
-        Finally
-            Response.ContentType = "application/json"
-            Response.Clear()
-            Response.ClearHeaders()
-            Response.ClearContent()
-            If var_Error.Trim.Length > 0 Then
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_Error & Chr(34) & var_Error & "}")
-            Else
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_Error & Chr(34) & obj_StringBuilder.ToString & "}")
-            End If
-            Response.End()
-        End Try
-
-    End Sub
-
-    Sub paqueteLoad()
-        Dim var_Error As String = ""
-        If Not IsNothing(Session.Contents("obj_envio")) Then
-            obj_envio = Session.Contents("obj_envio")
-        Else
-            obj_envio = New cls_envios
-        End If
-
-        Dim obj_DataTable As System.Data.DataTable = obj_envio.ListaPaquetes
-        Dim var_JSon As String = JsonConvert.SerializeObject(obj_DataTable)
-        Response.Clear()
-        Response.ClearHeaders()
-        Response.ClearContent()
-        Response.Write("{ " & Chr(34) & "aaData" & Chr(34) & ":" & var_JSon & "}")
-        Response.End()
-    End Sub
-
-    Sub paquetesave()
-        Try
-            If Not IsNothing(Session.Contents("obj_envio")) Then
-                obj_envio = Session.Contents("obj_envio")
-            Else
-                obj_envio = New cls_envios
-            End If
-
-            Dim var_StreamReader = New System.IO.StreamReader(Request.InputStream)
-            Dim var_JObject As JObject = JObject.Parse(var_StreamReader.ReadToEnd)
-            Dim var_paqueteId As Integer = CInt(var_JObject("IdEnvio").ToString)
-
-            If var_paqueteId > 0 Then
-                obj_envio.Paquete(var_paqueteId - 1).id_envio = var_JObject("IdEnvio").ToString
-                obj_envio.Paquete(var_paqueteId - 1).numero = var_JObject("NumeroP").ToString
-                obj_envio.Paquete(var_paqueteId - 1).peso = var_JObject("PesoP").ToString
-                obj_envio.Paquete(var_paqueteId - 1).volumen = var_JObject("VolumenP").ToString
-                obj_envio.Paquete(var_paqueteId - 1).costo = var_JObject("CostoP").ToString
-                obj_envio.Paquete(var_paqueteId - 1).descripcion = var_JObject("    ").ToString
-            Else
-                Dim obj_envios_paquetes As New cls_envios_paquetes
-                'obj_envios_paquetes.numero = var_JObject("Numero").ToString
-                obj_envios_paquetes.numero = Right("00000000" & (cls_envios_paquetes.SiguienteNumero() + 1).ToString, 8)
-                obj_envios_paquetes.peso = var_JObject("PesoP").ToString
-                obj_envios_paquetes.volumen = var_JObject("VolumenP").ToString
-                obj_envios_paquetes.costo = var_JObject("CostoP").ToString
-                obj_envios_paquetes.descripcion = var_JObject("DescripcionP").ToString
-                obj_envio.Paquete.Add(obj_envios_paquetes)
-            End If
-            Session.Contents("obj_envio") = obj_envio
-        Catch ex As Exception
-            var_Error = ex.Message
-        Finally
-            Response.ContentType = "application/json"
-            Response.Clear()
-            Response.ClearHeaders()
-            Response.ClearContent()
-            If var_Error.Trim.Length > 0 Then
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "error" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & var_Error & Chr(34) & "}")
-            Else
-                Response.Write("{" & Chr(34) & "rslt" & Chr(34) & ":" & Chr(34) & "exito" & Chr(34) & "," & Chr(34) & "msj" & Chr(34) & ":" & Chr(34) & "" & Chr(34) & "}")
-            End If
-            Response.End()
-        End Try
     End Sub
 
 #End Region
