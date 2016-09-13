@@ -303,7 +303,6 @@ function Editar() {
 }
 
 function Guardar() {
-    alert(2);
     var registro = {};
     registro.id = $('#id').val();
     registro.Nombre = $('#Nombre').val();

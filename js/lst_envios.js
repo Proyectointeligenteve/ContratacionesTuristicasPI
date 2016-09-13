@@ -2,6 +2,8 @@
     Permisos();
     CargarListados();
     EventosListado();
+    $('#Fecha').datepicker({ dateFormat: 'dd/mm/yy' })
+    var idt = $.url().param('id');
 }
 
 function Permisos() {
@@ -23,8 +25,10 @@ function Permisos() {
                 if (response.Agregar == 1) { $("#btn_agregar").removeClass('hide'); }
                 if (response.Ver == 1) { $("#btn_ver").removeClass('hide'); }
                 if (response.Editar == 1) { $("#btn_editar").removeClass('hide'); }
-                //if (response.Imprimir == 1) { $("#btn_imprimir").removeClass('hide'); }
+                if (response.Actualizar == 1) { $("#btn_actualizar").removeClass('hide'); }
                 if (response.Eliminar == 1) { $("#btn_eliminar").removeClass('hide'); }
+                if (response.Agregar_Seguimiento == 1) { $("#Agregar_Seguimiento").removeClass('hide'); }
+
             }
             else {
                 $("#dv_error").html(response.msj);
@@ -409,10 +413,10 @@ function Seguimiento() {
         "sDom": 'frt<"izq"i><"der"p>',
         "fnServerData": function (sSource, aoData, fnCallback) {
             $.getJSON(sSource, aoData, function (json) {
-                $('.loading').hide()
+                $('.loading').hide();
                 $('.btn').show();
-                $('#btn_cargar').show()
-                $('#dvloader').hide()
+                $('#btn_cargar').show();
+                $('#dvloader').hide();
 
                 modalseguimiento = $.remodal.lookup[$('[data-remodal-id=modalseguimiento]').data('remodal')];
                 modalseguimiento.open();
@@ -449,6 +453,7 @@ function Seguimiento() {
 
                          }
                          d = ((i < 10 ? '0' : '') + i) + "/" + ((m < 10 ? '0' : '') + m) + "/" + d.getFullYear();
+                         $('#hd_estatus').val(oObj.aData.Estatus2)
                          return "<div class='date'>" + d + "<div>";
                                }
                             },
@@ -467,6 +472,23 @@ var modalnuevoseg;
 function NuevoSeguimiento() {
     $('#btn_cerrarseguimiento').click()
     $('#Observacion').val('');
+    var f = $('#hd_estatus').val();
+    if(f==1){
+        $('#Estatus option[value=0]').remove();
+    } else if (f == 1) {
+        $('#Estatus option[value=0]').remove();
+        $('#Estatus option[value=1]').remove();
+    } else if (f == 2) {
+        $('#Estatus option[value=0]').remove();
+        $('#Estatus option[value=1]').remove();
+        $('#Estatus option[value=2]').remove();
+    } else if (f == 3) {
+        $('#Estatus option[value=0]').remove();
+        $('#Estatus option[value=1]').remove();
+        $('#Estatus option[value=2]').remove();
+        $('#Estatus option[value=3]').remove();
+    }
+   
     modalnuevoseg = $.remodal.lookup[$('[data-remodal-id=modalnuevoseg]').data('remodal')];
     modalnuevoseg.open();
 }

@@ -28,7 +28,13 @@
             <div style ="width :100%">
             <span style="font-size: 14px;color:white">LISTADO DE ENVIOS</span><hr />            
         </div>
-        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:180px !important" onchange="CargarListados()"><option value ="0">Ver Por Entregar</option><option value ="1">Ver En Transito</option><option value ="2">Ver Entregados</option><option value ="3">Ver Extraviados</option><option value ="4">Ver Anulados</option><option value ="5">Ver Todos</option></select></div>
+        <div class="izq"><select id="vista_estatus" class="form-control" style="margin:0 !important; width:180px !important" onchange="CargarListados()">
+            <option value ="0">Ver Por Entregar</option>
+            <option value ="1">Ver En Transito</option>
+            <option value ="2">Ver Entregados</option>
+            <option value ="3">Ver Extraviados</option>
+            <option value ="4">Ver Todos</option>
+            </select></div>
         <div class="hr">
             <hr />
         </div>
@@ -72,7 +78,7 @@
             </tbody>
         </table>
     </div>
-    <div class="remodal" data-remodal-id="modalseguimiento">
+    <div class="remodal" data-remodal-id="modalseguimiento" style="background-color:#013b63;color:white;font-size:14px !important">
        <div class="modal-header">
            <h4 class="modal-title" id="H2">Seguimiento del Envio</h4>
             <div class="text-right"><button class="btn hide" id="Agregar_Seguimiento" onclick="NuevoSeguimiento();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Agregar</button></div>
@@ -102,7 +108,7 @@
        </div>
    </div>
 
-   <div class="remodal" data-remodal-id="modalnuevoseg">
+   <div class="remodal" data-remodal-id="modalnuevoseg" style="background-color:#013b63;color:white;font-size:14px !important">
 
         <div class="modal-header">
             <h4 class="modal-title" id="myModalLabel">Nuevo Seguimiento</h4>
@@ -110,6 +116,7 @@
         <div class="modal-body">
             <form id="form1" class="form-horizontal" role="form">
                 <input type="hidden" id="id" name="id" />
+                <input type="hidden" id="hd_estatus" name="hd_estatus" />
 
                 <div class="row-fluid">
                     <div class="span12">
@@ -175,7 +182,7 @@
             <button type="button" class="btn btn-primary" onclick="if(ValidarSeguimiento()){GuardarSeguimiento()}">Aceptar</button>
         </div>
     </div>
-        <div class="remodal" data-remodal-id="deletemodal">
+        <div class="remodal" data-remodal-id="deletemodal" style="background-color:#013b63;color:white;font-size:14px !important">
         <div class="modal-header">
             <h4>Eliminar</h4>
         </div>
@@ -207,6 +214,9 @@
         $(document).ready(function () {
             $("#dv_mensaje").hide();
             $("#dv_error").hide();
+            $("#dv_error_seg").hide();
+            $("#dv_mensaje_seg").hide();
+            $("#dv_error_nuevoseg").hide();
             Cargar();
         });
 

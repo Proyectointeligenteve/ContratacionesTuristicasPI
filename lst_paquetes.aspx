@@ -188,7 +188,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="modal.close();CargarListado();">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="alert(1);if(Validar()){Guardar()}">Aceptar</button>
+            <button type="button" class="btn btn-primary" onclick="if(Validar()){Guardar()}">Aceptar</button>
         </div>
         <%--            </div>
         </div>

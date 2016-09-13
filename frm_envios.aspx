@@ -27,7 +27,7 @@
             </div>
             <div align="right">
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href='lst_envios.aspx'">Volver</button>
-                <button type="button" class="btn btn-primary" onclick="if(validate()){save();}" id="btn_guardar">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="if(validate());{save();}" id="btn_guardar">Guardar</button>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                <div class="span6">
+                <div class="span6 hide">
                     <label class="span3 control-label" for="TotalR">Total Envio&nbsp;</label>
                     <div class="span9">
                         <div class="input-group">

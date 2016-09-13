@@ -6,12 +6,12 @@ function backToList() {
     window.location.href = 'lst_envios.aspx';
 };
 function load() {
-    Permisos()
-    CargarPaisesE()
-    CargarPaisesR()
-    EventosListadoCliente()
-    EventosListadoClienteR()
-    //EventosListadoPaquetes()    
+    Permisos();
+    CargarPaisesE();
+    CargarPaisesR();
+    EventosListadoCliente();
+    EventosListadoClienteR();
+    //EventosListadoPaquetes();    
 
     $("#dv_error_modalE").hide();
     $("#dv_error_modalR").hide();
@@ -139,7 +139,8 @@ function Permisos() {
 }
     
 function save() {
-        var record = {};
+    var record = {};
+    alert("test");
         record.hdn_id_envio = $('#hdn_id_envio').val();
         record.Codigo = $('#Codigo').val();
         record.ClienteE = $('#ClienteE').val();
@@ -214,7 +215,7 @@ function save() {
     }
 //}
     function validate() {
-        var result = $("#form2").valid();
+        var result = $("#form1").valid();
         return result;
     };
     

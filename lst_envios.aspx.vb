@@ -74,8 +74,10 @@ Partial Class lst_envios
 
             obj_sb.Append("," & Chr(34) & "Agregar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("agregar").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Ver" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("ver").Id).permiso, 1, 0) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Actualizar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("actualizar").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Editar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("editar").Id).permiso, 1, 0) & Chr(34) & "")
             obj_sb.Append("," & Chr(34) & "Eliminar" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("eliminar").Id).permiso, 1, 0) & Chr(34) & "")
+            obj_sb.Append("," & Chr(34) & "Agregar_Seguimiento" & Chr(34) & ":" & Chr(34) & IIf(New cls_permisos(obj_Session.Usuario.Id, New cls_modulos("envios").Id, New cls_acciones("actualizar").Id).permiso, 1, 0) & Chr(34) & "")
 
         Catch ex As Exception
             var_error = ex.Message
@@ -170,7 +172,7 @@ Partial Class lst_envios
         Dim var_data As JObject = JObject.Parse(var_sr.ReadToEnd)
 
         Dim obj_seguimiento As New cls_envios_seguimientos()
-        obj_seguimiento.Idenvio = var_data("Idenvio")
+        obj_seguimiento.Idenvio = var_data("idenvio")
         obj_seguimiento.observacion = var_data("Observacion")
         obj_seguimiento.fecha = Now
         obj_seguimiento.fecha_reg = Now
