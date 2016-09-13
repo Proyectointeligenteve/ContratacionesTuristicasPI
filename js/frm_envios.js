@@ -140,7 +140,6 @@ function Permisos() {
     
 function save() {
     var record = {};
-    alert("test");
         record.hdn_id_envio = $('#hdn_id_envio').val();
         record.Codigo = $('#Codigo').val();
         record.ClienteE = $('#ClienteE').val();

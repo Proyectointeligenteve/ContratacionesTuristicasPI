@@ -68,8 +68,8 @@
                     <td data-class="phone,tablet">Fecha</td>
                     <td data-class="phone,tablet">Emisor</td>
                     <td data-class="phone,tablet">Receptor</td>
-                    <td data-class="phone,tablet">Pais Receptor</td>
-                    <td data-class="phone,tablet">Ciudad Receptor</td>
+                    <td data-class="phone,tablet">Pais Origen</td>
+                    <td data-class="phone,tablet">Pais Destino</td>
                     <td data-class="phone,tablet">Costo</td>
                     <td data-class="phone,tablet">Estatus</td>
                 </tr>
@@ -81,7 +81,7 @@
     <div class="remodal" data-remodal-id="modalseguimiento" style="background-color:#013b63;color:white;font-size:14px !important">
        <div class="modal-header">
            <h4 class="modal-title" id="H2">Seguimiento del Envio</h4>
-            <div class="text-right"><button class="btn hide" id="Agregar_Seguimiento" onclick="NuevoSeguimiento();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Agregar</button></div>
+            <div class="text-right"><button class="btn btn-primary hide" id="Agregar_Seguimiento" onclick="NuevoSeguimiento();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Agregar</button></div>
        </div>
        <div class="modal-body">
 

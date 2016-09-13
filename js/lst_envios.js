@@ -162,8 +162,8 @@ function CargarListados() {
             },
             { "mDataProp": "Emisor" },
             { "mDataProp": "Receptor" },
-            { "mDataProp": "Pais" },
-            { "mDataProp": "Ciudad" },
+            { "mDataProp": "PaisO" },
+            { "mDataProp": "PaisD" },
             { "mDataProp": "Costo" },
             { "mDataProp": "Estatus" }
         ]
@@ -221,7 +221,7 @@ function Editar() {
     if (id == '') {
         $("#dv_error").html('Seleccione un registro');
         $("#dv_error").show();
-        setTimeout(function () { $('#dv_error').hide(); }, 10000);
+        setTimeout(function () { $('#dv_error').hide(); }, 3000);
         return false;
     }
 
